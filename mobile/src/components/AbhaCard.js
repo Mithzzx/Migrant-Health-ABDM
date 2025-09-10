@@ -17,6 +17,6 @@ export function AbhaCard({ abha = '00-0000-0000-0000', name = 'Migrant Worker' }
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: '#FFFFFF', padding: 14, borderRadius: 16, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 4 },
+  card: { backgroundColor: '#FFFFFF', padding: 14, borderRadius: 16, borderWidth: 1, borderColor: '#E2E8F0' },
   muted: { color: '#555', marginTop: 2 },
 });

@@ -56,17 +56,21 @@ yarn dev:analytics     # (placeholder) Next.js dashboard
 ```
 
 ## Backend
-Simple Express server exposes `/health` and `/api/users` (in‑memory CRUD).
+Express server currently exposes:
+```
+GET /health
+GET /api/users
+POST /api/users
+GET /api/patients   # sample in‑memory patient list
+```
+Environment example: see `backend/.env.example`.
 
-## Mobile & Web (Unified)
 ## Apps
 Mobile (worker-facing):
 ```
-yarn dev:mobile     # Native (Expo Go / emulator)
-yarn dev:web        # RN Web (fast prototyping of mobile UI in browser)
+yarn dev:mobile
 ```
-
-Doctor Portal (separate web app):
+Doctor Portal:
 ```
 yarn workspace web-app dev
 ```
@@ -90,4 +94,37 @@ yarn workspaces list --verbose
 - Implement analytics dashboard (Next.js)
 - Populate shared `frontend` package
 - Add linting, formatting, testing setup
+- ABDM sandbox integration (consent, ABHA linking)
+- Replace mock DevStart screen with production splash/onboarding
+
+## DevStart Helper (Temporary)
+For faster testing a temporary screen is enabled. In `mobile/App.js` toggle:
+```
+const ENABLE_DEV_START = true; // set false for normal onboarding
+```
+Buttons allow skipping directly to Home / Profile / Reminders.
+
+## Environment Variables
+Backend example: `backend/.env.example`
+```
+PORT=4000
+ABDM_BASE=https://dev.abdm.gov.in/gateway
+```
+Web doctor portal example: `web-app/.env.example`
+```
+VITE_API_BASE=http://localhost:4000
+```
+Copy to `.env` (never commit real secrets).
+
+## Patients Data Fetch (Doctor Portal)
+`web-app/src/portal/pages/Patients.jsx` now fetches from `${VITE_API_BASE}/api/patients` with loading & error states. Adjust base URL via env.
+
+## Mobile Theming
+Central tokens: `mobile/src/theme/tokens.js` supplying colors, spacing, radii. Cards are flat (no shadows), light gray background (#F2F5F7) with white surfaces and green accent (#0B6E4F).
+
+## Design Conventions
+- 4pt spacing scale (see `spacing(n)` in tokens)
+- Minimal elevation; use borders (#E2E8F0)
+- Primary actions in green (#0B6E4F)
+
 

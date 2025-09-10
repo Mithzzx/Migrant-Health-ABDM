@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Button, HelperText, Icon, IconButton, Surface, Text, TextInput } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
+import { AppButton } from '../components/AppButton';
+import { KeralaLogo, AyushmanBharatLogo } from '../components/Logos';
 import { useI18n } from '../i18n/i18n';
 
 const LOGO_SIZE = 48;
@@ -28,34 +29,24 @@ export default function LoginScreen({ navigation }) {
   const header = useMemo(() => (
     <View style={styles.headerRow}>
       <View style={styles.logoRow}>
-        <Surface elevation={1} style={styles.logoCircle}>
-          <Image source={require('../../assets/icon.png')} style={styles.logoImg} resizeMode="contain" />
-        </Surface>
+        <KeralaLogo dimension={48} style={styles.logoImg} />
         <Text variant="labelLarge" style={styles.gokText}>{t('governmentOfKerala')}</Text>
       </View>
       <View style={styles.logoRow}>
-        <Surface elevation={1} style={styles.logoCircle}>
-          <Image source={require('../../assets/favicon.png')} style={styles.logoImg} resizeMode="contain" />
-        </Surface>
+        <AyushmanBharatLogo dimension={48} style={styles.logoImg} />
         <Text variant="labelLarge" style={styles.abdmText}>{t('abdm')}</Text>
       </View>
     </View>
   ), [t]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <LinearGradient
-        colors={[ '#E6F4FF', '#F6FAFF' ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradient}
-      />
+  <View style={{ flex: 1, backgroundColor: '#F2F5F7' }}>
 
       <View style={styles.container}>
         {header}
   <Text variant="headlineMedium" style={styles.appName}>{t('appName')}</Text>
 
-        <Surface style={styles.card} elevation={2}>
+  <Surface style={styles.card} elevation={0}>
           <TextInput
             mode="outlined"
             label={t('enterAbhaOrMobile')}
@@ -71,15 +62,9 @@ export default function LoginScreen({ navigation }) {
               {t('enterAbhaOrMobile')}
             </HelperText>
           )}
-          <Button
-            mode="contained"
-            onPress={onGetOtp}
-            style={styles.cta}
-            contentStyle={{ height: 52 }}
-            icon={(props) => <Icon {...props} source="message-text-lock-outline" />}
-          >
+          <AppButton onPress={onGetOtp} style={styles.cta} icon={(props) => <Icon {...props} source="message-text-lock-outline" />}> 
             {t('getOtp')}
-          </Button>
+          </AppButton>
 
           <View style={styles.linksRow}>
             <Text>{t('dontHaveAbha')}</Text>
@@ -88,15 +73,9 @@ export default function LoginScreen({ navigation }) {
             </Button>
           </View>
 
-          <Button
-            mode="outlined"
-            onPress={() => {}}
-            style={styles.voiceBtn}
-            contentStyle={{ height: 48 }}
-            icon={(props) => <Icon {...props} source="microphone-outline" />}
-          >
+          <AppButton mode="outlined" onPress={() => {}} style={styles.voiceBtn} contentStyle={{ height: 48 }} icon={(props) => <Icon {...props} source="microphone-outline" />}> 
             {t('voiceLogin')}
-          </Button>
+          </AppButton>
 
           <View style={styles.trustRow} accessibilityRole="text">
             <Icon source="lock-outline" size={18} color="#0B6E4F" />
@@ -115,7 +94,6 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  gradient: { ...StyleSheet.absoluteFillObject },
   container: {
     flex: 1,
     paddingHorizontal: 20,

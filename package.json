@@ -24,6 +24,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "resolutions": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
   "devDependencies": {
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.35.0",

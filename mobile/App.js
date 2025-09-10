@@ -39,13 +39,13 @@ const brandTheme = {
   ...PaperLightTheme,
   colors: {
     ...PaperLightTheme.colors,
-    primary: '#0B6E4F', // health green
-    secondary: '#0D47A1', // govt blue tone
-    tertiary: '#FF8F00', // saffron/orange highlight
-    background: '#F6FAFF',
+    primary: '#43A047', // health green accent
+    secondary: '#43A047',
+    tertiary: '#43A047',
+    background: '#F2F5F7', // lighter gray background
     surface: '#FFFFFF',
   },
-  roundness: 10,
+  roundness: 12,
 };
 
 const navTheme = {
@@ -65,7 +65,7 @@ export default function App() {
     <SafeAreaProvider>
       <AppI18nProvider>
         <PaperProvider theme={brandTheme}>
-          <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: brandTheme.colors.background }} edges={['top', 'bottom']}>
             <NavigationContainer theme={navTheme}>
               <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} />
               <Stack.Navigator initialRouteName={ENABLE_DEV_START ? 'DevStart' : 'Language'} screenOptions={{ headerShown: false }}>
@@ -111,6 +111,9 @@ function MainTabs() {
           height: baseTabBarHeight + insets.bottom,
           paddingBottom: Math.max(insets.bottom, 8),
           paddingTop: 8,
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#E2E8F0',
+          borderTopWidth: 1,
         },
         tabBarIcon: ({ color, size, focused }) => null, // icons set per-screen below
       })}
@@ -178,12 +181,12 @@ function FloatingQRButton() {
       width: 64,
       height: 64,
       borderRadius: 32,
-      backgroundColor: brandTheme.colors.tertiary,
+      backgroundColor: brandTheme.colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: -12,
-      shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 6, shadowOffset: { width: 0, height: 3 },
-      elevation: 6,
+      borderWidth: 1,
+      borderColor: '#E2E8F0'
     }}>
       <PaperIcon source="qrcode-scan" color="#FFFFFF" size={30} />
     </RNView>

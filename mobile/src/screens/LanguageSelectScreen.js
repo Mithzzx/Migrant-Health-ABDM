@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Image, StyleSheet, View, FlatList, TouchableOpacity, I18nManager } from 'react-native';
-import { Button, Icon, IconButton, Surface, Text } from 'react-native-paper';
+import { Icon, IconButton, Surface, Text } from 'react-native-paper';
+import { KeralaLogo, AyushmanBharatLogo } from '../components/Logos';
+import { AppButton } from '../components/AppButton';
 import * as Speech from 'expo-speech';
 import { useI18n } from '../i18n/i18n';
 
@@ -104,7 +106,7 @@ export default function LanguageSelectScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.root}>
+  <View style={styles.root}>
       {/* Subtle healthcare-themed background icons */}
       <View pointerEvents="none" style={styles.bgIcons}>
         <Icon source="stethoscope" size={48} color="#E0ECFF" />
@@ -114,16 +116,12 @@ export default function LanguageSelectScreen({ navigation }) {
 
       <View style={styles.container}>
         <View style={styles.headerRow}>
-          <View style={styles.logoBlock}>
-            <Surface elevation={1} style={styles.logoCircle}>
-              <Image source={require('../../assets/icon.png')} style={styles.logoImg} resizeMode="contain" />
-            </Surface>
+          <View style={styles.logoBlock}> 
+            <KeralaLogo dimension={52} style={styles.logoImg} />
             <Text variant="labelLarge" style={styles.headerText}>{t('governmentOfKerala')}</Text>
           </View>
           <View style={styles.logoBlock}>
-            <Surface elevation={1} style={styles.logoCircle}>
-              <Image source={require('../../assets/favicon.png')} style={styles.logoImg} resizeMode="contain" />
-            </Surface>
+            <AyushmanBharatLogo dimension={52} style={styles.logoImg} />
             <Text variant="labelLarge" style={styles.headerText}>{t('abdm')}</Text>
           </View>
         </View>
@@ -143,18 +141,18 @@ export default function LanguageSelectScreen({ navigation }) {
         <Text style={styles.footerNote}>{t('youCanChangeLanguageLater')}</Text>
       </View>
 
-      <Surface style={styles.bottomBar} elevation={8}>
-        <Button mode="contained" onPress={onContinue} contentStyle={{ height: 56 }} style={{ flex: 1 }}>
+      <View style={styles.bottomBar}>
+        <AppButton onPress={onContinue} style={{ flex: 1 }}>
           {t('continue')}
-        </Button>
-      </Surface>
+        </AppButton>
+      </View>
     </View>
   );
 }
 
 const LOGO_SIZE = 52;
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F6FAFF' },
+  root: { flex: 1, backgroundColor: '#F2F5F7' },
   container: { flex: 1, padding: 20, paddingTop: 48 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   logoBlock: { flexDirection: 'row', alignItems: 'center' },
@@ -188,14 +186,7 @@ const styles = StyleSheet.create({
   langNative: { fontSize: 18, color: '#0A2540', fontWeight: '600' },
   langEnglish: { marginTop: 2, color: '#475569' },
   footerNote: { marginTop: 8, color: '#475569' },
-  bottomBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 12,
-    backgroundColor: '#FFFFFF',
-  },
+  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 16, backgroundColor: 'transparent' },
   bgIcons: {
     position: 'absolute',
     top: 24,
