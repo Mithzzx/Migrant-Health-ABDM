@@ -1,17 +1,19 @@
+<h1><p align="center">
+  Migrant Health Record Management System (Kerala)
+</p></h1>
+
+<p align="center">
+<img src="https://img.shields.io/github/issues/Mithzzx/Migrant-Health-ABDM">
+<img src="https://img.shields.io/badge/Status-In%20Development-orange" alt="Status">
+<img src="https://img.shields.io/github/license/Mithzzx/Migrant-Health-ABDM?style" alt="License">
+<img src="https://img.shields.io/badge/Made%20with-React%20Native-61DAFB?logo=react">
+<img src="https://img.shields.io/badge/Powered%20by-ABDM-green?)](https://abdm.gov.in)">
+<img src="https://img.shields.io/github/stars/Mithzzx/Migrant-Health-ABDM?stylesocial)" alt="GitHub Stars">
+</p>
 <div align="center">
+  
 
-# Migrant Health Record Management System (Kerala)
-
-[![GitHub issues](https://img.shields.io/github/issues/Mithzzx/Migrant-Health-ABDM?style=flat-square)](https://github.com/<your-org>/<your-repo>/issues)
-[![GitHub forks](https://img.shields.io/github/forks/Mithzzx/Migrant-Health-ABDM?style=flat-square)](https://github.com/<your-org>/<your-repo>/network)
-[![GitHub stars](https://img.shields.io/github/stars/Mithzzx/Migrant-Health-ABDM?style=flat-square)](https://github.com/<your-org>/<your-repo>/stargazers)
-[![GitHub license](https://img.shields.io/github/license/Mithzzx/Migrant-Health-ABDM?style=flat-square)](./LICENSE)
-[![Made with React Native](https://img.shields.io/badge/Made%20with-React%20Native-61DAFB?style=flat-square&logo=react)](https://reactnative.dev)
-[![Powered by ABDM](https://img.shields.io/badge/Powered%20by-ABDM-green?style=flat-square)](https://abdm.gov.in)
-
----
-
-### 🌐 A Smart India Hackathon project to provide **migrant workers in Kerala** with secure, multilingual, and portable **digital health records**, powered by **ABHA ID & ABDM integration**.
+### A Smart India Hackathon project to provide **migrant workers in Kerala** with secure, multilingual, and portable **digital health records**, powered by **ABHA ID & ABDM integration**.
 
 </div>
 
