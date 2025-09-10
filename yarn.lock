@@ -4842,6 +4842,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"frontend@workspace:frontend":
+  version: 0.0.0-use.local
+  resolution: "frontend@workspace:frontend"
+  languageName: unknown
+  linkType: soft
+
 "fs-minipass@npm:^3.0.0":
   version: 3.0.3
   resolution: "fs-minipass@npm:3.0.3"

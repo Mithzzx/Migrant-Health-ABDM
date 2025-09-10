@@ -9,6 +9,5 @@
   },
   "scripts": {
     "build": "echo 'no build step for shared lib'"
-  },
-  "dependencies": {}
+  }
 }
