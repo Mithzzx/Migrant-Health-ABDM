@@ -73,7 +73,7 @@ export default function MoreScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: 24, paddingBottom: 140, backgroundColor: '#F2F5F7' },
+  scroll: { padding: 16, paddingBottom: 140, backgroundColor: '#F2F5F7' },
   profileHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 28 },
   avatar: { backgroundColor: '#0A2540' },
   profileName: { fontSize: 22, fontWeight: '700', color: '#0A2540' },

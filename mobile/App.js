@@ -12,6 +12,7 @@ import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 import DashboardScreen from './src/screens/home/DashboardScreen';
 import MedicinesScreen from './src/screens/home/MedicinesScreen';
 import RecordsScreen from './src/screens/home/RecordsScreen';
+import AIChatBotScreen from './src/screens/home/AIChatBotScreen';
 import MoreScreen from './src/screens/home/MoreScreen';
 // New feature placeholder screens
 import AbhaLinkScreen from './src/screens/auth/AbhaLinkScreen';
@@ -33,6 +34,7 @@ const Stack = createNativeStackNavigator();
 const DashboardStack = createNativeStackNavigator();
 const MedicinesStack = createNativeStackNavigator();
 const RecordsStack = createNativeStackNavigator();
+const AIChatBotStack = createNativeStackNavigator();
 const MoreStack = createNativeStackNavigator();
 // Toggle this to false to disable the temporary developer start screen
 const ENABLE_DEV_START = true;
@@ -153,6 +155,20 @@ function RecordsStackScreen() {
   );
 }
 
+function AIChatBotStackScreen() {
+  const { t } = useI18n();
+  return (
+    <AIChatBotStack.Navigator
+      screenOptions={{
+        headerShown: false,  // Hide the navigation header
+        contentStyle: { backgroundColor: brandTheme.colors.background }
+      }}
+    >
+      <AIChatBotStack.Screen name="AIChatBotMain" component={AIChatBotScreen} options={{ title: t('aiHealthAssistant') }} />
+    </AIChatBotStack.Navigator>
+  );
+}
+
 function MoreStackScreen() {
   const { t } = useI18n();
   return (
@@ -227,11 +243,11 @@ function MainTabs() {
         }}
       />
       <Tab.Screen
-        name="Records"
-        component={RecordsStackScreen}
+        name="AIChatBot"
+        component={AIChatBotStackScreen}
         options={{
-          tabBarLabel: 'Records',
-          tabBarIcon: ({ color }) => <HomeScreenIcon name="folder" color={color} />,
+          tabBarLabel: 'AI Chat',
+          tabBarIcon: ({ color }) => <HomeScreenIcon name="robot" color={color} />,
         }}
       />
       <Tab.Screen

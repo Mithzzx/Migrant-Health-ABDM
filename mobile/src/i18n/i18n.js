@@ -36,6 +36,7 @@ const translations = {
   dashboard: 'Dashboard',
   medicines: 'Medicines',
   records: 'Records',
+  aiChat: 'AI Chat',
   more: 'More',
   qr: 'QR',
   homeTitle: 'Home',
@@ -50,6 +51,43 @@ const translations = {
   taken: 'Taken',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'Verified Profile',
+  // Health features
+  healthLocker: 'Health Locker',
+  viewMyRecords: 'View My Records',
+  securelyAccessRecords: 'Securely access all your medical records',
+  myRecords: 'My Records',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'Check Your ABHA',
+  verifyAbhaDetails: 'Verify and manage your ABHA details',
+  myAbha: 'My ABHA',
+  bookAppointment: 'Book an Appointment',
+  findDoctorsNearby: 'Find doctors and healthcare providers nearby',
+  bookNow: 'Book Now',
+  history: 'History',
+  myHealth: 'My Health',
+  manageHealthData: 'Manage Health Data',
+  trackVitalsAndHealth: 'Track vitals, medicines and health trends',
+  manageHealth: 'Manage Health',
+  emergencyDetails: 'Emergency Details',
+  quickAccessEmergency: 'Quick access to emergency medical info',
+  comingSoon: 'Coming Soon',
+  // AI Chat Bot translations
+  aiHealthAssistant: 'AI Health Assistant',
+  aiOnlineStatus: 'Online • Ready to help',
+  aiWelcomeMessage: 'Hello! I\'m your AI health assistant. How can I help you today?',
+  aiThinkingResponse: 'Thank you for your question. I\'m processing your request...',
+  aiCheckSymptoms: 'Check Symptoms',
+  aiMedicineInfo: 'Medicine Info',
+  aiFindDoctors: 'Find Doctors',
+  aiHealthTips: 'Health Tips',
+  aiTypeMessage: 'Type your health question here...',
+  aiSymptomPrompt: 'I have some symptoms I\'d like to discuss',
+  aiMedicinePrompt: 'I need information about my medications',
+  aiDoctorPrompt: 'Help me find a doctor nearby',
+  aiTipsPrompt: 'Give me some health tips',
   },
   ml: {
     appName: 'ഡിജിറ്റൽ ഹെൽത്ത് റെക്കോർഡ്സ്',
@@ -86,6 +124,7 @@ const translations = {
   dashboard: 'ഡാഷ്ബോർഡ്',
   medicines: 'മരുന്നുകൾ',
   records: 'റെക്കോർഡുകൾ',
+  aiChat: 'AI ചാറ്റ്',
   more: 'മോർ',
   qr: 'QR',
   homeTitle: 'ഹോം',
@@ -100,6 +139,43 @@ const translations = {
   taken: 'എടുത്തു',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'പ്രൊഫൈൽ സാധൂകരിച്ചു',
+  // Health features
+  healthLocker: 'ഹെൽത്ത് ലോക്കർ',
+  viewMyRecords: 'എന്റെ റെക്കോർഡുകൾ കാണുക',
+  securelyAccessRecords: 'നിങ്ങളുടെ എല്ലാ മെഡിക്കൽ റെക്കോർഡുകളും സുരക്ഷിതമായി ആക്‌സസ് ചെയ്യുക',
+  myRecords: 'എന്റെ റെക്കോർഡുകൾ',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'നിങ്ങളുടെ ABHA പരിശോധിക്കുക',
+  verifyAbhaDetails: 'നിങ്ങളുടെ ABHA വിവരങ്ങൾ പരിശോധിച്ച് കൈകാര്യം ചെയ്യുക',
+  myAbha: 'എന്റെ ABHA',
+  bookAppointment: 'അപ്പോയിന്റ്മെന്റ് ബുക്ക് ചെയ്യുക',
+  findDoctorsNearby: 'സമീപത്തുള്ള ഡോക്ടർമാരെയും ആരോഗ്യ ദാതാക്കളെയും കണ്ടെത്തുക',
+  bookNow: 'ഇപ്പോൾ ബുക്ക് ചെയ്യുക',
+  history: 'ചരിത്രം',
+  myHealth: 'എന്റെ ആരോഗ്യം',
+  manageHealthData: 'ആരോഗ്യ ഡാറ്റ കൈകാര്യം ചെയ്യുക',
+  trackVitalsAndHealth: 'വൈറ്റലുകൾ, മരുന്നുകൾ, ആരോഗ്യ ട്രെന്ഡുകൾ ട്രാക്ക് ചെയ്യുക',
+  manageHealth: 'ആരോഗ്യം കൈകാര്യം ചെയ്യുക',
+  emergencyDetails: 'അടിയന്തര വിവരങ്ങൾ',
+  quickAccessEmergency: 'അടിയന്തര മെഡിക്കൽ വിവരങ്ങളിലേക്ക് പെട്ടെന്നുള്ള ആക്‌സസ്',
+  comingSoon: 'ഉടൻ വരുന്നു',
+  // AI Chat Bot translations
+  aiHealthAssistant: 'AI ആരോഗ്യ സഹായി',
+  aiOnlineStatus: 'ഓൺലൈൻ • സഹായിക്കാൻ തയ്യാർ',
+  aiWelcomeMessage: 'നമസ്കാരം! ഞാൻ നിങ്ങളുടെ AI ആരോഗ്യ സഹായിയാണ്. ഇന്ന് നിങ്ങളെ എങ്ങനെ സഹായിക്കാൻ കഴിയും?',
+  aiThinkingResponse: 'നിങ്ങളുടെ ചോദ്യത്തിന് നന്ദി. ഞാൻ നിങ്ങളുടെ അഭ്യർത്ഥന പ്രോസസ്സ് ചെയ്യുകയാണ്...',
+  aiCheckSymptoms: 'ലക്ഷണങ്ങൾ പരിശോധിക്കുക',
+  aiMedicineInfo: 'മരുന്ന് വിവരങ്ങൾ',
+  aiFindDoctors: 'ഡോക്ടർമാരെ കണ്ടെത്തുക',
+  aiHealthTips: 'ആരോഗ്യ നുറുങ്ങുകൾ',
+  aiTypeMessage: 'നിങ്ങളുടെ ആരോഗ്യ ചോദ്യം ഇവിടെ ടൈപ്പ് ചെയ്യുക...',
+  aiSymptomPrompt: 'എനിക്ക് ചർച്ച ചെയ്യാൻ ചില ലക്ഷണങ്ങളുണ്ട്',
+  aiMedicinePrompt: 'എന്റെ മരുന്നുകളെക്കുറിച്ച് വിവരങ്ങൾ വേണം',
+  aiDoctorPrompt: 'സമീപത്തുള്ള ഒരു ഡോക്ടറെ കണ്ടെത്താൻ സഹായിക്കുക',
+  aiTipsPrompt: 'എനിക്ക് കുറച്ച് ആരോഗ്യ നുറുങ്ങുകൾ തരൂ',
   },
 };
 
@@ -152,6 +228,43 @@ translations.hi = {
   taken: 'ली गई',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'प्रोफाइल सत्यापित',
+  // Health features
+  healthLocker: 'हेल्थ लॉकर',
+  viewMyRecords: 'मेरे रिकॉर्ड्स देखें',
+  securelyAccessRecords: 'अपने सभी मेडिकल रिकॉर्ड्स को सुरक्षित रूप से एक्सेस करें',
+  myRecords: 'मेरे रिकॉर्ड्स',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'अपना ABHA चेक करें',
+  verifyAbhaDetails: 'अपने ABHA विवरण की पुष्टि और प्रबंधन करें',
+  myAbha: 'मेरा ABHA',
+  bookAppointment: 'अपॉइंटमेंट बुक करें',
+  findDoctorsNearby: 'आस-पास के डॉक्टरों और स्वास्थ्य सेवा प्रदाताओं को खोजें',
+  bookNow: 'अभी बुक करें',
+  history: 'इतिहास',
+  myHealth: 'मेरा स्वास्थ्य',
+  manageHealthData: 'स्वास्थ्य डेटा प्रबंधित करें',
+  trackVitalsAndHealth: 'वाइटल्स, दवाइयाँ और स्वास्थ्य रुझानों को ट्रैक करें',
+  manageHealth: 'स्वास्थ्य प्रबंधित करें',
+  emergencyDetails: 'आपातकालीन विवरण',
+  quickAccessEmergency: 'आपातकालीन चिकित्सा जानकारी तक त्वरित पहुंच',
+  comingSoon: 'जल्द आ रहा है',
+  // AI Chat Bot translations
+  aiHealthAssistant: 'AI स्वास्थ्य सहायक',
+  aiOnlineStatus: 'ऑनलाइन • मदद के लिए तैयार',
+  aiWelcomeMessage: 'नमस्ते! मैं आपका AI स्वास्थ्य सहायक हूं। आज मैं आपकी कैसे मदद कर सकता हूं?',
+  aiThinkingResponse: 'आपके प्रश्न के लिए धन्यवाद। मैं आपके अनुरोध को प्रोसेस कर रहा हूं...',
+  aiCheckSymptoms: 'लक्षण जांचें',
+  aiMedicineInfo: 'दवा की जानकारी',
+  aiFindDoctors: 'डॉक्टर खोजें',
+  aiHealthTips: 'स्वास्थ्य सुझाव',
+  aiTypeMessage: 'अपना स्वास्थ्य प्रश्न यहां टाइप करें...',
+  aiSymptomPrompt: 'मेरे कुछ लक्षण हैं जिन पर चर्चा करना चाहता हूं',
+  aiMedicinePrompt: 'मुझे अपनी दवाओं के बारे में जानकारी चाहिए',
+  aiDoctorPrompt: 'पास के डॉक्टर खोजने में मदद करें',
+  aiTipsPrompt: 'मुझे कुछ स्वास्थ्य सुझाव दें',
 };
 
 translations.bn = {
@@ -202,6 +315,29 @@ translations.bn = {
   taken: 'নেয়া হয়েছে',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'প্রোফাইল সত্যাপিত',
+  // Health features
+  healthLocker: 'হেলথ লকার',
+  viewMyRecords: 'আমার রেকর্ডস দেখুন',
+  securelyAccessRecords: 'আপনার সব মেডিকেল রেকর্ড নিরাপদে দেখুন',
+  myRecords: 'আমার রেকর্ডস',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'আপনার ABHA চেক করুন',
+  verifyAbhaDetails: 'আপনার ABHA বিবরণ যাচাই ও পরিচালনা করুন',
+  myAbha: 'আমার ABHA',
+  bookAppointment: 'অ্যাপয়েন্টমেন্ট বুক করুন',
+  findDoctorsNearby: 'কাছাকাছি ডাক্তার ও স্বাস্থ্যসেবা প্রদানকারী খুঁজুন',
+  bookNow: 'এখনই বুক করুন',
+  history: 'ইতিহাস',
+  myHealth: 'আমার স্বাস্থ্য',
+  manageHealthData: 'স্বাস্থ্য ডেটা পরিচালনা করুন',
+  trackVitalsAndHealth: 'ভাইটাল, ওষুধ ও স্বাস্থ্য ট্রেন্ড ট্র্যাক করুন',
+  manageHealth: 'স্বাস্থ্য পরিচালনা',
+  emergencyDetails: 'জরুরি বিবরণ',
+  quickAccessEmergency: 'জরুরি মেডিকেল তথ্যে দ্রুত অ্যাক্সেস',
+  comingSoon: 'শীঘ্রই আসছে',
 };
 
 translations.ta = {
@@ -252,6 +388,29 @@ translations.ta = {
   taken: 'எடுத்தது',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'சரிபார்க்கப்பட்ட சுயவிவரம்',
+  // Health features
+  healthLocker: 'சுகாதார பெட்டகம்',
+  viewMyRecords: 'என் பதிவுகளைப் பார்க்கவும்',
+  securelyAccessRecords: 'உங்கள் அனைத்து மருத்துவ பதிவுகளையும் பாதுகாப்பாக அணுகவும்',
+  myRecords: 'என் பதிவுகள்',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'உங்கள் ABHA ஐ சரிபார்க்கவும்',
+  verifyAbhaDetails: 'உங்கள் ABHA விவரங்களை சரிபார்த்து நிர்வகிக்கவும்',
+  myAbha: 'என் ABHA',
+  bookAppointment: 'சந்திப்பு முன்பதிவு',
+  findDoctorsNearby: 'அருகிலுள்ள மருத்துவர்கள் மற்றும் சுகாதார வழங்குநர்களைக் கண்டறியவும்',
+  bookNow: 'இப்போது முன்பதிவு செய்யுங்கள்',
+  history: 'வரலாறு',
+  myHealth: 'என் சுகாதாரம்',
+  manageHealthData: 'சுகாதார தரவை நிர்வகிக்கவும்',
+  trackVitalsAndHealth: 'உயிர்நிலை, மருந்துகள் மற்றும் சுகாதார போக்குகளைக் கண்காணிக்கவும்',
+  manageHealth: 'சுகாதாரத்தை நிர்வகிக்கவும்',
+  emergencyDetails: 'அவசர விவரங்கள்',
+  quickAccessEmergency: 'அவசர மருத்துவ தகவலுக்கான விரைவு அணுகல்',
+  comingSoon: 'விரைவில் வருகிறது',
 };
 
 translations.te = {
@@ -302,6 +461,29 @@ translations.te = {
   taken: 'తీసుకుంది',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'ధృవీకరించబడిన ప్రొఫైల్',
+  // Health features
+  healthLocker: 'హెల్త్ లాకర్',
+  viewMyRecords: 'నా రికార్డులను చూడండి',
+  securelyAccessRecords: 'మీ అన్ని వైద్య రికార్డులను సురక్షితంగా యాక్సెస్ చేయండి',
+  myRecords: 'నా రికార్డులు',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'మీ ABHA చెక్ చేయండి',
+  verifyAbhaDetails: 'మీ ABHA వివరాలను ధృవీకరించండి మరియు నిర్వహించండి',
+  myAbha: 'నా ABHA',
+  bookAppointment: 'అపాయింట్మెంట్ బుక్ చేయండి',
+  findDoctorsNearby: 'సమీపంలోని వైద్యులు మరియు ఆరోగ్య సేవా ప్రదాతలను కనుగొనండి',
+  bookNow: 'ఇప్పుడే బుక్ చేయండి',
+  history: 'చరిత్ర',
+  myHealth: 'నా ఆరోగ్యం',
+  manageHealthData: 'ఆరోగ్య డేటాను నిర్వహించండి',
+  trackVitalsAndHealth: 'వైటల్స్, మందులు మరియు ఆరోగ్య ధోరణులను ట్రాక్ చేయండి',
+  manageHealth: 'ఆరోగ్యాన్ని నిర్వహించండి',
+  emergencyDetails: 'అత్యవసర వివరాలు',
+  quickAccessEmergency: 'అత్యవసర వైద్య సమాచారానికి త్వరిత యాక్సెస్',
+  comingSoon: 'త్వరలో వస్తుంది',
 };
 
 translations.kn = {
@@ -352,6 +534,29 @@ translations.kn = {
   taken: 'ತೆಗೆದಿದೆ',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'ಪ್ರೊಫೈಲ್ ಪರಿಶೀಲಿಸಲಾಗಿದೆ',
+  // Health features
+  healthLocker: 'ಆರೋಗ್ಯ ಲಾಕರ್',
+  viewMyRecords: 'ನನ್ನ ದಾಖಲೆಗಳನ್ನು ನೋಡಿ',
+  securelyAccessRecords: 'ನಿಮ್ಮ ಎಲ್ಲಾ ವೈದ್ಯಕೀಯ ದಾಖಲೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಪ್ರವೇಶಿಸಿ',
+  myRecords: 'ನನ್ನ ದಾಖಲೆಗಳು',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'ನಿಮ್ಮ ABHA ಪರಿಶೀಲಿಸಿ',
+  verifyAbhaDetails: 'ನಿಮ್ಮ ABHA ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ',
+  myAbha: 'ನನ್ನ ABHA',
+  bookAppointment: 'ಅಪಾಯಿಂಟ್ಮೆಂಟ್ ಬುಕ್ ಮಾಡಿ',
+  findDoctorsNearby: 'ಹತ್ತಿರದ ವೈದ್ಯರು ಮತ್ತು ಆರೋಗ್ಯ ಸೇವಾ ಪ್ರದಾತರನ್ನು ಹುಡುಕಿ',
+  bookNow: 'ಈಗ ಬುಕ್ ಮಾಡಿ',
+  history: 'ಇತಿಹಾಸ',
+  myHealth: 'ನನ್ನ ಆರೋಗ್ಯ',
+  manageHealthData: 'ಆರೋಗ್ಯ ಡೇಟಾವನ್ನು ನಿರ್ವಹಿಸಿ',
+  trackVitalsAndHealth: 'ವೈಟಲ್ಸ್, ಔಷಧಿಗಳು ಮತ್ತು ಆರೋಗ್ಯ ಪ್ರವೃತ್ತಿಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ',
+  manageHealth: 'ಆರೋಗ್ಯವನ್ನು ನಿರ್ವಹಿಸಿ',
+  emergencyDetails: 'ತುರ್ತು ವಿವರಗಳು',
+  quickAccessEmergency: 'ತುರ್ತು ವೈದ್ಯಕೀಯ ಮಾಹಿತಿಗೆ ತ್ವರಿತ ಪ್ರವೇಶ',
+  comingSoon: 'ಶೀಘ್ರದಲ್ಲೇ ಬರುತ್ತಿದೆ',
 };
 
 translations.or = {
@@ -402,6 +607,29 @@ translations.or = {
   taken: 'ନିଆଯାଇଛି',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'ପ୍ରୋଫାଇଲ ସତ୍ୟାପିତ',
+  // Health features
+  healthLocker: 'ସ୍ୱାସ୍ଥ୍ୟ ଲକର',
+  viewMyRecords: 'ମୋର ରେକର୍ଡ ଦେଖନ୍ତୁ',
+  securelyAccessRecords: 'ଆପଣଙ୍କର ସମସ୍ତ ଚିକିତ୍ସା ରେକର୍ଡକୁ ସୁରକ୍ଷିତ ଭାବରେ ପ୍ରବେଶ କରନ୍ତୁ',
+  myRecords: 'ମୋର ରେକର୍ଡ',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'ଆପଣଙ୍କର ABHA ଯାଞ୍ଚ କରନ୍ତୁ',
+  verifyAbhaDetails: 'ଆପଣଙ୍କର ABHA ବିବରଣୀ ଯାଞ୍ଚ ଏବଂ ପରିଚାଳନା କରନ୍ତୁ',
+  myAbha: 'ମୋର ABHA',
+  bookAppointment: 'ଆପଏଣ୍ଟମେଣ୍ଟ ବୁକ୍ କରନ୍ତୁ',
+  findDoctorsNearby: 'ନିକଟବର୍ତ୍ତୀ ଡାକ୍ତର ଏବଂ ସ୍ୱାସ୍ଥ୍ୟ ସେବା ପ୍ରଦାନକାରୀ ଖୋଜନ୍ତୁ',
+  bookNow: 'ବର୍ତ୍ତମାନ ବୁକ୍ କରନ୍ତୁ',
+  history: 'ଇତିହାସ',
+  myHealth: 'ମୋର ସ୍ୱାସ୍ଥ୍ୟ',
+  manageHealthData: 'ସ୍ୱାସ୍ଥ୍ୟ ତଥ୍ୟ ପରିଚାଳନା କରନ୍ତୁ',
+  trackVitalsAndHealth: 'ଜୀବନୀ ଶକ୍ତି, ଔଷଧ ଏବଂ ସ୍ୱାସ୍ଥ୍ୟ ଧାରା ଟ୍ରାକ୍ କରନ୍ତୁ',
+  manageHealth: 'ସ୍ୱାସ୍ଥ୍ୟ ପରିଚାଳନା କରନ୍ତୁ',
+  emergencyDetails: 'ଜରୁରୀକାଳୀନ ବିବରଣୀ',
+  quickAccessEmergency: 'ଜରୁରୀକାଳୀନ ଚିକିତ୍ସା ସୂଚନାକୁ ଶୀଘ୍ର ପ୍ରବେଶ',
+  comingSoon: 'ଶୀଘ୍ର ଆସୁଛି',
 };
 
 translations.mr = {
@@ -452,6 +680,29 @@ translations.mr = {
   taken: 'घेतले',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'प्रोफाइल सत्यापित',
+  // Health features
+  healthLocker: 'आरोग्य लॉकर',
+  viewMyRecords: 'माझे रेकॉर्ड पहा',
+  securelyAccessRecords: 'तुमचे सर्व वैद्यकीय रेकॉर्ड सुरक्षितपणे अॅक्सेस करा',
+  myRecords: 'माझे रेकॉर्ड',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'तुमचा ABHA तपासा',
+  verifyAbhaDetails: 'तुमचे ABHA तपशील सत्यापित करा आणि व्यवस्थापित करा',
+  myAbha: 'माझा ABHA',
+  bookAppointment: 'भेट बुक करा',
+  findDoctorsNearby: 'जवळपासचे डॉक्टर आणि आरोग्य सेवा प्रदाते शोधा',
+  bookNow: 'आता बुक करा',
+  history: 'इतिहास',
+  myHealth: 'माझे आरोग्य',
+  manageHealthData: 'आरोग्य डेटा व्यवस्थापित करा',
+  trackVitalsAndHealth: 'जीवनाधार, औषधे आणि आरोग्य ट्रेंड ट्रॅक करा',
+  manageHealth: 'आरोग्य व्यवस्थापित करा',
+  emergencyDetails: 'आपत्कालीन तपशील',
+  quickAccessEmergency: 'आपत्कालीन वैद्यकीय माहितीसाठी जलद प्रवेश',
+  comingSoon: 'लवकरच येत आहे',
 };
 
 translations.as = {
@@ -502,6 +753,29 @@ translations.as = {
   taken: 'লোৱা হৈছে',
   am: 'AM',
   pm: 'PM',
+  // Dashboard translations
+  // Profile card
+  profileVerified: 'প্ৰোফাইল সত্যাপিত',
+  // Health features
+  healthLocker: 'স্বাস্থ্য লকাৰ',
+  viewMyRecords: 'মোৰ ৰেকৰ্ড চাওক',
+  securelyAccessRecords: 'আপোনাৰ সকলো চিকিৎসা ৰেকৰ্ড সুৰক্ষিতভাৱে এক্সেছ কৰক',
+  myRecords: 'মোৰ ৰেকৰ্ড',
+  abhaCard: 'ABHA',
+  checkYourAbha: 'আপোনাৰ ABHA পৰীক্ষা কৰক',
+  verifyAbhaDetails: 'আপোনাৰ ABHA বিৱৰণ সত্যাপন আৰু পৰিচালনা কৰক',
+  myAbha: 'মোৰ ABHA',
+  bookAppointment: 'এপইণ্টমেণ্ট বুক কৰক',
+  findDoctorsNearby: 'ওচৰৰ চিকিৎসক আৰু স্বাস্থ্য সেৱা প্ৰদানকাৰী বিচাৰি উলিয়াওক',
+  bookNow: 'এতিয়াই বুক কৰক',
+  history: 'ইতিহাস',
+  myHealth: 'মোৰ স্বাস্থ্য',
+  manageHealthData: 'স্বাস্থ্য তথ্য পৰিচালনা কৰক',
+  trackVitalsAndHealth: 'জীৱনীশক্তি, ঔষধ আৰু স্বাস্থ্য ধাৰা ট্ৰেক কৰক',
+  manageHealth: 'স্বাস্থ্য পৰিচালনা কৰক',
+  emergencyDetails: 'জৰুৰীকালীন বিৱৰণ',
+  quickAccessEmergency: 'জৰুৰীকালীন চিকিৎসা তথ্যৰ বাবে দ্ৰুত এক্সেছ',
+  comingSoon: 'শীঘ্ৰেই আহিছে',
 };
 
 const I18nContext = createContext({
