@@ -88,6 +88,16 @@ const translations = {
   aiMedicinePrompt: 'I need information about my medications',
   aiDoctorPrompt: 'Help me find a doctor nearby',
   aiTipsPrompt: 'Give me some health tips',
+  // Voice Chat translations
+  voiceChatTitle: 'Voice Chat',
+  voiceRecordingMessage: 'Recording your voice message. Speak clearly and tap "Stop Recording" when finished.',
+  voiceProcessingMessage: 'Processing your voice message...',
+  voiceRecognizedText: 'I said something about my health symptoms',
+  aiVoiceResponse: 'I understand you mentioned health symptoms. Could you provide more specific details about what you\'re experiencing?',
+  voiceMessage: 'Voice',
+  stopRecording: 'Stop Recording',
+  cancel: 'Cancel',
+  ok: 'OK',
   },
   ml: {
     appName: 'ഡിജിറ്റൽ ഹെൽത്ത് റെക്കോർഡ്സ്',
@@ -176,6 +186,16 @@ const translations = {
   aiMedicinePrompt: 'എന്റെ മരുന്നുകളെക്കുറിച്ച് വിവരങ്ങൾ വേണം',
   aiDoctorPrompt: 'സമീപത്തുള്ള ഒരു ഡോക്ടറെ കണ്ടെത്താൻ സഹായിക്കുക',
   aiTipsPrompt: 'എനിക്ക് കുറച്ച് ആരോഗ്യ നുറുങ്ങുകൾ തരൂ',
+  // Voice Chat translations
+  voiceChatTitle: 'വോയ്‌സ് ചാറ്റ്',
+  voiceRecordingMessage: 'നിങ്ങളുടെ വോയ്‌സ് മെസേജ് റെക്കോർഡ് ചെയ്യുന്നു. വ്യക്തമായി സംസാരിക്കുകയും കഴിഞ്ഞാൽ "റെക്കോർഡിംഗ് നിർത്തുക" ടാപ്പ് ചെയ്യുകയും ചെയ്യുക.',
+  voiceProcessingMessage: 'നിങ്ങളുടെ വോയ്‌സ് മെസേജ് പ്രോസസ്സ് ചെയ്യുന്നു...',
+  voiceRecognizedText: 'എന്റെ ആരോഗ്യ ലക്ഷണങ്ങളെക്കുറിച്ച് ഞാൻ എന്തോ പറഞ്ഞു',
+  aiVoiceResponse: 'നിങ്ങൾ ആരോഗ്യ ലക്ഷണങ്ങളെക്കുറിച്ച് പരാമർശിച്ചത് ഞാൻ മനസ്സിലാക്കുന്നു. നിങ്ങൾ അനുഭവിക്കുന്നതിനെക്കുറിച്ച് കൂടുതൽ വിശദാംശങ്ങൾ നൽകാമോ?',
+  voiceMessage: 'വോയ്‌സ്',
+  stopRecording: 'റെക്കോർഡിംഗ് നിർത്തുക',
+  cancel: 'റദ്ദാക്കുക',
+  ok: 'ശരി',
   },
 };
 
@@ -265,6 +285,16 @@ translations.hi = {
   aiMedicinePrompt: 'मुझे अपनी दवाओं के बारे में जानकारी चाहिए',
   aiDoctorPrompt: 'पास के डॉक्टर खोजने में मदद करें',
   aiTipsPrompt: 'मुझे कुछ स्वास्थ्य सुझाव दें',
+  // Voice Chat translations
+  voiceChatTitle: 'वॉइस चैट',
+  voiceRecordingMessage: 'आपका वॉइस मैसेज रिकॉर्ड हो रहा है। स्पष्ट रूप से बोलें और समाप्त होने पर "रिकॉर्डिंग बंद करें" पर टैप करें।',
+  voiceProcessingMessage: 'आपका वॉइस मैसेज प्रोसेस हो रहा है...',
+  voiceRecognizedText: 'मैंने अपने स्वास्थ्य के लक्षणों के बारे में कुछ कहा',
+  aiVoiceResponse: 'मैं समझ गया कि आपने स्वास्थ्य के लक्षणों का उल्लेख किया है। क्या आप अपने अनुभव के बारे में अधिक विशिष्ट विवरण दे सकते हैं?',
+  voiceMessage: 'वॉइस',
+  stopRecording: 'रिकॉर्डिंग बंद करें',
+  cancel: 'रद्द करें',
+  ok: 'ठीक है',
 };
 
 translations.bn = {

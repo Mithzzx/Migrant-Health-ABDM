@@ -30,7 +30,7 @@ export default function MedicinesScreen() {
       dosage: '1 pill (40mg)',
       stock: '19',
       type: 'medicine',
-      backgroundColor: '#F3E8FF', // Light purple
+      backgroundColor: '#FFFFFF', // White
       iconColor: '#8B5CF6', // Purple
       icon: 'pill'
     },
@@ -39,7 +39,7 @@ export default function MedicinesScreen() {
       time: '8:00AM',
       name: 'Breakfast',
       type: 'meal',
-      backgroundColor: '#ECFDF5', // Light green
+      backgroundColor: '#FFFFFF', // White
       iconColor: '#10B981', // Green
       icon: 'silverware-fork-knife'
     },
@@ -50,7 +50,7 @@ export default function MedicinesScreen() {
       dosage: '0.5 tablet (40mg)',
       stock: '10.5',
       type: 'medicine',
-      backgroundColor: '#EFF6FF', // Light blue
+      backgroundColor: '#FFFFFF', // White
       iconColor: '#3B82F6', // Blue
       icon: 'pill'
     },
@@ -59,7 +59,7 @@ export default function MedicinesScreen() {
       time: '12:00PM',
       name: 'Lunch',
       type: 'meal',
-      backgroundColor: '#ECFDF5', // Light green
+      backgroundColor: '#FFFFFF', // White
       iconColor: '#10B981', // Green
       icon: 'silverware-fork-knife'
     },
@@ -70,7 +70,7 @@ export default function MedicinesScreen() {
       dosage: '1 injection (8ml)',
       stock: '7',
       type: 'injection',
-      backgroundColor: '#FFFBEB', // Light orange
+      backgroundColor: '#FFFFFF', // White
       iconColor: '#F59E0B', // Orange
       icon: 'needle'
     },
@@ -81,7 +81,7 @@ export default function MedicinesScreen() {
       dosage: '1 tablet (200mg)',
       stock: '11',
       type: 'medicine',
-      backgroundColor: '#FDF2F8', // Light pink
+      backgroundColor: '#FFFFFF', // White
       iconColor: '#EC4899', // Pink
       icon: 'pill'
     },
@@ -92,7 +92,7 @@ export default function MedicinesScreen() {
       dosage: '1 pill (40mg)',
       stock: '19',
       type: 'medicine',
-      backgroundColor: '#F3E8FF', // Light purple
+      backgroundColor: '#FFFFFF', // White
       iconColor: '#8B5CF6', // Purple
       icon: 'pill'
     }
@@ -173,7 +173,11 @@ export default function MedicinesScreen() {
                 <View style={styles.medicineActions}>
                   {item.stock && (
                     <View style={styles.stockBadge}>
-                      <Text style={styles.stockCount}>{item.stock}</Text>
+                      <Text style={{
+                        fontSize: 12,
+                        color: item.iconColor,
+                        fontWeight: '600',
+                      }}>{item.stock}</Text>
                     </View>
                   )}
                   <Pressable
@@ -184,7 +188,7 @@ export default function MedicinesScreen() {
                     <Icon 
                       source={isTaken ? "check" : "plus"} 
                       size={16} 
-                      color={isTaken ? "#FFFFFF" : "#43A047"} 
+                      color={isTaken ? "#43A047" : '#1F2937'} 
                     />
                   </Pressable>
                 </View>
@@ -285,8 +289,8 @@ const styles = StyleSheet.create({
     paddingBottom: 4 
   },
   dayChip: { 
-    width: 54, 
-    height: 72, 
+    width: 45, 
+    height: 64, 
     borderRadius: 28, 
     backgroundColor: '#F5F6F7', 
     marginHorizontal: 4, 
@@ -306,10 +310,10 @@ const styles = StyleSheet.create({
     fontWeight: '600' 
   },
   dayChipDate: { 
-    fontSize: 18, 
+    fontSize: 16, 
     fontWeight: '600', 
     color: '#0A2540', 
-    marginTop: 2 
+    marginTop: 4 
   },
   dayChipDateSel: { 
     color: '#FFFFFF' 
@@ -320,7 +324,7 @@ const styles = StyleSheet.create({
     borderRadius: 3, 
     backgroundColor: '#43A047', 
     position: 'absolute', 
-    bottom: 10 
+    bottom: 6 
   },
   bodyScrollWrapper: { 
     flex: 1, 
@@ -374,6 +378,7 @@ const styles = StyleSheet.create({
   },
   // Medicine Card Styles (Actionable)
   medicineCard: {
+    color: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     marginRight: 8,
@@ -384,9 +389,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   medicineIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
+    width: 48,
+    height: 48,
+    borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -401,7 +406,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   medicineDosage: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6B7280',
   },
   medicineActions: {
@@ -409,30 +414,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  stockBadge: {
-    backgroundColor: '#F3F4F6',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
   stockCount: {
     fontSize: 12,
     color: '#6B7280',
     fontWeight: '600',
   },
   checkButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    backgroundColor: '#F9FAFB',
+    width: 28,
+    height: 28,
+    borderRadius: 28,
+    backgroundColor: '#F3F4F6',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#43A047',
   },
   checkButtonTaken: {
-    backgroundColor: '#43A047',
-    borderColor: '#43A047',
+    backgroundColor: 'rgba(225, 242, 234, 1)',
   },
   // Indicator Card Styles (Non-actionable)
   indicatorCard: {
@@ -469,7 +465,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#6B7280',
+    backgroundColor: '#43A047',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
