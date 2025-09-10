@@ -1,8 +1,42 @@
-# Migrant Health ABDM Hackathon Project
+<div align="center">
 
+# Migrant Health Record Management System (Kerala)
+
+[![GitHub issues](https://img.shields.io/github/issues/Mithzzx/Migrant-Health-ABDM?style=flat-square)](https://github.com/<your-org>/<your-repo>/issues)
+[![GitHub forks](https://img.shields.io/github/forks/Mithzzx/Migrant-Health-ABDM?style=flat-square)](https://github.com/<your-org>/<your-repo>/network)
+[![GitHub stars](https://img.shields.io/github/stars/Mithzzx/Migrant-Health-ABDM?style=flat-square)](https://github.com/<your-org>/<your-repo>/stargazers)
+[![GitHub license](https://img.shields.io/github/license/Mithzzx/Migrant-Health-ABDM?style=flat-square)](./LICENSE)
+[![Made with React Native](https://img.shields.io/badge/Made%20with-React%20Native-61DAFB?style=flat-square&logo=react)](https://reactnative.dev)
+[![Powered by ABDM](https://img.shields.io/badge/Powered%20by-ABDM-green?style=flat-square)](https://abdm.gov.in)
+
+---
+
+### 🌐 A Smart India Hackathon project to provide **migrant workers in Kerala** with secure, multilingual, and portable **digital health records**, powered by **ABHA ID & ABDM integration**.
+
+</div>
+
+---
+
+## ✨ Features
+- 🔐 **ABHA ID-based login** (secure & government-compliant)  
+- 📂 **Health Locker Integration** – prescriptions, lab reports, discharge summaries  
+- 🩺 **Doctor Portal** – update patient history with consent  
+- 🌐 **Multilingual Support (10 languages)** with voice assistance  
+- 📶 **Offline Mode + QR Code Sharing** for low-connectivity areas  
+- 🚑 **Emergency Access** – critical info available instantly  
+
+---
+
+## 🏗️ Tech Stack
+- **Mobile App:** React Native (Expo / CLI, Material Design 3 style)  
+- **Backend:** Node.js + Express  
+- **Database:** PostgreSQL / MongoDB  
+- **ABDM Integration:** ABDM APIs (Gateway, Health Locker, Consent Manager)  
+- **Authentication:** ABHA ID + OTP-based  
+- **Infra:** Docker + Cloud Run / AWS / Azure  
+
+---
 Monorepo managed with Yarn workspaces.
-
-## Structure
 ## Structure
 - `mobile/` - Migrant Worker app (Expo: Android/iOS + optional RN Web for rapid prototyping)
 - `web-app/` - Doctor / Facility Portal (React + Vite)
@@ -11,12 +45,6 @@ Monorepo managed with Yarn workspaces.
 - `frontend/` - Shared UI components / utilities (placeholder)
 
 - Corepack enabled (installs Yarn 4 automatically)
-
-## Install
-```
-corepack enable
-yarn install
-```
 
 ## Common Scripts
 At repo root:
