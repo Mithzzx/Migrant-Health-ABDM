@@ -126,12 +126,8 @@ function MedicinesStackScreen() {
   return (
     <MedicinesStack.Navigator
       screenOptions={{
-  headerLargeTitle: Platform.OS === 'ios',
-  headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
-  headerLargeTitleStyle: { color: '#0A2540', fontWeight: '700', textAlign: 'right' },
-  headerTitleStyle: { color: '#0A2540', fontWeight: '600', textAlign: 'center' },
-        headerStyle: { backgroundColor: '#FFFFFF' },
-        contentStyle: { backgroundColor: brandTheme.colors.background }
+  headerShown: false,
+  contentStyle: { backgroundColor: brandTheme.colors.background }
       }}
     >
       <MedicinesStack.Screen name="MedicinesMain" component={MedicinesScreen} options={{ title: t('medicines') }} />

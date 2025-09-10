@@ -41,6 +41,15 @@ const translations = {
   homeTitle: 'Home',
   homeWelcome: 'Welcome! Your health records will appear here.',
   logout: 'Logout',
+  today: 'Today',
+  tomorrow: 'Tomorrow',
+  yesterday: 'Yesterday',
+  previousWeek: 'Previous week',
+  nextWeek: 'Next week',
+  addMedicine: 'Add',
+  taken: 'Taken',
+  am: 'AM',
+  pm: 'PM',
   },
   ml: {
     appName: 'ഡിജിറ്റൽ ഹെൽത്ത് റെക്കോർഡ്സ്',
@@ -82,6 +91,15 @@ const translations = {
   homeTitle: 'ഹോം',
   homeWelcome: 'സ്വാഗതം! നിങ്ങളുടെ ഹെൽത്ത് റെക്കോർഡുകൾ ഇവിടെ കാണാം.',
   logout: 'ലോഗൗട്ട്',
+  today: 'ഇന്ന്',
+  tomorrow: 'നാളെ',
+  yesterday: 'ഇന്നലെ',
+  previousWeek: 'കഴിഞ്ഞ ആഴ്‌ച',
+  nextWeek: 'അടുത്ത ആഴ്‌ച',
+  addMedicine: 'ചേർക്കുക',
+  taken: 'എടുത്തു',
+  am: 'AM',
+  pm: 'PM',
   },
 };
 
@@ -125,6 +143,15 @@ translations.hi = {
   homeTitle: 'होम',
   homeWelcome: 'स्वागत है! आपके स्वास्थ्य रिकॉर्ड यहाँ दिखेंगे।',
   logout: 'लॉगआउट',
+  today: 'आज',
+  tomorrow: 'कल',
+  yesterday: 'बीता कल',
+  previousWeek: 'पिछला सप्ताह',
+  nextWeek: 'अगला सप्ताह',
+  addMedicine: 'जोड़ें',
+  taken: 'ली गई',
+  am: 'AM',
+  pm: 'PM',
 };
 
 translations.bn = {
@@ -166,6 +193,15 @@ translations.bn = {
   homeTitle: 'হোম',
   homeWelcome: 'স্বাগতম! আপনার স্বাস্থ্য রেকর্ড এখানে দেখানো হবে।',
   logout: 'লগআউট',
+  today: 'আজ',
+  tomorrow: 'আগামীকাল',
+  yesterday: 'গতকাল',
+  previousWeek: 'আগের সপ্তাহ',
+  nextWeek: 'পরের সপ্তাহ',
+  addMedicine: 'যোগ করুন',
+  taken: 'নেয়া হয়েছে',
+  am: 'AM',
+  pm: 'PM',
 };
 
 translations.ta = {
@@ -207,6 +243,15 @@ translations.ta = {
   homeTitle: 'முகப்பு',
   homeWelcome: 'வரவேற்கிறோம்! உங்கள் சுகாதார பதிவுகள் இங்கே தோன்றும்.',
   logout: 'வெளியேறு',
+  today: 'இன்று',
+  tomorrow: 'நாளை',
+  yesterday: 'நேற்று',
+  previousWeek: 'கடந்த வாரம்',
+  nextWeek: 'அடுத்த வாரம்',
+  addMedicine: 'சேர்க்க',
+  taken: 'எடுத்தது',
+  am: 'AM',
+  pm: 'PM',
 };
 
 translations.te = {
@@ -248,6 +293,15 @@ translations.te = {
   homeTitle: 'హోమ్',
   homeWelcome: 'స్వాగతం! మీ ఆరోగ్య రికార్డులు ఇక్కడ కనిపిస్తాయి.',
   logout: 'లాగ్ అవుట్',
+  today: 'ఈ రోజు',
+  tomorrow: 'రేపు',
+  yesterday: 'నిన్న',
+  previousWeek: 'గత వారం',
+  nextWeek: 'వచ్చే వారం',
+  addMedicine: 'జోడించండి',
+  taken: 'తీసుకుంది',
+  am: 'AM',
+  pm: 'PM',
 };
 
 translations.kn = {
@@ -289,6 +343,15 @@ translations.kn = {
   homeTitle: 'ಮುಖಪುಟ',
   homeWelcome: 'ಸ್ವಾಗತ! ನಿಮ್ಮ ಆರೋಗ್ಯ ದಾಖಲೆಗಳು ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ.',
   logout: 'ಲಾಗ್ ಔಟ್',
+  today: 'ಇಂದು',
+  tomorrow: 'ನಾಳೆ',
+  yesterday: 'ನಿನ್ನೆ',
+  previousWeek: 'ಕಳೆದ ವಾರ',
+  nextWeek: 'ಮುಂದಿನ ವಾರ',
+  addMedicine: 'ಸೇರಿಸಿ',
+  taken: 'ತೆಗೆದಿದೆ',
+  am: 'AM',
+  pm: 'PM',
 };
 
 translations.or = {
@@ -330,6 +393,15 @@ translations.or = {
   homeTitle: 'ମୂଳ ପୃଷ୍ଠା',
   homeWelcome: 'ସ୍ୱାଗତ! ଆପଣଙ୍କ ସ୍ୱାସ୍ଥ୍ୟ ରେକର୍ଡ ଏଠାରେ ଦେଖାଯିବ।',
   logout: 'ଲଗ୍ଆଉଟ୍',
+  today: 'ଆଜି',
+  tomorrow: 'ଆସନ୍ତାକାଲି',
+  yesterday: 'ଗତକାଲି',
+  previousWeek: 'ଗତ ସପ୍ତାହ',
+  nextWeek: 'ଆସନ୍ତା ସପ୍ତାହ',
+  addMedicine: 'ଯୋଗ କରନ୍ତୁ',
+  taken: 'ନିଆଯାଇଛି',
+  am: 'AM',
+  pm: 'PM',
 };
 
 translations.mr = {
@@ -371,6 +443,15 @@ translations.mr = {
   homeTitle: 'मुख्य',
   homeWelcome: 'स्वागत! तुमचे आरोग्य रेकॉर्ड येथे दिसतील.',
   logout: 'लॉगआउट',
+  today: 'आज',
+  tomorrow: 'उद्या',
+  yesterday: 'काल',
+  previousWeek: 'मागील आठवडा',
+  nextWeek: 'पुढील आठवडा',
+  addMedicine: 'जोडा',
+  taken: 'घेतले',
+  am: 'AM',
+  pm: 'PM',
 };
 
 translations.as = {
@@ -412,6 +493,15 @@ translations.as = {
   homeTitle: 'হোম',
   homeWelcome: 'স্বাগতম! আপোনাৰ স্বাস্থ ৰেকৰ্ড ইয়াত দেখা যাব।',
   logout: 'লগ আউট',
+  today: 'আজি',
+  tomorrow: 'কালি',
+  yesterday: 'যোৱাকালী',
+  previousWeek: 'পূৰ্ব সপ্তাহ',
+  nextWeek: 'আগামী সপ্তাহ',
+  addMedicine: 'যোগ কৰক',
+  taken: 'লোৱা হৈছে',
+  am: 'AM',
+  pm: 'PM',
 };
 
 const I18nContext = createContext({

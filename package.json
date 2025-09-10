@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "Migrant Health ABDM monorepo (mobile, web, analytics dashboard, backend, shared frontend)",
-  "packageManager": "yarn@4.3.1",
+  "packageManager": "yarn@4.9.4",
   "workspaces": [
     "mobile",
     "web-app",
