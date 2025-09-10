@@ -27,9 +27,12 @@ import VoiceAssistantScreen from './src/screens/assist/VoiceAssistantScreen';
 import RemindersScreen from './src/screens/reminders/RemindersScreen';
 import AddReminderScreen from './src/screens/reminders/AddReminderScreen';
 import HealthTipsScreen from './src/screens/health/HealthTipsScreen';
+import DevStartScreen from './src/screens/dev/DevStartScreen';
 import { AppI18nProvider } from './src/i18n/i18n';
 
 const Stack = createNativeStackNavigator();
+// Toggle this to false to disable the temporary developer start screen
+const ENABLE_DEV_START = true;
 const Tab = createBottomTabNavigator();
 
 const brandTheme = {
@@ -65,7 +68,8 @@ export default function App() {
           <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
             <NavigationContainer theme={navTheme}>
               <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} />
-              <Stack.Navigator initialRouteName="Language" screenOptions={{ headerShown: false }}>
+              <Stack.Navigator initialRouteName={ENABLE_DEV_START ? 'DevStart' : 'Language'} screenOptions={{ headerShown: false }}>
+                {ENABLE_DEV_START && <Stack.Screen name="DevStart" component={DevStartScreen} />}
                 <Stack.Screen name="Language" component={LanguageSelectScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="OTP" component={OTPScreen} />
