@@ -1,0 +1,13 @@
+.app-shell { display: flex; min-height: 100vh; font-family: system-ui, Arial, sans-serif; }
+.sidebar { width: 220px; background:#0B6E4F; color:#fff; padding:1rem; display:flex; flex-direction:column; }
+.logo { font-size:1.1rem; margin:0 0 1rem; }
+.sidebar nav { display:flex; flex-direction:column; gap:.5rem; }
+.sidebar a { color:#e2f7ec; text-decoration:none; padding:.5rem .75rem; border-radius:4px; font-size:.9rem; }
+.sidebar a.active, .sidebar a:hover { background:#0d805d; color:#fff; }
+.main-area { flex:1; padding:1.5rem; background:#f6faff; }
+.page h2 { margin-top:0; }
+.card-grid { display:grid; gap:1rem; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+.card { background:#fff; border:1px solid #e3e8ef; border-radius:8px; padding:1rem; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.table { width:100%; border-collapse:collapse; background:#fff; }
+.table th, .table td { padding:.5rem .75rem; border:1px solid #e3e8ef; text-align:left; font-size:.85rem; }
+.status-badge { display:inline-block; padding:2px 8px; font-size:.65rem; border-radius:10px; background:#e0f7f0; color:#0b6e4f; letter-spacing:.5px; text-transform:uppercase; }

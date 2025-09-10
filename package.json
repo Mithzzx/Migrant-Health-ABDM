@@ -1,0 +1,33 @@
+{
+  "name": "migrant-health-abdm",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Migrant Health ABDM monorepo (mobile, web, analytics dashboard, backend, shared frontend)",
+  "packageManager": "yarn@4.3.1",
+  "workspaces": [
+    "mobile",
+    "web-app",
+    "analytics-dashboard",
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "echo \"Specify a package: backend, web-app, mobile, analytics-dashboard\"",
+    "dev:backend": "yarn workspace backend dev",
+    "dev:web": "yarn workspace web-app dev",
+    "dev:analytics": "yarn workspace analytics-dashboard dev",
+    "dev:mobile": "yarn workspace mobile start",
+    "build": "yarn workspaces foreach -pt run build || true",
+    "lint": "eslint . --ext .js,.jsx --max-warnings=0",
+    "format": "prettier . --write"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prettier": "^3.3.3"
+  }
+}
