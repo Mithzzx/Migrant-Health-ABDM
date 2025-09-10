@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef } from 'react';
 import { Animated, StyleSheet, View, Platform, useWindowDimensions } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,11 +10,8 @@ export function LargeTitleLayout({ title, children }) {
   const scrollY = useRef(new Animated.Value(0)).current;
   const { width } = useWindowDimensions();
 
-  const [measuredTitleH, setMeasuredTitleH] = useState(34); // fallback approx
-  const HEADER_EXTRA_BOTTOM = 12; // space below large title before collapse area end
-  const HEADER_TOP_PADDING_EXTRA = 4; // small breathing room below status bar
-  const headerHeight = insets.top + HEADER_TOP_PADDING_EXTRA + measuredTitleH + HEADER_EXTRA_BOTTOM;
-  const COLLAPSE_DISTANCE = Math.min(48, measuredTitleH + 8); // adapt to title size
+  const LARGE_HEIGHT = 96; // area including large title
+  const COLLAPSE_DISTANCE = 48; // amount of scroll to collapse
 
   const translateY = scrollY.interpolate({
     inputRange: [0, COLLAPSE_DISTANCE],
@@ -34,19 +31,11 @@ export function LargeTitleLayout({ title, children }) {
     extrapolate: 'clamp'
   });
 
-  const onTitleLayout = useCallback((e) => {
-    const h = e.nativeEvent.layout.height;
-    if (h > 0 && Math.abs(h - measuredTitleH) > 1) {
-      setMeasuredTitleH(h);
-    }
-  }, [measuredTitleH]);
-
   return (
     <View style={styles.root}>
       {/* Header container */}
-      <Animated.View style={[styles.headerContainer, { paddingTop: insets.top + HEADER_TOP_PADDING_EXTRA, height: headerHeight, transform: [{ translateY }] }]}>        
+      <Animated.View style={[styles.headerContainer, { paddingTop: insets.top, transform: [{ translateY }] }]}>        
         <Animated.Text
-          onLayout={onTitleLayout}
           style={[styles.largeTitle, { opacity: largeOpacity }]}
           accessibilityRole="header"
         >
@@ -60,7 +49,7 @@ export function LargeTitleLayout({ title, children }) {
       {/* Scroll content */}
       <Animated.ScrollView
         style={styles.scroll}
-        contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: 32 + insets.bottom }}
+        contentContainerStyle={{ paddingTop: LARGE_HEIGHT + insets.top, paddingBottom: 32 + insets.bottom }}
         scrollEventThrottle={16}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -87,15 +76,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E2E8F0',
     paddingHorizontal: 20,
-  // dynamic height supplied inline
-  justifyContent: 'flex-end',
+    height: 96 + 0, // updated with insets via paddingTop
+    justifyContent: 'flex-end',
     shadowColor: '#000',
     shadowOpacity: 0.04,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 1
   },
-  largeTitle: { fontSize: 32, fontWeight: '700', color: '#0A2540', letterSpacing: 0.25, lineHeight: 38 },
+  largeTitle: { fontSize: 32, fontWeight: '700', color: '#0A2540', letterSpacing: 0.25 },
   inlineContainer: { position: 'absolute', left: 20, bottom: 12 },
   inlineTitle: { color: '#0A2540', fontWeight: '600' },
   scroll: { flex: 1 },

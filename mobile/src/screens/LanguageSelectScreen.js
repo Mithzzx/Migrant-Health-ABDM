@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     minHeight: 84,
   },
   langCardSelected: {
-    borderColor: '#0B6E4F',
+    borderColor: '#43A047',
     backgroundColor: '#F0FBF6',
   },
   langNative: { fontSize: 18, color: '#0A2540', fontWeight: '600' },
