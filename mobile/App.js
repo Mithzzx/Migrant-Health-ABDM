@@ -9,7 +9,6 @@ import { Provider as PaperProvider, MD3LightTheme as PaperLightTheme } from 'rea
 import LoginScreen from './src/screens/LoginScreen';
 import OTPScreen from './src/screens/OTPScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
-import HomeScreen from './src/screens/HomeScreen';
 import DashboardScreen from './src/screens/home/DashboardScreen';
 import MedicinesScreen from './src/screens/home/MedicinesScreen';
 import RecordsScreen from './src/screens/home/RecordsScreen';
@@ -31,6 +30,10 @@ import DevStartScreen from './src/screens/dev/DevStartScreen';
 import { AppI18nProvider } from './src/i18n/i18n';
 
 const Stack = createNativeStackNavigator();
+const DashboardStack = createNativeStackNavigator();
+const MedicinesStack = createNativeStackNavigator();
+const RecordsStack = createNativeStackNavigator();
+const MoreStack = createNativeStackNavigator();
 // Toggle this to false to disable the temporary developer start screen
 const ENABLE_DEV_START = true;
 const Tab = createBottomTabNavigator();
@@ -65,7 +68,8 @@ export default function App() {
     <SafeAreaProvider>
       <AppI18nProvider>
         <PaperProvider theme={brandTheme}>
-          <SafeAreaView style={{ flex: 1, backgroundColor: brandTheme.colors.background }} edges={['top', 'bottom']}>
+          {/** Use only top edge so bottom inset can be handled explicitly by tab bar without double spacing */}
+          <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }} edges={['top']}>
             <NavigationContainer theme={navTheme}>
               <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} />
               <Stack.Navigator initialRouteName={ENABLE_DEV_START ? 'DevStart' : 'Language'} screenOptions={{ headerShown: false }}>
@@ -96,14 +100,91 @@ export default function App() {
   );
 }
 
+import { useI18n } from './src/i18n/i18n';
+
+function DashboardStackScreen() {
+  const { t } = useI18n();
+  return (
+    <DashboardStack.Navigator
+      screenOptions={{
+  // Use native large title on iOS. Expanded state: right-aligned via style. Collapsed: centered via headerTitleAlign
+  headerLargeTitle: Platform.OS === 'ios',
+  headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
+  headerLargeTitleStyle: { color: '#0A2540', fontWeight: '700', textAlign: 'right' },
+  headerTitleStyle: { color: '#0A2540', fontWeight: '600', textAlign: 'center' },
+        headerStyle: { backgroundColor: '#FFFFFF' },
+        contentStyle: { backgroundColor: brandTheme.colors.background }
+      }}
+    >
+      <DashboardStack.Screen name="DashboardMain" component={DashboardScreen} options={{ title: t('dashboard') }} />
+    </DashboardStack.Navigator>
+  );
+}
+
+function MedicinesStackScreen() {
+  const { t } = useI18n();
+  return (
+    <MedicinesStack.Navigator
+      screenOptions={{
+  headerLargeTitle: Platform.OS === 'ios',
+  headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
+  headerLargeTitleStyle: { color: '#0A2540', fontWeight: '700', textAlign: 'right' },
+  headerTitleStyle: { color: '#0A2540', fontWeight: '600', textAlign: 'center' },
+        headerStyle: { backgroundColor: '#FFFFFF' },
+        contentStyle: { backgroundColor: brandTheme.colors.background }
+      }}
+    >
+      <MedicinesStack.Screen name="MedicinesMain" component={MedicinesScreen} options={{ title: t('medicines') }} />
+    </MedicinesStack.Navigator>
+  );
+}
+
+function RecordsStackScreen() {
+  const { t } = useI18n();
+  return (
+    <RecordsStack.Navigator
+      screenOptions={{
+  headerLargeTitle: Platform.OS === 'ios',
+  headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
+  headerLargeTitleStyle: { color: '#0A2540', fontWeight: '700', textAlign: 'right' },
+  headerTitleStyle: { color: '#0A2540', fontWeight: '600', textAlign: 'center' },
+        headerStyle: { backgroundColor: '#FFFFFF' },
+        contentStyle: { backgroundColor: brandTheme.colors.background }
+      }}
+    >
+      <RecordsStack.Screen name="RecordsMain" component={RecordsScreen} options={{ title: t('records') }} />
+    </RecordsStack.Navigator>
+  );
+}
+
+function MoreStackScreen() {
+  const { t } = useI18n();
+  return (
+    <MoreStack.Navigator
+      screenOptions={{
+  headerLargeTitle: Platform.OS === 'ios',
+  headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
+  headerLargeTitleStyle: { color: '#0A2540', fontWeight: '700', textAlign: 'right' },
+  headerTitleStyle: { color: '#0A2540', fontWeight: '600', textAlign: 'center' },
+        headerStyle: { backgroundColor: '#FFFFFF' },
+        contentStyle: { backgroundColor: brandTheme.colors.background }
+      }}
+    >
+      <MoreStack.Screen name="MoreMain" component={MoreScreen} options={{ title: t('more') }} />
+    </MoreStack.Navigator>
+  );
+}
+
 function MainTabs() {
   // Add safe-area aware padding for bottom tab (home indicator) and dynamic height
   const insets = useSafeAreaInsets();
   const baseTabBarHeight = 56; // base height excluding extra bottom inset
+  // header removed in favor of large title inside screens
+
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
+      screenOptions={({ route, navigation }) => ({
+  headerShown: false,
         tabBarShowLabel: true,
         tabBarActiveTintColor: brandTheme.colors.primary,
         tabBarInactiveTintColor: '#6B7280',
@@ -120,7 +201,7 @@ function MainTabs() {
     >
       <Tab.Screen
         name="Dashboard"
-        component={DashboardScreen}
+        component={DashboardStackScreen}
         options={{
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color }) => <HomeScreenIcon name="home" color={color} />,
@@ -128,7 +209,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="Medicines"
-        component={MedicinesScreen}
+        component={MedicinesStackScreen}
         options={{
           tabBarLabel: 'Medicines',
           tabBarIcon: ({ color }) => <HomeScreenIcon name="pill" color={color} />,
@@ -151,7 +232,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="Records"
-        component={RecordsScreen}
+        component={RecordsStackScreen}
         options={{
           tabBarLabel: 'Records',
           tabBarIcon: ({ color }) => <HomeScreenIcon name="folder" color={color} />,
@@ -159,7 +240,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="More"
-        component={MoreScreen}
+        component={MoreStackScreen}
         options={{
           tabBarLabel: 'More',
           tabBarIcon: ({ color }) => <HomeScreenIcon name="dots-horizontal-circle-outline" color={color} />,
