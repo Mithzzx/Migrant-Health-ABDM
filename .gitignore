@@ -1,1 +1,103 @@
-node_modules
+# --- Core Node / Packages ---
+node_modules/
+**/.pnp.cjs
+**/.pnp.loader.mjs
+.yarn/*
+!.yarn/patches/
+!.yarn/plugins/
+!.yarn/releases/
+!.yarn/sdks/
+!.yarn/versions/
+
+# Yarn v4 build state
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# --- Logs & Diagnostics ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+logs/
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# --- Environment Files ---
+.env
+.env.*
+!.env.example
+
+# --- Build Outputs ---
+dist/
+build/
+web-app/dist/
+coverage/
+
+# --- Expo / React Native ---
+*.expo/*
+.expo/
+.expo-shared/
+expo-debug.log
+*.jks
+*.p12
+*.keystore
+*.mobileprovision
+*.orig.*
+# Metro / packager
+*.packager-info.json
+*.bundle
+*.map
+
+# iOS (if ejected later)
+ios/DerivedData/
+ios/build/
+*.xcworkspace
+*.xcodeproj/project.xcworkspace/
+Pods/
+
+# Android (if ejected later)
+android/.gradle/
+android/app/build/
+android/local.properties
+android/.cxx/
+
+# --- Test / Coverage ---
+coverage/
+*.lcov
+
+# --- Temporary & Caches ---
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*.orig
+*.patch
+
+# --- Images / Generated Assets ---
+*.log
+*.pid
+*.seed
+*.cover
+*.sass-cache/
+
+# --- Backend specific ---
+backend/.env.local
+backend/.env.test
+backend/*.sqlite
+backend/coverage/
+
+# --- Misc ---
+*.DS_Store
+*.orig
+.env.local
+package-lock.json
+
