@@ -96,7 +96,7 @@ backend/*.sqlite
 backend/coverage/
 
 # --- Misc ---
-.DS_Store
+*.DS_Store
 *.orig
 .env.local
 package-lock.json
