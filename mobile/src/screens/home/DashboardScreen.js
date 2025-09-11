@@ -8,6 +8,11 @@ export default function DashboardScreen() {
   const { t } = useI18n();
   const navigation = useNavigation();
 
+  const navigateToRecords = () => {
+    // Navigate to the Records screen directly
+    navigation.navigate('Records');
+  };
+
   // Mock user data - replace with actual user data from context/API
   const userData = {
     name: 'User Name',
@@ -96,7 +101,7 @@ export default function DashboardScreen() {
             title={t('healthLocker')}
             description={t('securelyAccessRecords')}
             buttonText={t('myRecords')}
-            onPress={() => navigation.navigate('RecordsMain')}
+            onPress={navigateToRecords}
           />
           <FeatureCard
             icon="card-account-details"
