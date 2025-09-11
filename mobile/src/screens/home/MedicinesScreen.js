@@ -3,104 +3,23 @@ import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
 import { Text, Icon } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useI18n } from '../../i18n/i18n';
+// Removed external timeline dependency; using custom implementation
 
 export default function MedicinesScreen() {
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
-  const [weekOffset, setWeekOffset] = useState(0);
+  const [weekOffset, setWeekOffset] = useState(0); // 0 = current week
   const base = useMemo(() => {
     const d = new Date();
     d.setDate(d.getDate() + weekOffset * 7);
     return d;
   }, [weekOffset]);
   const today = new Date();
-  const [taken, setTaken] = useState({
-    'osemiprazol-7': true,
-    'indever-10': false,
-    'rocal-15': false,
-    'osemiprazol-17': false,
-  });
-
-  // Mock medicine data matching the detailed design specification
-  const medicineSchedule = [
-    {
-      id: 'osemiprazol-7',
-      time: '7:00AM',
-      name: 'Osemiprazol',
-      dosage: '1 pill (40mg)',
-      stock: '19',
-      type: 'medicine',
-      backgroundColor: '#FFFFFF', // White
-      iconColor: '#8B5CF6', // Purple
-      icon: 'pill'
-    },
-    {
-      id: 'breakfast',
-      time: '8:00AM',
-      name: 'Breakfast',
-      type: 'meal',
-      backgroundColor: '#FFFFFF', // White
-      iconColor: '#10B981', // Green
-      icon: 'silverware-fork-knife'
-    },
-    {
-      id: 'indever-10',
-      time: '10:30AM',
-      name: 'Indever',
-      dosage: '0.5 tablet (40mg)',
-      stock: '10.5',
-      type: 'medicine',
-      backgroundColor: '#FFFFFF', // White
-      iconColor: '#3B82F6', // Blue
-      icon: 'pill'
-    },
-    {
-      id: 'lunch',
-      time: '12:00PM',
-      name: 'Lunch',
-      type: 'meal',
-      backgroundColor: '#FFFFFF', // White
-      iconColor: '#10B981', // Green
-      icon: 'silverware-fork-knife'
-    },
-    {
-      id: 'insuline',
-      time: '1:00PM',
-      name: 'Insuline',
-      dosage: '1 injection (8ml)',
-      stock: '7',
-      type: 'injection',
-      backgroundColor: '#FFFFFF', // White
-      iconColor: '#F59E0B', // Orange
-      icon: 'needle'
-    },
-    {
-      id: 'rocal-15',
-      time: '3:00PM',
-      name: 'Rocal D',
-      dosage: '1 tablet (200mg)',
-      stock: '11',
-      type: 'medicine',
-      backgroundColor: '#FFFFFF', // White
-      iconColor: '#EC4899', // Pink
-      icon: 'pill'
-    },
-    {
-      id: 'osemiprazol-17',
-      time: '5:00PM',
-      name: 'Osemiprazol',
-      dosage: '1 pill (40mg)',
-      stock: '19',
-      type: 'medicine',
-      backgroundColor: '#FFFFFF', // White
-      iconColor: '#8B5CF6', // Purple
-      icon: 'pill'
-    }
-  ];
+  const [taken, setTaken] = useState({}); // key: hour index -> boolean
 
   const weekDays = useMemo(() => Array.from({ length: 7 }).map((_, i) => {
     const d = new Date(base);
-    d.setDate(base.getDate() - d.getDay() + i);
+    d.setDate(base.getDate() - d.getDay() + i); // start Sunday
     return {
       key: i,
       label: d.toLocaleDateString(undefined, { weekday: 'short' }).slice(0,1),
@@ -123,101 +42,48 @@ export default function MedicinesScreen() {
   }
   const headerTitleText = formatHeaderDate(selectedDay);
 
-  const toggleMedicine = useCallback((id) => {
-    setTaken(prev => ({ ...prev, [id]: !prev[id] }));
+  const hours = [7,8,9,10,11,12,13,14,15,16,17];
+
+  const toggleHour = useCallback((h) => {
+    setTaken(prev => ({ ...prev, [h]: !prev[h] }));
   }, []);
 
-  const MedicineTimelineItem = ({ item, isLast }) => {
-    const isTaken = taken[item.id];
-    const isMedicine = item.type === 'medicine' || item.type === 'injection';
-    const isMeal = item.type === 'meal';
-    
+  const HourRow = ({ hour }) => {
+    const labelHour = (hour <= 12 ? hour : hour - 12);
+    const ampm = hour < 12 ? t('am') : t('pm');
+    const display = `${labelHour} ${ampm}`;
+    const isTaken = !!taken[hour];
     return (
-      <View style={styles.timelineContainer}>
-        <View style={styles.timelineLeft}>
-          <Text style={styles.timeText}>{item.time}</Text>
+      <View style={styles.hourRow}>
+        <View style={[styles.timePill, isTaken && styles.timePillActive]}>
+          <Text style={[styles.timePillText, isTaken && styles.timePillTextActive]}>{display}</Text>
         </View>
-        
-        <View style={styles.timelineCenter}>
-          <View style={[styles.timelineDot, isTaken && styles.timelineDotTaken]} />
-          {!isLast && <View style={styles.timelineLine} />}
-        </View>
-        
-        <View style={styles.timelineRight}>
-          {isMeal ? (
-            // Indicator Card for Meals (Non-actionable)
-            <View style={[styles.indicatorCard, { backgroundColor: item.backgroundColor }]}>
-              <View style={styles.indicatorContent}>
-                <View style={[styles.indicatorIcon, { backgroundColor: item.iconColor + '20' }]}>
-                  <Icon source={item.icon} size={14} color={item.iconColor} />
-                </View>
-                <Text style={styles.indicatorName}>{item.name}</Text>
-              </View>
-            </View>
-          ) : (
-            // Medicine Card (Actionable)
-            <View style={[styles.medicineCard, { backgroundColor: item.backgroundColor }]}>
-              <View style={styles.medicineContent}>
-                {/* Left Section - Icon */}
-                <View style={[styles.medicineIcon, { backgroundColor: item.iconColor + '20' }]}>
-                  <Icon source={item.icon} size={18} color={item.iconColor} />
-                </View>
-                
-                {/* Middle Section - Medicine Info */}
-                <View style={styles.medicineInfo}>
-                  <Text style={styles.medicineName}>{item.name}</Text>
-                  {item.dosage && <Text style={styles.medicineDosage}>{item.dosage}</Text>}
-                </View>
-                
-                {/* Right Section - Stock & Action */}
-                <View style={styles.medicineActions}>
-                  {item.stock && (
-                    <View style={styles.stockBadge}>
-                      <Text style={{
-                        fontSize: 12,
-                        color: item.iconColor,
-                        fontWeight: '600',
-                      }}>{item.stock}</Text>
-                    </View>
-                  )}
-                  <Pressable
-                    style={[styles.checkButton, isTaken && styles.checkButtonTaken]}
-                    onPress={() => toggleMedicine(item.id)}
-                    accessibilityLabel={`${isTaken ? 'Mark as not taken' : 'Mark as taken'} ${item.name}`}
-                  >
-                    <Icon 
-                      source={isTaken ? "check" : "plus"} 
-                      size={16} 
-                      color={isTaken ? "#43A047" : '#1F2937'} 
-                    />
-                  </Pressable>
-                </View>
-              </View>
-            </View>
-          )}
-        </View>
+        <Pressable
+          style={[styles.timeActionBtn, isTaken && styles.timeActionBtnActive]}
+          onPress={() => toggleHour(hour)}
+          accessibilityLabel={`${isTaken ? t('taken') : t('addMedicine')} ${display}`}
+        >
+          <Icon source={isTaken ? 'check' : 'plus'} size={18} color={isTaken ? '#FFFFFF' : '#0A2540'} />
+          <Text style={[styles.timeActionText, isTaken && styles.timeActionTextActive]}>{isTaken ? t('taken') : t('addMedicine')}</Text>
+        </Pressable>
       </View>
     );
   };
 
   return (
     <View style={styles.container}>
-      {/* Header with date navigation */}
-      <View style={styles.stripContainer}>        
+      {/* Combined strip with navigation */}
+  <View style={styles.stripContainer}>        
         <View style={styles.combinedHeaderRow}>
-          <Pressable onPress={() => setWeekOffset(o => o - 1)} style={styles.navArrow}>
-            <Icon source="chevron-left" size={26} />
-          </Pressable>
+          <Pressable onPress={() => setWeekOffset(o => o - 1)} style={styles.navArrow} accessibilityLabel={t('previousWeek')}><Icon source="chevron-left" size={26} /></Pressable>
           <Text style={styles.headerTitle}>{headerTitleText}</Text>
-          <Pressable onPress={() => setWeekOffset(o => o + 1)} style={styles.navArrow}>
-            <Icon source="chevron-right" size={26} />
-          </Pressable>
+          <Pressable onPress={() => setWeekOffset(o => o + 1)} style={styles.navArrow} accessibilityLabel={t('nextWeek')}><Icon source="chevron-right" size={26} /></Pressable>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.weekStrip}>
           {weekDays.map(d => {
             const selected = d.key === selectedIndex;
             return (
-              <Pressable key={d.key} onPress={() => setSelectedIndex(d.key)} style={[styles.dayChip, selected && styles.dayChipSelected]}>
+              <Pressable key={d.key} onPress={() => setSelectedIndex(d.key)} style={[styles.dayChip, selected && styles.dayChipSelected]} accessibilityLabel={`Select ${d.date} ${d.label}`}>
                 <Text style={[styles.dayChipDow, selected && styles.dayChipDowSel]}>{d.label}</Text>
                 <Text style={[styles.dayChipDate, selected && styles.dayChipDateSel]}>{d.date}</Text>
                 {d.isToday && <View style={styles.todayDot} />}
@@ -226,255 +92,40 @@ export default function MedicinesScreen() {
           })}
         </ScrollView>
       </View>
-
-      {/* Medicine Timeline */}
-      <ScrollView style={styles.bodyScrollWrapper} contentContainerStyle={styles.bodyScroll}>
-        <View style={styles.timelineWrapper}>
-          {medicineSchedule.map((item, index) => (
-            <MedicineTimelineItem 
-              key={item.id} 
-              item={item} 
-              isLast={index === medicineSchedule.length - 1}
-            />
-          ))}
-        </View>
-        <View style={{ height: 100 }} />
+  <ScrollView style={styles.bodyScrollWrapper} contentContainerStyle={styles.bodyScroll} contentInsetAdjustmentBehavior="automatic" automaticallyAdjustContentInsets>
+        <View style={{ height: 4 }} />
+        <View style={styles.timelineList}>{hours.map(h => <HourRow key={h} hour={h} />)}</View>
+        <View style={{ height: 160 }} />
       </ScrollView>
-
-      {/* Floating Action Button */}
-      <View style={styles.fabContainer}>
-        <Pressable style={styles.fab} accessibilityLabel="Add new medicine">
-          <Icon source="plus" size={24} color="#FFFFFF" />
-        </Pressable>
-      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: '#F8F9FA' 
-  },
-  stripContainer: { 
-    paddingTop: 4, 
-    backgroundColor: '#FFFFFF', 
-    borderBottomWidth: 1, 
-    borderBottomColor: '#F5F6F7', 
-    shadowColor: '#000', 
-    shadowOpacity: 0.03, 
-    shadowRadius: 3, 
-    shadowOffset: { width: 0, height: 1 }, 
-    elevation: 1 
-  },
-  combinedHeaderRow: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'space-between', 
-    paddingHorizontal: 12, 
-    marginBottom: 0, 
-    paddingBottom: 2 
-  },
-  headerTitle: { 
-    fontSize: 20, 
-    fontWeight: '700', 
-    color: '#0A2540' 
-  },
-  navArrow: { 
-    padding: 4, 
-    borderRadius: 22 
-  },
-  weekStrip: { 
-    paddingHorizontal: 8, 
-    paddingBottom: 4 
-  },
-  dayChip: { 
-    width: 45, 
-    height: 64, 
-    borderRadius: 28, 
-    backgroundColor: '#F5F6F7', 
-    marginHorizontal: 4, 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    position: 'relative' 
-  },
-  dayChipSelected: { 
-    backgroundColor: '#0A2540' 
-  },
-  dayChipDow: { 
-    fontSize: 12, 
-    color: '#4B5563' 
-  },
-  dayChipDowSel: { 
-    color: '#FFFFFF', 
-    fontWeight: '600' 
-  },
-  dayChipDate: { 
-    fontSize: 16, 
-    fontWeight: '600', 
-    color: '#0A2540', 
-    marginTop: 4 
-  },
-  dayChipDateSel: { 
-    color: '#FFFFFF' 
-  },
-  todayDot: { 
-    width: 6, 
-    height: 6, 
-    borderRadius: 3, 
-    backgroundColor: '#43A047', 
-    position: 'absolute', 
-    bottom: 6 
-  },
-  bodyScrollWrapper: { 
-    flex: 1, 
-    backgroundColor: '#F8F9FA' 
-  },
-  bodyScroll: { 
-    paddingHorizontal: 0,
-    paddingTop: 16
-  },
-  timelineWrapper: {
-    flex: 1
-  },
-  timelineContainer: {
-    flexDirection: 'row',
-    marginBottom: 16,
-    minHeight: 80
-  },
-  timelineLeft: {
-    width: 80,
-    paddingTop: 8
-  },
-  timeText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#6B7280',
-    textAlign: 'center'
-  },
-  timelineCenter: {
-    width: 20,
-    alignItems: 'center',
-    marginHorizontal: 8
-  },
-  timelineDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#D1D5DB',
-    marginTop: 12
-  },
-  timelineDotTaken: {
-    backgroundColor: '#43A047',
-  },
-  timelineLine: {
-    width: 2,
-    flex: 1,
-    backgroundColor: '#E5E7EB',
-    marginTop: 4
-  },
-  timelineRight: {
-    flex: 1
-  },
-  // Medicine Card Styles (Actionable)
-  medicineCard: {
-    color: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    marginRight: 8,
-    elevation: 5,
-  },
-  medicineContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  medicineIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  medicineInfo: {
-    flex: 1,
-  },
-  medicineName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 2,
-  },
-  medicineDosage: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  medicineActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stockCount: {
-    fontSize: 12,
-    color: '#6B7280',
-    fontWeight: '600',
-  },
-  checkButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 28,
-    backgroundColor: '#F3F4F6',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkButtonTaken: {
-    backgroundColor: 'rgba(225, 242, 234, 1)',
-  },
-  // Indicator Card Styles (Non-actionable)
-  indicatorCard: {
-    width: 120,
-    borderRadius: 12,
-    padding: 12,
-    marginRight: 8,
-    opacity: 1,
-  },
-  indicatorContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  indicatorIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 8,
-  },
-  indicatorName: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontWeight: '500',
-  },
-  // Floating Action Button
-  fabContainer: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-  },
-  fab: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#43A047',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
+  container: { flex: 1, backgroundColor: '#F2F5F7' },
+  stripContainer: { paddingTop: 4, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#F5F6F7', shadowColor: '#000', shadowOpacity: 0.03, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  combinedHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, marginBottom: 0, paddingBottom: 2 },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: '#0A2540' },
+  navArrow: { padding: 4, borderRadius: 22 },
+  weekStrip: { paddingHorizontal: 8, paddingBottom: 4 },
+  dayChip: { width: 54, height: 72, borderRadius: 28, backgroundColor: '#F5F6F7', marginHorizontal: 4, alignItems: 'center', justifyContent: 'center', position: 'relative' },
+  dayChipSelected: { backgroundColor: '#0A2540' },
+  dayChipDow: { fontSize: 12, color: '#4B5563' },
+  dayChipDowSel: { color: '#FFFFFF', fontWeight: '600' },
+  dayChipDate: { fontSize: 18, fontWeight: '600', color: '#0A2540', marginTop: 2 },
+  dayChipDateSel: { color: '#FFFFFF' },
+  todayDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#43A047', position: 'absolute', bottom: 10 },
+  bodyScrollWrapper: { flex: 1, backgroundColor: '#F2F5F7' },
+  bodyScroll: { paddingHorizontal: 16 },
+  timelineList: { marginTop: 8 },
+  hourRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 18 },
+  timePill: { minWidth: 78, paddingVertical: 8, paddingHorizontal: 12, backgroundColor: '#E2E8F0', borderRadius: 24, alignItems: 'center' },
+  timePillActive: { backgroundColor: '#0A2540' },
+  timePillText: { fontSize: 14, fontWeight: '600', color: '#0A2540' },
+  timePillTextActive: { color: '#FFFFFF' },
+  timeActionBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#CBD5E1', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 22, marginLeft: 14 },
+  timeActionBtnActive: { backgroundColor: '#0A2540' },
+  timeActionText: { marginLeft: 6, fontSize: 13, fontWeight: '600', color: '#0A2540' },
+  timeActionTextActive: { color: '#FFFFFF' },
+  // removed FAB styles
 });

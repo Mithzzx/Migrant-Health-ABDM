@@ -9,8 +9,8 @@ export default function DashboardScreen() {
   const navigation = useNavigation();
 
   const navigateToRecords = () => {
-    // Navigate to the Records screen directly
-    navigation.navigate('Records');
+    // Navigate to the globally registered HealthRecords screen in root stack
+    navigation.navigate('HealthRecords');
   };
 
   // Mock user data - replace with actual user data from context/API

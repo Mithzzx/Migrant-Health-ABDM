@@ -10,6 +10,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import OTPScreen from './src/screens/OTPScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
 import DashboardScreen from './src/screens/home/DashboardScreen';
+import HealthRecordsScreen from './src/screens/home/HealthRecordsScreen';
 import MedicinesScreen from './src/screens/home/MedicinesScreen';
 import AIChatBotScreen from './src/screens/home/AIChatBotScreen';
 import MoreScreen from './src/screens/home/MoreScreen';
@@ -18,7 +19,6 @@ import AbhaLinkScreen from './src/screens/auth/AbhaLinkScreen';
 import QRLoginScreen from './src/screens/auth/QRLoginScreen';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
 import EditProfileScreen from './src/screens/profile/EditProfileScreen';
-import VaccinationRecordsScreen from './src/screens/profile/VaccinationRecordsScreen';
 import MedicalHistoryScreen from './src/screens/profile/MedicalHistoryScreen';
 import VoiceAssistantScreen from './src/screens/assist/VoiceAssistantScreen';
 import RemindersScreen from './src/screens/reminders/RemindersScreen';
@@ -87,7 +87,17 @@ function AppContent() {
           contentStyle: { backgroundColor: brandTheme.colors.background }
         }}
       >
-        <DashboardStack.Screen name="DashboardMain" component={DashboardScreen} options={{ title: t('dashboard') }} />
+  <DashboardStack.Screen name="DashboardMain" component={DashboardScreen} options={{ title: t('dashboard') }} />
+  {/** Moved HealthRecords here from root stack so nested navigation works without parent traverse */}
+  <DashboardStack.Screen
+    name="HealthRecords"
+    component={HealthRecordsScreen}
+    options={{
+      title: t('healthRecords'),
+      headerLargeTitle: Platform.OS === 'ios',
+      headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
+    }}
+  />
       </DashboardStack.Navigator>
     );
   }
@@ -179,21 +189,6 @@ function AppContent() {
           }}
         />
         <Tab.Screen
-          name="QR"
-          component={DashboardScreen}
-          options={{
-            tabBarLabel: '',
-            tabBarIcon: ({ color }) => (
-              <FloatingQRButton />
-            ),
-          }}
-          listeners={{
-            tabPress: (e) => {
-              // TODO: navigate to scanner or QR share screen
-            },
-          }}
-        />
-        <Tab.Screen
           name="AIChatBot"
           component={AIChatBotStackScreen}
           options={{
@@ -230,7 +225,6 @@ function AppContent() {
             {/* Deep feature routes */}
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-            <Stack.Screen name="VaccinationRecords" component={VaccinationRecordsScreen} />
             <Stack.Screen name="MedicalHistory" component={MedicalHistoryScreen} />
             <Stack.Screen name="VoiceAssistant" component={VoiceAssistantScreen} />
             <Stack.Screen name="Reminders" component={RemindersScreen} />
@@ -250,21 +244,3 @@ function HomeScreenIcon({ name, color }) {
   return <PaperIcon source={name} color={color} size={24} />;
 }
 
-import { View as RNView } from 'react-native';
-function FloatingQRButton() {
-  return (
-    <RNView style={{
-      width: 64,
-      height: 64,
-      borderRadius: 32,
-      backgroundColor: brandTheme.colors.primary,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: -12,
-      borderWidth: 1,
-      borderColor: '#E2E8F0'
-    }}>
-      <PaperIcon source="qrcode-scan" color="#FFFFFF" size={30} />
-    </RNView>
-  );
-}
