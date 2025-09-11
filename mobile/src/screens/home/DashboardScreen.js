@@ -96,7 +96,7 @@ export default function DashboardScreen() {
             title={t('healthLocker')}
             description={t('securelyAccessRecords')}
             buttonText={t('myRecords')}
-            onPress={() => navigation.navigate('Records')}
+            onPress={() => navigation.navigate('RecordsMain')}
           />
           <FeatureCard
             icon="card-account-details"

@@ -83,7 +83,6 @@ export default function App() {
                 <Stack.Screen name="QRLogin" component={QRLoginScreen} />
                 <Stack.Screen name="Home" component={MainTabs} />
                 {/* Deep feature routes */}
-                <Stack.Screen name="Records" component={RecordsStackScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />
                 <Stack.Screen name="EditProfile" component={EditProfileScreen} />
                 <Stack.Screen name="VaccinationRecords" component={VaccinationRecordsScreen} />
@@ -143,25 +142,15 @@ function RecordsStackScreen() {
   return (
     <RecordsStack.Navigator
       screenOptions={{
-        headerShown: true,
-        headerStyle: { 
-          backgroundColor: '#FFFFFF',
-          height: 80, // Compact header
-        },
-        headerTitleStyle: { 
-          color: '#0A2540', 
-          fontWeight: '600', 
-          fontSize: 18,
-        },
-        headerTitleAlign: 'center',
-        contentStyle: { backgroundColor: '#F8FAFC' }
+  headerLargeTitle: Platform.OS === 'ios',
+  headerTitleAlign: Platform.OS === 'ios' ? 'center' : 'left',
+  headerLargeTitleStyle: { color: '#0A2540', fontWeight: '700', textAlign: 'right' },
+  headerTitleStyle: { color: '#0A2540', fontWeight: '600', textAlign: 'center' },
+        headerStyle: { backgroundColor: '#FFFFFF' },
+        contentStyle: { backgroundColor: brandTheme.colors.background }
       }}
     >
-      <RecordsStack.Screen 
-        name="RecordsMain" 
-        component={RecordsScreen} 
-        options={{ title: t('healthRecords') || 'Health Records' }} 
-      />
+      <RecordsStack.Screen name="RecordsMain" component={RecordsScreen} options={{ title: t('records') }} />
     </RecordsStack.Navigator>
   );
 }
