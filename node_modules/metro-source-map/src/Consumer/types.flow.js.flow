@@ -13,6 +13,7 @@
 
 import type {IterationOrder, LookupBias} from './constants';
 import type {Number0, Number1} from 'ob1';
+
 export type {IterationOrder, LookupBias};
 export type GeneratedOffset = {+lines: Number0, +columns: Number0};
 export type SourcePosition = {
@@ -34,7 +35,7 @@ export type GeneratedPositionLookup = {
   ...
 };
 
-export type Mapping = {
+export type Mapping = $ReadOnly<{
   source: ?string,
   generatedLine: Number1,
   generatedColumn: Number0,
@@ -42,7 +43,7 @@ export type Mapping = {
   originalColumn: ?Number0,
   name: ?string,
   ...
-};
+}>;
 
 export interface IConsumer {
   originalPositionFor(

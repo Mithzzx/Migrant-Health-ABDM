@@ -82,6 +82,12 @@ const DevToolsAPIImpl = class {
    */
   _dispatchOnInspectorFrontendAPI(method, args) {
     const inspectorFrontendAPI = /** @type {!Object<string, function()>} */ (window['InspectorFrontendAPI']);
+    if (!inspectorFrontendAPI) {
+      // This is the case for device_mode_emulation_frame entrypoint. It's created via `window.open` from
+      // the DevTools window, so it shares a context with DevTools but has a separate DevToolsUIBinding and `window` object.
+      // We can safely ignore the events since they also arrive on the DevTools `window` object.
+      return;
+    }
     inspectorFrontendAPI[method].apply(inspectorFrontendAPI, args);
   }
 
@@ -282,10 +288,6 @@ const DevToolsAPIImpl = class {
     }
   }
 
-  reattachMainTarget() {
-    this._dispatchOnInspectorFrontendAPI('reattachMainTarget', []);
-  }
-
   /**
    * @param {boolean} hard
    */
@@ -317,6 +319,10 @@ const DevToolsAPIImpl = class {
    */
   searchCompleted(requestId, fileSystemPath, files) {
     this._dispatchOnInspectorFrontendAPI('searchCompleted', [requestId, fileSystemPath, files]);
+  }
+
+  colorThemeChanged() {
+    this._dispatchOnInspectorFrontendAPI('colorThemeChanged', []);
   }
 
   /**
@@ -401,13 +407,11 @@ window.DevToolsAPI = DevToolsAPI;
  */
 const EnumeratedHistogram = {
   ActionTaken: 'DevTools.ActionTaken',
-  BreakpointWithConditionAdded: 'DevTools.BreakpointWithConditionAdded',
-  BreakpointEditDialogRevealedFrom: 'DevTools.BreakpointEditDialogRevealedFrom',
   CSSHintShown: 'DevTools.CSSHintShown',
   DeveloperResourceLoaded: 'DevTools.DeveloperResourceLoaded',
   DeveloperResourceScheme: 'DevTools.DeveloperResourceScheme',
-  ElementsSidebarTabShown: 'DevTools.Elements.SidebarTabShown',
   ExperimentDisabled: 'DevTools.ExperimentDisabled',
+  ExperimentDisabledAtLaunch: 'DevTools.ExperimentDisabledAtLaunch',
   ExperimentEnabled: 'DevTools.ExperimentEnabled',
   ExperimentEnabledAtLaunch: 'DevTools.ExperimentEnabledAtLaunch',
   IssueCreated: 'DevTools.IssueCreated',
@@ -418,11 +422,10 @@ const EnumeratedHistogram = {
   KeyboardShortcutFired: 'DevTools.KeyboardShortcutFired',
   Language: 'DevTools.Language',
   LighthouseModeRun: 'DevTools.LighthouseModeRun',
-  LinearMemoryInspectorRevealedFrom: 'DevTools.LinearMemoryInspector.RevealedFrom',
-  LinearMemoryInspectorTarget: 'DevTools.LinearMemoryInspector.Target',
+  LighthouseCategoryUsed: 'DevTools.LighthouseCategoryUsed',
   ManifestSectionSelected: 'DevTools.ManifestSectionSelected',
-  PanelClosed: 'DevTools.PanelClosed',
   PanelShown: 'DevTools.PanelShown',
+  PanelShownInLocation: 'DevTools.PanelShownInLocation',
   RecordingAssertion: 'DevTools.RecordingAssertion',
   RecordingCodeToggled: 'DevTools.RecordingCodeToggled',
   RecordingCopiedToClipboard: 'DevTools.RecordingCopiedToClipboard',
@@ -442,11 +445,15 @@ const EnumeratedHistogram = {
   ColorConvertedFrom: 'DevTools.ColorConvertedFrom',
   ColorPickerOpenedFrom: 'DevTools.ColorPickerOpenedFrom',
   CSSPropertyDocumentation: 'DevTools.CSSPropertyDocumentation',
-  InlineScriptParsed: 'DevTools.InlineScriptParsed',
-  VMInlineScriptTypeShown: 'DevTools.VMInlineScriptShown',
-  BreakpointsRestoredFromStorageCount: 'DevTools.BreakpointsRestoredFromStorageCount',
   SwatchActivated: 'DevTools.SwatchActivated',
-  BadgeActivated: 'DevTools.BadgeActivated',
+  AnimationPlaybackRateChanged: 'DevTools.AnimationPlaybackRateChanged',
+  AnimationPointDragged: 'DevTools.AnimationPointDragged',
+  LegacyResourceTypeFilterNumberOfSelectedChanged: 'DevTools.LegacyResourceTypeFilterNumberOfSelectedChanged',
+  LegacyResourceTypeFilterItemSelected: 'DevTools.LegacyResourceTypeFilterItemSelected',
+  ResourceTypeFilterNumberOfSelectedChanged: 'DevTools.ResourceTypeFilterNumberOfSelectedChanged',
+  ResourceTypeFilterItemSelected: 'DevTools.ResourceTypeFilterItemSelected',
+  NetworkPanelMoreFiltersNumberOfSelectedChanged: 'DevTools.NetworkPanelMoreFiltersNumberOfSelectedChanged',
+  NetworkPanelMoreFiltersItemSelected: 'DevTools.NetworkPanelMoreFiltersItemSelected',
 };
 
 /**
@@ -632,6 +639,14 @@ const InspectorFrontendHostImpl = class {
 
   /**
    * @override
+   * @param {function(Object<string, Object<string, string|boolean>>):void} callback
+   */
+  getHostConfig(callback) {
+    DevToolsAPI.sendMessageToEmbedder('getHostConfig', [], /** @type {function(?Object)} */ (callback));
+  }
+
+  /**
+   * @override
    * @param {string} origin
    * @param {string} script
    */
@@ -665,6 +680,14 @@ const InspectorFrontendHostImpl = class {
 
   /**
    * @override
+   * @param {string} query
+   */
+  openSearchResultsInNewTab(query) {
+    DevToolsAPI.sendMessageToEmbedder('openSearchResultsInNewTab', [query], null);
+  }
+
+  /**
+   * @override
    * @param {string} fileSystemPath
    */
   showItemInFolder(fileSystemPath) {
@@ -676,9 +699,10 @@ const InspectorFrontendHostImpl = class {
    * @param {string} url
    * @param {string} content
    * @param {boolean} forceSaveAs
+   * @param {boolean} isBase64
    */
-  save(url, content, forceSaveAs) {
-    DevToolsAPI.sendMessageToEmbedder('save', [url, content, forceSaveAs], null);
+  save(url, content, forceSaveAs, isBase64) {
+    DevToolsAPI.sendMessageToEmbedder('save', [url, content, forceSaveAs, isBase64], null);
   }
 
   /**
@@ -978,6 +1002,62 @@ const InspectorFrontendHostImpl = class {
     DevToolsAPI.setAddExtensionCallback(callback);
   }
 
+  /**
+   * @override
+   * @param {InspectorFrontendHostAPI.ImpressionEvent} impressionEvent
+   */
+  recordImpression(impressionEvent) {
+    DevToolsAPI.sendMessageToEmbedder('recordImpression', [impressionEvent], null);
+  }
+
+  /**
+   * @override
+   * @param {InspectorFrontendHostAPI.ResizeEvent} resizeEvent
+   */
+  recordResize(resizeEvent) {
+    DevToolsAPI.sendMessageToEmbedder('recordResize', [resizeEvent], null);
+  }
+
+  /**
+   * @override
+   * @param {InspectorFrontendHostAPI.ClickEvent} clickEvent
+   */
+  recordClick(clickEvent) {
+    DevToolsAPI.sendMessageToEmbedder('recordClick', [clickEvent], null);
+  }
+
+  /**
+   * @override
+   * @param {InspectorFrontendHostAPI.HoverEvent} hoverEvent
+   */
+  recordHover(hoverEvent) {
+    DevToolsAPI.sendMessageToEmbedder('recordHover', [hoverEvent], null);
+  }
+
+  /**
+   * @override
+   * @param {InspectorFrontendHostAPI.DragEvent} dragEvent
+   */
+  recordDrag(dragEvent) {
+    DevToolsAPI.sendMessageToEmbedder('recordDrag', [dragEvent], null);
+  }
+
+  /**
+   * @override
+   * @param {InspectorFrontendHostAPI.ChangeEvent} changeEvent
+   */
+  recordChange(changeEvent) {
+    DevToolsAPI.sendMessageToEmbedder('recordChange', [changeEvent], null);
+  }
+
+  /**
+   * @override
+   * @param {InspectorFrontendHostAPI.KeyDownEvent} keyDownEvent
+   */
+  recordKeyDown(keyDownEvent) {
+    DevToolsAPI.sendMessageToEmbedder('recordKeyDown', [keyDownEvent], null);
+  }
+
   // Backward-compatible methods below this line --------------------------------------------
 
   /**
@@ -1053,6 +1133,23 @@ const InspectorFrontendHostImpl = class {
    */
   initialTargetId() {
     return DevToolsAPI._initialTargetIdPromise;
+  }
+
+  /**
+   * @param {string} request
+   * @param {number} streamId
+   * @param {function(!InspectorFrontendHostAPI.DoAidaConversationResult): void} cb
+   */
+  doAidaConversation(request, streamId, cb) {
+    DevToolsAPI.sendMessageToEmbedder('doAidaConversation', [request, streamId], cb);
+  }
+
+  /**
+   * @param {string} request
+   * @param {function(!InspectorFrontendHostAPI.AidaClientResult): void} cb
+   */
+  registerAidaClientEvent(request, cb) {
+    DevToolsAPI.sendMessageToEmbedder('registerAidaClientEvent', [request], cb);
   }
 };
 
@@ -1190,7 +1287,6 @@ function installObjectObserve() {
     'showHeaSnapshotObjectsHiddenProperties',
     'showInheritedComputedStyleProperties',
     'showMediaQueryInspector',
-    'showNativeFunctionsInJSProfile',
     'showUAShadowDOM',
     'showWhitespacesInEditor',
     'sidebarPosition',
@@ -1198,6 +1294,7 @@ function installObjectObserve() {
     'automaticallyIgnoreListKnownThirdPartyScripts',
     'skipStackFramesPattern',
     'sourceMapInfobarDisabled',
+    'sourceMapSkippedInfobarDisabled',
     'sourcesPanelDebuggerSidebarSplitViewState',
     'sourcesPanelNavigatorSplitViewState',
     'sourcesPanelSplitSidebarRatio',
