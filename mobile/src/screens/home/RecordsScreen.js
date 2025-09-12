@@ -1,171 +1,32 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Platform, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Searchbar, Text, Icon, Button, FAB, Card, Dialog, Portal, ActivityIndicator, IconButton, Menu } from 'react-native-paper';
+import { Searchbar, Text, Icon, Button, FAB, Card, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
 import { useI18n } from '../../i18n/i18n';
 import sampleRecords from '../records/recordData';
 
-export default function RecordsScreen({ navigation, route }) {
+export default function RecordsScreen({ navigation }) {
   const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState(['all']); // Default to 'all' selected
-  
-  // Get selected language from navigation params or default to English
-  const selectedLanguage = route?.params?.selectedLanguage || 'en';
   
   // ABDM Integration State
   const [abdmRecords, setAbdmRecords] = useState([]); // Start with 0 records
   const [isAbdmLinked, setIsAbdmLinked] = useState(false);
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [abdmId, setAbdmId] = useState('14-1234-5678-9012'); // Demo ABDM ID
+  const [abdmId] = useState('14-1234-5678-9012'); // Demo ABDM ID
 
   const onChangeSearch = (query) => setSearchQuery(query);
-
-  // Supported Languages
-  const supportedLanguages = [
-    { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
-    { code: 'hi', name: 'Hindi', nativeName: 'हिंदी', flag: '🇮🇳' },
-    { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം', flag: '🇮🇳' },
-    { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', flag: '🇮🇳' },
-    { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', flag: '🇮🇳' },
-    { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ', flag: '🇮🇳' },
-    { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇮🇳' },
-    { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી', flag: '🇮🇳' },
-    { code: 'mr', name: 'Marathi', nativeName: 'मराठी', flag: '🇮🇳' },
-    { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
-  ];
-
-  // Demo Translation Service
-  const translateText = (text, targetLang) => {
-    const translations = {
-      // Medical Record Titles
-      'Blood Test Report': {
-        hi: 'रक्त जांच रिपोर्ट',
-        ml: 'രക്ത പരിശോധന റിപ്പോർട്ട്',
-        ta: 'இரத்த பரிசோதனை அறிக்கை',
-        te: 'రక్త పరీక్ష నివేదిక',
-        kn: 'ರಕ್ತ ಪರೀಕ್ಷೆ ವರದಿ',
-        bn: 'রক্ত পরীক্ষার রিপোর্ট',
-        gu: 'લોહી પરીક્ષણ રિપોર્ટ',
-        mr: 'रक्त तपासणी अहवाल',
-        pa: 'ਖੂਨ ਦੀ ਜਾਂਚ ਰਿਪੋਰਟ'
-      },
-      'Prescription - Antibiotics': {
-        hi: 'नुस्खा - एंटीबायोटिक्स',
-        ml: 'കുറിപ്പടി - ആൻറിബയോട്ടിക്സ്',
-        ta: 'மருந்து பரிந்துரை - நுண்ணுயிர் எதிர்ப்பிகள்',
-        te: 'ప్రిస్క్రిప్షన్ - యాంటీబయాటిక్స్',
-        kn: 'ಔಷಧಿ ಸೂಚನೆ - ಆಂಟಿಬಯಾಟಿಕ್ಸ್',
-        bn: 'প্রেসক্রিপশন - অ্যান্টিবায়োটিক',
-        gu: 'પ્રિસ્ક્રિપ્શન - એન્ટિબાયોટિક્સ',
-        mr: 'प्रिस्क्रिप्शन - प्रतिजैविक',
-        pa: 'ਨੁਸਖਾ - ਐਂਟੀਬਾਇਓਟਿਕਸ'
-      },
-      'Chest X-Ray Report': {
-        hi: 'छाती एक्स-रे रिपोर्ट',
-        ml: 'നെഞ്ച് എക്സ്-റേ റിപ്പോർട്ട്',
-        ta: 'மார்பு எக்ஸ்-ரே அறிக்கை',
-        te: 'ఛాతీ ఎక్స్-రే నివేదిక',
-        kn: 'ಎದೆಯ ಎಕ್ಸ್-ರೇ ವರದಿ',
-        bn: 'বুকের এক্স-রে রিপোর্ট',
-        gu: 'છાતીના એક્સ-રે રિપોર્ટ',
-        mr: 'छाती एक्स-रे अहवाल',
-        pa: 'ਛਾਤੀ ਦਾ ਐਕਸ-ਰੇ ਰਿਪੋਰਟ'
-      },
-      'Ayushman Bharat Coverage Card': {
-        hi: 'आयुष्मान भारत कवरेज कार्ड',
-        ml: 'ആയുഷ്മാൻ ഭാരത് കവറേജ് കാർഡ്',
-        ta: 'ஆயுஷ்மான் பாரத் கவரேஜ் கார்டு',
-        te: 'ఆయుష్మాన్ భారత్ కవరేజ్ కార్డ్',
-        kn: 'ಆಯುಷ್ಮಾನ್ ಭಾರತ್ ಕವರೇಜ್ ಕಾರ್ಡ್',
-        bn: 'আয়ুষ্মান ভারত কভারেজ কার্ড',
-        gu: 'આયુષ્માન ભારત કવરેજ કાર્ડ',
-        mr: 'आयुष्मान भारत कव्हरेज कार्ड',
-        pa: 'ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ ਕਵਰੇਜ ਕਾਰਡ'
-      },
-      'ESI Medical Coverage': {
-        hi: 'ईएसआई चिकित्सा कवरेज',
-        ml: 'ഇഎസ്ഐ മെഡിക്കൽ കവറേജ്',
-        ta: 'ஈஎஸ்ஐ மருத்துவ கவரேஜ்',
-        te: 'ఈఎస్ఐ వైద్య కవరేజ్',
-        kn: 'ಇಎಸ್ಐ ವೈದ್ಯಕೀಯ ಕವರೇಜ್',
-        bn: 'ইএসআই চিকিৎসা কভারেজ',
-        gu: 'ઇએસઆઇ મેડિકલ કવરેજ',
-        mr: 'ईएसआय वैद्यकीय कव्हरेज',
-        pa: 'ਈਐਸਆਈ ਮੈਡੀਕਲ ਕਵਰੇਜ'
-      },
-      'State Health Insurance Claim': {
-        hi: 'राज्य स्वास्थ्य बीमा दावा',
-        ml: 'സംസ്ഥാന ആരോഗ്യ ഇൻഷുറൻസ് ക്ലെയിം',
-        ta: 'மாநில சுகாதார காப்பீடு கோரிக்கை',
-        te: 'రాష్ట్ర ఆరోగ్య బీమా దావా',
-        kn: 'ರಾಜ್ಯ ಆರೋಗ್ಯ ವಿಮೆ ಹಕ್ಕು',
-        bn: 'রাজ্য স্বাস্থ্য বীমা দাবি',
-        gu: 'રાજ્ય આરોગ્ય વીમા દાવો',
-        mr: 'राज्य आरोग्य विमा दावा',
-        pa: 'ਰਾਜ ਸਿਹਤ ਬੀਮਾ ਦਾਅਵਾ'
-      },
-      'RSBY Portability Certificate': {
-        hi: 'आरएसबीवाई पोर्टेबिलिटी प्रमाणपत्र',
-        ml: 'ആർഎസ്ബിവൈ പോർട്ടബിലിറ്റി സർട്ടിഫിക്കറ്റ്',
-        ta: 'ஆர்எஸ்பிவை போர்டபிலிட்டி சான்றிதழ்',
-        te: 'ఆర్ఎస్బివై పోర్టబిలిటీ సర్టిఫికేట్',
-        kn: 'ಆರ್ಎಸ್ಬಿವೈ ಪೋರ್ಟಬಿಲಿಟಿ ಪ್ರಮಾಣಪತ್ರ',
-        bn: 'আরএসবিওয়াই পোর্টেবিলিটি সার্টিফিকেট',
-        gu: 'આરએસબીવાય પોર્ટેબિલિટી સર્ટિફિકેટ',
-        mr: 'आरएसबीवाय पोर्टेबिलिटी प्रमाणपत्र',
-        pa: 'ਆਰਐਸਬੀਵਾਈ ਪੋਰਟੇਬਿਲਟੀ ਸਰਟੀਫਿਕੇਟ'
-      },
-      'Private Health Insurance Policy': {
-        hi: 'निजी स्वास्थ्य बीमा पॉलिसी',
-        ml: 'സ്വകാര്യ ആരോഗ്യ ഇൻഷുറൻസ് പോളിസി',
-        ta: 'தனியார் சுகாதார காப்பீடு கொள்கை',
-        te: 'ప్రైవేట్ హెల్త్ ఇన్‌షురెన్స్ పాలసీ',
-        kn: 'ಖಾಸಗಿ ಆರೋಗ್ಯ ವಿಮಾ ನೀತಿ',
-        bn: 'ব্যক্তিগত স্বাস্থ্য বীমা নীতি',
-        gu: 'ખાનગી આરોગ્ય વીમા પોલિસી',
-        mr: 'खाजगी आरोग्य विमा पॉलिसी',
-        pa: 'ਪ੍ਰਾਈਵੇਟ ਹੈਲਥ ਇੰਸ਼ੋਰੈਂਸ ਪਾਲਿਸੀ'
-      }
-      // Add more translations as needed
-    };
-
-    if (targetLang === 'en' || !translations[text] || !translations[text][targetLang]) {
-      return text;
-    }
-    return translations[text][targetLang];
-  };
-
-  // Handle Language Selection
-  const handleLanguageSelect = async (langCode) => {
-    if (langCode === selectedLanguage) return;
-    
-    setIsTranslating(true);
-    setShowLanguageMenu(false);
-    
-    // Simulate translation delay
-    setTimeout(() => {
-      setSelectedLanguage(langCode);
-      setIsTranslating(false);
-      
-      const selectedLang = supportedLanguages.find(lang => lang.code === langCode);
-      Alert.alert(
-        'Language Changed',
-        `Records are now displayed in ${selectedLang.nativeName}. This is a demo translation.`,
-        [{ text: 'OK' }]
-      );
-    }, 1500);
-  };
 
   // Handle record viewing with ABDM integration
   const onRecordPress = (record) => {
     // ABDM-compliant record viewing
     const abdmRecord = {
       ...record,
-      abdmId: `ABDM-${record.id}-${Date.now()}`, // ABDM unique identifier
-      hipId: record.hospital.replace(/\s+/g, '_').toUpperCase(), // Health Information Provider ID
-      patientId: 'PHR_USER_123456', // Patient Health Record ID (would come from ABHA)
+      abdmId: `ABDM-${record.id}-${Date.now()}`,
+      hipId: record.hospital.replace(/\s+/g, '_').toUpperCase(),
+      patientId: 'PHR_USER_123456',
       careContext: {
         referenceNumber: `CC-${record.id}`,
         display: record.title
@@ -178,11 +39,9 @@ export default function RecordsScreen({ navigation, route }) {
       }
     };
 
-    // Navigate to ABDM-compliant record detail screen
     navigation.navigate('RecordDetail', { 
       record: abdmRecord,
       abdmCompliant: true,
-      selectedLanguage: selectedLanguage 
     });
   };
 
@@ -224,15 +83,15 @@ export default function RecordsScreen({ navigation, route }) {
       setIsAbdmLinked(true);
       
       Alert.alert(
-        'ABDM Link Success',
-        `Successfully linked ABDM ID: ${abdmId}\nFetched ${mockAbdmRecords.length} health records from ABDM sandbox.`,
-        [{ text: 'OK' }]
+        t('abdmLinkSuccess'),
+        t('abdmLinkSuccessMessage', { abdmId, count: mockAbdmRecords.length }),
+        [{ text: t('ok') }]
       );
     } catch (error) {
       Alert.alert(
-        'ABDM Link Failed',
-        'Failed to fetch records from ABDM sandbox. Please try again.',
-        [{ text: 'OK' }]
+        t('abdmLinkFailed'),
+        t('abdmLinkFailedMessage'),
+        [{ text: t('ok') }]
       );
     } finally {
       setIsLoading(false);
@@ -252,53 +111,44 @@ export default function RecordsScreen({ navigation, route }) {
     setAbdmRecords([]);
     setIsAbdmLinked(false);
     Alert.alert(
-      'ABDM Unlinked',
-      'ABDM account has been unlinked. Records cleared.',
-      [{ text: 'OK' }]
+      t('abdmUnlinked'),
+      t('abdmUnlinkedMessage'),
+      [{ text: t('ok') }]
     );
   };
 
   const recordCategories = [
-    { id: 'all', icon: 'view-grid', label: 'All', color: '#43A047' },
-    { id: 'diagnostic', icon: 'monitor-screenshot', label: 'Diagnostic Report', color: '#2196F3' },
-    { id: 'discharge', icon: 'file-document-outline', label: 'Discharge Summary', color: '#FF9800' },
-    { id: 'lab', icon: 'test-tube', label: 'Lab Report', color: '#E91E63' },
-    { id: 'prescription', icon: 'pill', label: 'Prescription', color: '#9C27B0' },
-    { id: 'immunization', icon: 'needle', label: 'Immunization Records', color: '#00BCD4' },
-    { id: 'consultation', icon: 'doctor', label: 'OP Consultation', color: '#4CAF50' },
-    { id: 'wellness', icon: 'heart-pulse', label: 'Wellness Record', color: '#FF5722' },
-    { id: 'invoice', icon: 'receipt', label: 'Invoice', color: '#795548' },
-    { id: 'others', icon: 'dots-horizontal', label: 'Others', color: '#607D8B' },
+    { id: 'all', icon: 'view-grid', label_key: 'all', color: '#43A047' },
+    { id: 'diagnostic', icon: 'monitor-screenshot', label_key: 'diagnosticReport', color: '#2196F3' },
+    { id: 'discharge', icon: 'file-document-outline', label_key: 'dischargeSummary', color: '#FF9800' },
+    { id: 'lab', icon: 'test-tube', label_key: 'labReport', color: '#E91E63' },
+    { id: 'prescription', icon: 'pill', label_key: 'prescription', color: '#9C27B0' },
+    { id: 'immunization', icon: 'needle', label_key: 'immunizationRecords', color: '#00BCD4' },
+    { id: 'consultation', icon: 'doctor', label_key: 'opConsultation', color: '#4CAF50' },
+    { id: 'wellness', icon: 'heart-pulse', label_key: 'wellnessRecord', color: '#FF5722' },
+    { id: 'invoice', icon: 'receipt', label_key: 'invoice', color: '#795548' },
+    { id: 'others', icon: 'dots-horizontal', label_key: 'others', color: '#607D8B' },
   ];
 
   const onCategoryPress = (categoryId) => {
     if (categoryId === 'all') {
-      // If 'All' is selected, clear other selections and select only 'All'
       setSelectedCategories(['all']);
     } else {
-      // Remove 'All' from selection when other categories are selected
       let newSelection = selectedCategories.filter(id => id !== 'all');
       
       if (newSelection.includes(categoryId)) {
-        // Remove if already selected
         newSelection = newSelection.filter(id => id !== categoryId);
-        // If no categories selected, default back to 'All'
         if (newSelection.length === 0) {
           newSelection = ['all'];
         }
       } else {
-        // Add to selection
         newSelection.push(categoryId);
       }
       
       setSelectedCategories(newSelection);
     }
-    
-    console.log('Selected categories:', categoryId, selectedCategories);
-    // TODO: Filter records by selected categories
   };
 
-  // Filter records based on selected categories - use ABDM records when linked
   const currentRecords = isAbdmLinked ? abdmRecords : [];
   const filteredRecords = selectedCategories.includes('all') 
     ? currentRecords 
@@ -309,15 +159,14 @@ export default function RecordsScreen({ navigation, route }) {
     return categoryData ? { icon: categoryData.icon, color: categoryData.color } : { icon: 'file', color: '#607D8B' };
   };
 
-  // Get display title for records section
   const getRecordsTitle = () => {
     if (selectedCategories.includes('all')) {
-      return `All Records (${filteredRecords.length})`;
+      return t('allRecords', { count: filteredRecords.length });
     } else if (selectedCategories.length === 1) {
       const category = recordCategories.find(cat => cat.id === selectedCategories[0]);
-      return `${category?.label} (${filteredRecords.length})`;
+      return t('categoryRecords', { category: t(category?.label_key), count: filteredRecords.length });
     } else {
-      return `${selectedCategories.length} Filters Selected (${filteredRecords.length})`;
+      return t('filtersSelected', { count: selectedCategories.length, recordCount: filteredRecords.length });
     }
   };
 
@@ -328,10 +177,9 @@ export default function RecordsScreen({ navigation, route }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Search Bar - Part of scrollable content */}
         <View style={styles.searchContainer}>
           <Searchbar
-            placeholder={t('Search Records') || 'Search records...'}
+            placeholder={t('searchRecords')}
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchBar}
@@ -342,9 +190,8 @@ export default function RecordsScreen({ navigation, route }) {
           />
         </View>
 
-        {/* Category Grid */}
         <View style={styles.categorySection}>
-          <Text style={styles.sectionTitle}>{t('Filters') || 'Filters'}</Text>
+          <Text style={styles.sectionTitle}>{t('filters')}</Text>
           <View style={styles.categoryGrid}>
             {recordCategories.map((category) => {
               const isSelected = selectedCategories.includes(category.id);
@@ -365,7 +212,7 @@ export default function RecordsScreen({ navigation, route }) {
                     />
                   </View>
                   <Text style={styles.categoryLabel} numberOfLines={1} ellipsizeMode="tail">
-                    {category.label}
+                    {t(category.label_key)}
                   </Text>
                 </View>
               );
@@ -373,7 +220,6 @@ export default function RecordsScreen({ navigation, route }) {
           </View>
         </View>
 
-        {/* Filtered Records List */}
         {filteredRecords.length > 0 && (
           <View style={styles.recordsSection}>
             <Text style={styles.recordsTitle}>
@@ -399,16 +245,16 @@ export default function RecordsScreen({ navigation, route }) {
                       <View style={styles.recordInfo}>
                         <View style={styles.recordHeader}>
                           <Text style={styles.recordTitle} numberOfLines={1}>
-                            {translateText(record.title, selectedLanguage)}
+                            {t(record.title_key)}
                           </Text>
                           {isActive && (
                             <View style={styles.activeBadge}>
-                              <Text style={styles.activeBadgeText}>Active</Text>
+                              <Text style={styles.activeBadgeText}>{t('active')}</Text>
                             </View>
                           )}
                           {isFinal && (
                             <View style={styles.finalBadge}>
-                              <Text style={styles.finalBadgeText}>Final</Text>
+                              <Text style={styles.finalBadgeText}>{t('final')}</Text>
                             </View>
                           )}
                           {isCompleted && (
@@ -421,7 +267,7 @@ export default function RecordsScreen({ navigation, route }) {
                         <Text style={styles.recordDoctor}>{record.doctor}</Text>
                         <View style={styles.abdmIndicator}>
                           <Icon source="shield-check" size={12} color="#10B981" />
-                          <Text style={styles.abdmText}>ABDM Verified</Text>
+                          <Text style={styles.abdmText}>{t('abdmVerified')}</Text>
                         </View>
                       </View>
                       <View style={styles.recordActions}>
@@ -437,20 +283,19 @@ export default function RecordsScreen({ navigation, route }) {
           </View>
         )}
 
-        {/* ABDM Empty State - show when not linked */}
         {!isAbdmLinked && currentRecords.length === 0 && (
           <View style={styles.emptyContainer}>
             <View style={styles.emptyIconContainer}>
               <Icon source="shield-plus" size={64} color="#43A047" />
             </View>
             <Text style={styles.emptyTitle}>
-              Link Your ABDM Account
+              {t('linkYourAbdmAccount')}
             </Text>
             <Text style={styles.emptyDescription}>
-              Connect your Ayushman Bharat Digital Mission (ABDM) account to securely access your health records from across India.
+              {t('connectAbdmDescription')}
             </Text>
             <Text style={styles.abdmIdText}>
-              Demo ABDM ID: {abdmId}
+              {t('demoAbdmId', { abdmId })}
             </Text>
             
             <Button
@@ -462,22 +307,21 @@ export default function RecordsScreen({ navigation, route }) {
               icon="shield-check"
               loading={isLoading}
             >
-              {isLoading ? 'Linking ABDM...' : 'Link ABDM Account'}
+              {isLoading ? t('linkingAbdm') : t('linkAbdmAccount')}
             </Button>
 
             <Text style={styles.sandboxNote}>
-              * This is a sandbox demo using sample ABDM data
+              {t('sandboxDemoNote')}
             </Text>
           </View>
         )}
 
-        {/* Show records count when ABDM is linked */}
         {isAbdmLinked && (
           <View style={styles.abdmLinkedContainer}>
             <View style={styles.abdmLinkedHeader}>
               <Icon source="shield-check" size={20} color="#10B981" />
               <Text style={styles.abdmLinkedText}>
-                ABDM Linked: {abdmId}
+                {t('abdmLinked', { abdmId })}
               </Text>
               <Button 
                 mode="text" 
@@ -485,45 +329,42 @@ export default function RecordsScreen({ navigation, route }) {
                 textColor="#DC2626"
                 compact
               >
-                Unlink
+                {t('unlink')}
               </Button>
             </View>
           </View>
         )}
       </ScrollView>
 
-      {/* Floating Action Button - No Label */}
       <FAB
         icon="plus"
         style={styles.fab}
         color="#FFFFFF"
         onPress={() => {
-          // TODO: Navigate to manual upload/add record
           console.log('Add record manually');
         }}
         mode="elevated"
       />
 
-      {/* ABDM Link Confirmation Dialog */}
       <Portal>
         <Dialog visible={showLinkDialog} onDismiss={() => setShowLinkDialog(false)} style={styles.dialogContainer}>
           <Dialog.Icon icon="shield-check" />
-          <Dialog.Title style={styles.dialogTitle}>Link ABDM Account</Dialog.Title>
+          <Dialog.Title style={styles.dialogTitle}>{t('linkAbdmAccount')}</Dialog.Title>
           <Dialog.Content>
             <Text style={styles.dialogText}>
-              Do you want to link your ABDM account to access your health records?
+              {t('confirmAbdmLinkMessage')}
             </Text>
             <View style={styles.abdmIdContainer}>
-              <Text style={styles.abdmIdLabel}>ABDM ID:</Text>
+              <Text style={styles.abdmIdLabel}>{t('abdmIdLabel')}</Text>
               <Text style={styles.abdmIdValue}>{abdmId}</Text>
             </View>
             <Text style={styles.dialogSubtext}>
-              This will securely fetch your health records from the ABDM network using sandbox demo data.
+              {t('abdmLinkSandboxNote')}
             </Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowLinkDialog(false)} textColor="#6B7280">
-              Cancel
+              {t('cancel')}
             </Button>
             <Button 
               onPress={confirmAbdmLink} 
@@ -531,7 +372,7 @@ export default function RecordsScreen({ navigation, route }) {
               style={styles.confirmButton}
               loading={isLoading}
             >
-              {isLoading ? 'Linking...' : 'Confirm Link'}
+              {isLoading ? t('linking') : t('confirmLink')}
             </Button>
           </Dialog.Actions>
         </Dialog>

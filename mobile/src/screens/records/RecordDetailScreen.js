@@ -2,90 +2,12 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Card, Button, Icon, Chip, Divider } from 'react-native-paper';
+import { useI18n } from '../../i18n/i18n';
 
 export default function RecordDetailScreen({ route, navigation }) {
-  const { record, abdmCompliant, selectedLanguage = 'en' } = route.params;
+  const { t } = useI18n();
+  const { record, abdmCompliant } = route.params;
   const [sharing, setSharing] = useState(false);
-
-  // Demo Translation Service (same as RecordsScreen)
-  const translateText = (text, targetLang) => {
-    const translations = {
-      // Medical Record Titles
-      'Blood Test Report': {
-        hi: 'रक्त जांच रिपोर्ट',
-        ml: 'രക്ത പരിശോധന റിപ്പോർട്ട്',
-        ta: 'இரத்த பரிசோதனை அறிக்கை',
-        te: 'రక్త పరీక్ష నివేదిక',
-        kn: 'ರಕ್ತ ಪರೀಕ್ಷೆ ವರದಿ',
-        bn: 'রক্ত পরীক্ষার রিপোর্ট',
-        gu: 'લોહી પરીક્ષણ રિપોર્ટ',
-        mr: 'रक्त तपासणी अहवाल',
-        pa: 'ਖੂਨ ਦੀ ਜਾਂਚ ਰਿਪੋਰਟ'
-      },
-      'Prescription - Antibiotics': {
-        hi: 'नुस्खा - एंटीबायोटिक्स',
-        ml: 'കുറിപ്പടി - ആൻറിബയോട്ടിക്സ്',
-        ta: 'மருந்து பரிந்துரை - நுண்ணுயிர் எதிர்ப்பிகள்',
-        te: 'ప్రిస్క్రిప్షన్ - యాంటీబయాటిక్స్',
-        kn: 'ಔಷಧಿ ಸೂಚನೆ - ಆಂಟಿಬಯಾಟಿಕ್ಸ್',
-        bn: 'প্রেসক্রিপশন - অ্যান্টিবায়োটিক',
-        gu: 'પ્રિસ્ક્રિપ્શન - એન્ટિબાયોટિક્સ',
-        mr: 'प्रिस्क्रिप्शन - प्रतिजैविक',
-        pa: 'ਨੁਸਖਾ - ਐਂਟੀਬਾਇਓਟਿਕਸ'
-      },
-      // Medical Terms
-      'Record Details': {
-        hi: 'रिकॉर्ड विवरण',
-        ml: 'റെക്കോർഡ് വിശദാംശങ്ങൾ',
-        ta: 'பதிவு விவரங்கள்',
-        te: 'రికార్డ్ వివరాలు',
-        kn: 'ದಾಖಲೆ ವಿವರಗಳು',
-        bn: 'রেকর্ডের বিবরণ',
-        gu: 'રેકોર્ડ વિગતો',
-        mr: 'रेकॉर्ड तपशील',
-        pa: 'ਰਿਕਾਰਡ ਵੇਰਵੇ'
-      },
-      'Test Results': {
-        hi: 'परीक्षण परिणाम',
-        ml: 'പരിശോധന ഫലങ്ങൾ',
-        ta: 'சோதனை முடிவுகள்',
-        te: 'పరీక్ష ఫలితాలు',
-        kn: 'ಪರೀಕ್ಷೆಯ ಫಲಿತಾಂಶಗಳು',
-        bn: 'পরীক্ষার ফলাফল',
-        gu: 'પરીક્ષણ પરિણામો',
-        mr: 'चाचणी परिणाम',
-        pa: 'ਟੈਸਟ ਦੇ ਨਤੀਜੇ'
-      },
-      'Medications': {
-        hi: 'दवाएं',
-        ml: 'മരുന്നുകൾ',
-        ta: 'மருந்துகள்',
-        te: 'మందులు',
-        kn: 'ಔಷಧಿಗಳು',
-        bn: 'ওষুধ',
-        gu: 'દવાઓ',
-        mr: 'औषधे',
-        pa: 'ਦਵਾਈਆਂ'
-      },
-      'Normal': {
-        hi: 'सामान्य',
-        ml: 'സാധാരണ',
-        ta: 'சாதாரண',
-        te: 'సాధారణ',
-        kn: 'ಸಾಮಾನ್ಯ',
-        bn: 'স্বাভাবিক',
-        gu: 'સામાન્ય',
-        mr: 'सामान्य',
-        pa: 'ਆਮ'
-      }
-      // Add more translations as needed
-    };
-
-    if (targetLang === 'en' || !translations[text] || !translations[text][targetLang]) {
-      return text;
-    }
-    return translations[text][targetLang];
-  };
 
   const getCategoryColor = (type) => {
     const colors = {
@@ -107,20 +29,20 @@ export default function RecordDetailScreen({ route, navigation }) {
     setTimeout(() => {
       setSharing(false);
       Alert.alert(
-        'ABDM Sharing',
-        'Record shared securely via ABDM network. Healthcare provider will receive encrypted access link.',
-        [{ text: 'OK' }]
+        t('abdmSharing'),
+        t('abdmSharingMessage'),
+        [{ text: t('ok') }]
       );
     }, 2000);
   };
 
   const handleDownload = () => {
     Alert.alert(
-      'Download Record',
-      'This will download the ABDM-verified document to your device.',
+      t('downloadRecord'),
+      t('downloadRecordMessage'),
       [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Download', onPress: () => console.log('Download started') }
+        { text: t('cancel'), style: 'cancel' },
+        { text: t('download'), onPress: () => console.log('Download started') }
       ]
     );
   };
@@ -133,9 +55,9 @@ export default function RecordDetailScreen({ route, navigation }) {
           <Card.Content style={styles.abdmHeader}>
             <View style={styles.abdmBadge}>
               <Icon source="shield-check" size={16} color="#FFFFFF" />
-              <Text style={styles.abdmBadgeText}>ABDM Verified</Text>
+              <Text style={styles.abdmBadgeText}>{t('abdmVerified')}</Text>
             </View>
-            <Text style={styles.abdmId}>ID: {record.abdmId}</Text>
+            <Text style={styles.abdmId}>{t('abdmIdLabel')} {record.abdmId}</Text>
           </Card.Content>
         </Card>
 
@@ -147,7 +69,7 @@ export default function RecordDetailScreen({ route, navigation }) {
                 <Icon source="file-document" size={32} color="#FFFFFF" />
               </View>
               <View style={styles.headerInfo}>
-                <Text style={styles.recordTitle}>{translateText(record.title, selectedLanguage)}</Text>
+                <Text style={styles.recordTitle}>{t(record.title_key)}</Text>
                 <Text style={styles.recordMeta}>{record.date} • {record.hospital}</Text>
                 <Text style={styles.recordDoctor}>{record.doctor}</Text>
               </View>
@@ -170,20 +92,20 @@ export default function RecordDetailScreen({ route, navigation }) {
         {/* Record Details */}
         <Card style={styles.detailCard} mode="outlined">
           <Card.Content>
-            <Text style={styles.sectionTitle}>{translateText('Record Details', selectedLanguage)}</Text>
+            <Text style={styles.sectionTitle}>{t('recordDetails')}</Text>
             <Divider style={styles.divider} />
             
-            {record.description && (
+            {record.description_key && (
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Description:</Text>
-                <Text style={styles.detailValue}>{record.description}</Text>
+                <Text style={styles.detailLabel}>{t('description')}:</Text>
+                <Text style={styles.detailValue}>{t(record.description_key)}</Text>
               </View>
             )}
 
             {/* Lab Results */}
             {record.results && (
               <View>
-                <Text style={styles.subSectionTitle}>{translateText('Test Results', selectedLanguage)}</Text>
+                <Text style={styles.subSectionTitle}>{t('testResults')}</Text>
                 {record.results.map((result, index) => (
                   <View key={index} style={styles.resultRow}>
                     <Text style={styles.testName}>{result.test}</Text>
@@ -195,7 +117,7 @@ export default function RecordDetailScreen({ route, navigation }) {
                       style={[styles.statusIndicator, { backgroundColor: result.status === 'Normal' ? '#E8F5E8' : '#FEF2F2' }]}
                       textStyle={{ color: result.status === 'Normal' ? '#059669' : '#DC2626', fontSize: 10 }}
                     >
-                      {translateText(result.status, selectedLanguage)}
+                      {t(result.status.toLowerCase())}
                     </Chip>
                   </View>
                 ))}
@@ -205,12 +127,12 @@ export default function RecordDetailScreen({ route, navigation }) {
             {/* Medications */}
             {record.medications && (
               <View>
-                <Text style={styles.subSectionTitle}>{translateText('Medications', selectedLanguage)}</Text>
+                <Text style={styles.subSectionTitle}>{t('medications')}</Text>
                 {record.medications.map((med, index) => (
                   <View key={index} style={styles.medicationRow}>
                     <Text style={styles.medicationName}>{med.name}</Text>
                     <Text style={styles.medicationDosage}>{med.dosage}</Text>
-                    <Text style={styles.medicationDuration}>Duration: {med.duration}</Text>
+                    <Text style={styles.medicationDuration}>{t('duration')}: {med.duration}</Text>
                     <Text style={styles.medicationInstructions}>{med.instructions}</Text>
                   </View>
                 ))}
@@ -220,7 +142,7 @@ export default function RecordDetailScreen({ route, navigation }) {
             {/* Findings */}
             {record.findings && (
               <View>
-                <Text style={styles.subSectionTitle}>Findings</Text>
+                <Text style={styles.subSectionTitle}>{t('findings')}</Text>
                 {record.findings.map((finding, index) => (
                   <Text key={index} style={styles.findingItem}>• {finding}</Text>
                 ))}
@@ -229,7 +151,7 @@ export default function RecordDetailScreen({ route, navigation }) {
 
             {record.notes && (
               <View style={styles.notesSection}>
-                <Text style={styles.detailLabel}>Notes:</Text>
+                <Text style={styles.detailLabel}>{t('notes')}:</Text>
                 <Text style={styles.notesText}>{record.notes}</Text>
               </View>
             )}
@@ -239,23 +161,23 @@ export default function RecordDetailScreen({ route, navigation }) {
         {/* ABDM Metadata */}
         <Card style={styles.metadataCard} mode="outlined">
           <Card.Content>
-            <Text style={styles.sectionTitle}>ABDM Information</Text>
+            <Text style={styles.sectionTitle}>{t('abdmInformation')}</Text>
             <Divider style={styles.divider} />
             
             <View style={styles.metadataRow}>
-              <Text style={styles.metadataLabel}>HIP ID:</Text>
+              <Text style={styles.metadataLabel}>{t('hipId')}</Text>
               <Text style={styles.metadataValue}>{record.hipId}</Text>
             </View>
             <View style={styles.metadataRow}>
-              <Text style={styles.metadataLabel}>Care Context:</Text>
+              <Text style={styles.metadataLabel}>{t('careContext')}</Text>
               <Text style={styles.metadataValue}>{record.careContext?.referenceNumber}</Text>
             </View>
             <View style={styles.metadataRow}>
-              <Text style={styles.metadataLabel}>Encryption:</Text>
+              <Text style={styles.metadataLabel}>{t('encryption')}</Text>
               <Text style={styles.metadataValue}>{record.metadata?.encryption}</Text>
             </View>
             <View style={styles.metadataRow}>
-              <Text style={styles.metadataLabel}>Version:</Text>
+              <Text style={styles.metadataLabel}>{t('version')}</Text>
               <Text style={styles.metadataValue}>{record.metadata?.version}</Text>
             </View>
           </Card.Content>
@@ -272,7 +194,7 @@ export default function RecordDetailScreen({ route, navigation }) {
             loading={sharing}
             icon="share-variant"
           >
-            {sharing ? 'Sharing via ABDM...' : 'Share via ABDM'}
+            {sharing ? t('sharingViaAbdm') : t('shareViaAbdm')}
           </Button>
 
           <Button
@@ -283,7 +205,7 @@ export default function RecordDetailScreen({ route, navigation }) {
             onPress={handleDownload}
             icon="download"
           >
-            Download PDF
+            {t('downloadPdf')}
           </Button>
         </View>
       </ScrollView>

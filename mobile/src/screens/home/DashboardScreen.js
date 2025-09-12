@@ -93,49 +93,145 @@ export default function DashboardScreen() {
         <UserProfileCard />
       </View>
 
-      {/* Section 1: Health Features Grid */}
-      <View style={styles.section}>
-        <View style={styles.gridRow}>
-          <FeatureCard
-            icon="folder-heart"
-            title={t('healthLocker')}
-            description={t('securelyAccessRecords')}
-            buttonText={t('myRecords')}
-            onPress={navigateToRecords}
-          />
-          <FeatureCard
-            icon="card-account-details"
-            title={t('abhaCard')}
-            description={t('verifyAbhaDetails')}
-            buttonText={t('myAbha')}
-            onPress={() => {}}
-          />
+      {/* Main 2-Column Grid Section */}
+      <View style={styles.mainGridSection}>
+        <View style={styles.gridContainer}>
+          {/* Left Column - Large Health Records Card */}
+          <View style={styles.leftColumn}>
+            <View style={styles.largeCard}>
+              <View style={styles.largeCardHeader}>
+                <Icon source="folder-heart" size={28} color="#43A047" />
+                <Text style={styles.largeCardTitle}>{t('healthLocker')}</Text>
+              </View>
+              <Text style={styles.largeCardDescription}>
+                {t('securelyAccessRecords')}
+              </Text>
+              <View style={styles.statsContainer}>
+                <View style={styles.statItem}>
+                  <Text style={styles.statNumber}>12</Text>
+                  <Text style={styles.statLabel}>Records</Text>
+                </View>
+                <View style={styles.statItem}>
+                  <Text style={styles.statNumber}>3</Text>
+                  <Text style={styles.statLabel}>Categories</Text>
+                </View>
+              </View>
+              <View style={styles.abdmBadge}>
+                <Icon source="shield-check" size={16} color="#10B981" />
+                <Text style={styles.abdmBadgeText}>ABDM Verified</Text>
+              </View>
+              <Button
+                mode="contained"
+                style={styles.largeCardButton}
+                labelStyle={styles.largeCardButtonText}
+                onPress={navigateToRecords}
+                icon="arrow-right"
+                contentStyle={styles.buttonContent}
+              >
+                {t('myRecords')}
+              </Button>
+            </View>
+          </View>
+
+          {/* Right Column - Two Stacked Cards */}
+          <View style={styles.rightColumn}>
+            {/* Top Card - ABHA */}
+            <View style={styles.smallCard}>
+              <Icon source="card-account-details" size={24} color="#43A047" style={styles.smallCardIcon} />
+              <Text style={styles.smallCardTitle}>{t('abhaCard')}</Text>
+              <Text style={styles.smallCardDescription}>
+                {t('verifyAbhaDetails')}
+              </Text>
+              <Button
+                mode="outlined"
+                style={styles.smallCardButton}
+                labelStyle={styles.smallCardButtonText}
+                onPress={() => {}}
+              >
+                {t('myAbha')}
+              </Button>
+            </View>
+
+            {/* Bottom Card - Emergency Info */}
+            <View style={[styles.smallCard, styles.emergencyCard]}>
+              <Icon source="alert-circle" size={24} color="#DC2626" style={styles.smallCardIcon} />
+              <Text style={[styles.smallCardTitle, styles.emergencyTitle]}>{t('emergencyDetails')}</Text>
+              <Text style={styles.smallCardDescription}>
+                {t('quickAccessEmergency')}
+              </Text>
+              <Button
+                mode="contained"
+                style={styles.emergencyButton}
+                labelStyle={styles.emergencyButtonText}
+                onPress={() => {}}
+                icon="share"
+              >
+                Share Info
+              </Button>
+            </View>
+          </View>
         </View>
       </View>
 
-      {/* Section 2: Appointment Booking */}
-      <View style={styles.section}>
-        <AppointmentCard />
-      </View>
+      {/* Redesigned Appointment Booking Card */}
+      <View style={styles.appointmentSection}>
+        <View style={styles.appointmentCard}>
+          <View style={styles.appointmentHeader}>
+            <View style={styles.appointmentIconContainer}>
+              <Icon source="calendar-heart" size={32} color="#43A047" />
+            </View>
+            <View style={styles.appointmentHeaderText}>
+              <Text style={styles.appointmentTitle}>{t('bookAppointment')}</Text>
+              <Text style={styles.appointmentSubtitle}>{t('findDoctorsNearby')}</Text>
+            </View>
+            <Pressable onPress={() => {}} style={styles.historyButton}>
+              <Icon source="history" size={20} color="#6B7280" />
+              <Text style={styles.historyText}>{t('history')}</Text>
+            </Pressable>
+          </View>
+          
+          <View style={styles.appointmentServices}>
+            <View style={styles.serviceItem}>
+              <View style={styles.serviceIcon}>
+                <Icon source="video" size={20} color="#43A047" />
+              </View>
+              <Text style={styles.serviceText}>Video Call</Text>
+            </View>
+            <View style={styles.serviceItem}>
+              <View style={styles.serviceIcon}>
+                <Icon source="hospital-building" size={20} color="#43A047" />
+              </View>
+              <Text style={styles.serviceText}>In-person</Text>
+            </View>
+            <View style={styles.serviceItem}>
+              <View style={styles.serviceIcon}>
+                <Icon source="test-tube" size={20} color="#43A047" />
+              </View>
+              <Text style={styles.serviceText}>Lab Tests</Text>
+            </View>
+          </View>
 
-      {/* Section 3: Additional Health Options */}
-      <View style={styles.section}>
-        <View style={styles.gridRow}>
-          <FeatureCard
-            icon="heart-pulse"
-            title={t('myHealth')}
-            description={t('trackVitalsAndHealth')}
-            buttonText={t('manageHealth')}
-            onPress={() => {}}
-          />
-          <FeatureCard
-            icon="alert-circle"
-            title={t('emergencyDetails')}
-            description={t('quickAccessEmergency')}
-            buttonText={t('comingSoon')}
-            onPress={() => {}}
-            disabled={true}
-          />
+          <View style={styles.appointmentActions}>
+            <Button
+              mode="contained"
+              style={styles.bookButton}
+              labelStyle={styles.bookButtonText}
+              onPress={() => {}}
+              icon="calendar-plus"
+              contentStyle={styles.bookButtonContent}
+            >
+              {t('bookNow')}
+            </Button>
+            <Button
+              mode="outlined"
+              style={styles.emergencyCallButton}
+              labelStyle={styles.emergencyCallButtonText}
+              onPress={() => {}}
+              icon="phone"
+            >
+              Emergency
+            </Button>
+          </View>
         </View>
       </View>
 
@@ -213,68 +309,107 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 12,  // Increased from 24 to 32 for more separation
   },
-  gridRow: {
-    flexDirection: 'row',
-    gap: 8,  // Increased from 12 to 16 for more space between cards
+  // New 2-Column Grid Layout Styles
+  mainGridSection: {
+    marginBottom: 20,
   },
-  featureCard: {
-    flex: 1,
+  gridContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    height: 280, // Fixed height for the grid
+  },
+  leftColumn: {
+    flex: 1, // Equal width with right column
+  },
+  rightColumn: {
+    flex: 1, // Equal width with left column
+    gap: 12,
+  },
+  largeCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 20,
+    padding: 18,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    minHeight: 160,
+    height: '100%',
   },
-  disabledCard: {
-    backgroundColor: '#F8F9FA',
-    shadowOpacity: 0.02,
-    elevation: 1,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardIcon: {
+  largeCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 12,
   },
-  cardTitle: {
+  largeCardTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#0A2540',
-    marginBottom: 6,
-    lineHeight: 20,
+    marginLeft: 10,
+    flex: 1,
   },
-  cardDescription: {
+  largeCardDescription: {
     fontSize: 13,
     color: '#6B7280',
     lineHeight: 18,
     marginBottom: 16,
   },
-  disabledText: {
-    color: '#9CA3AF',
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 12,
   },
-  cardButton: {
+  statItem: {
+    alignItems: 'center',
+  },
+  statNumber: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#43A047',
+    marginBottom: 2,
+  },
+  statLabel: {
+    fontSize: 10,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+  abdmBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F0FDF4',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#10B981',
+  },
+  abdmBadgeText: {
+    fontSize: 11,
+    color: '#10B981',
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  largeCardButton: {
     backgroundColor: '#43A047',
     borderRadius: 12,
     marginTop: 'auto',
   },
-  disabledButton: {
-    backgroundColor: '#E5E7EB',
-  },
-  cardButtonText: {
+  largeCardButtonText: {
     fontSize: 13,
     fontWeight: '600',
     color: '#FFFFFF',
   },
-  appointmentCard: {
+  buttonContent: {
+    flexDirection: 'row-reverse',
+  },
+  smallCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
@@ -288,37 +423,163 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  smallCardIcon: {
+    marginBottom: 8,
+  },
+  smallCardTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#0A2540',
+    marginBottom: 6,
+    lineHeight: 18,
+  },
+  smallCardDescription: {
+    fontSize: 12,
+    color: '#6B7280',
+    lineHeight: 16,
+    marginBottom: 12,
+    flex: 1,
+  },
+  smallCardButton: {
+    borderColor: '#43A047',
+    borderRadius: 8,
+  },
+  smallCardButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#43A047',
+  },
+  // Emergency Card Styles
+  emergencyCard: {
+    borderColor: '#DC2626',
+    borderWidth: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  emergencyTitle: {
+    color: '#DC2626',
+  },
+  emergencyButton: {
+    backgroundColor: '#DC2626',
+    borderRadius: 8,
+  },
+  emergencyButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  // Redesigned Appointment Card Styles
+  appointmentSection: {
+    marginBottom: 20,
+  },
+  appointmentCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   appointmentHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 20,
+  },
+  appointmentIconContainer: {
+    width: 56,
+    height: 56,
+    backgroundColor: '#F0FDF4',
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+    borderWidth: 2,
+    borderColor: '#43A047',
+  },
+  appointmentHeaderText: {
+    flex: 1,
   },
   appointmentTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#0A2540',
+    marginBottom: 2,
   },
-  historyLink: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#43A047',
-  },
-  appointmentDescription: {
-    fontSize: 14,
+  appointmentSubtitle: {
+    fontSize: 13,
     color: '#6B7280',
-    marginBottom: 16,
-    lineHeight: 20,
   },
-  appointmentButton: {
+  historyButton: {
+    alignItems: 'center',
+    padding: 8,
+  },
+  historyText: {
+    fontSize: 10,
+    color: '#6B7280',
+    marginTop: 2,
+  },
+  appointmentServices: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+    paddingVertical: 16,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 12,
+  },
+  serviceItem: {
+    alignItems: 'center',
+  },
+  serviceIcon: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  serviceText: {
+    fontSize: 11,
+    color: '#374151',
+    fontWeight: '500',
+  },
+  appointmentActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  bookButton: {
+    flex: 2,
     backgroundColor: '#43A047',
     borderRadius: 12,
   },
-  appointmentButtonText: {
+  bookButtonText: {
     fontSize: 14,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  bookButtonContent: {
+    flexDirection: 'row-reverse',
+  },
+  emergencyCallButton: {
+    flex: 1,
+    borderColor: '#DC2626',
+    borderRadius: 12,
+  },
+  emergencyCallButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#DC2626',
   },
   bottomSpacing: {
     height: 120,
