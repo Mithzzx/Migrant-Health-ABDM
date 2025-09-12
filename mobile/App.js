@@ -15,6 +15,7 @@ import AIChatBotScreen from './src/screens/home/AIChatBotScreen';
 import MoreScreen from './src/screens/home/MoreScreen';
 import RecordsScreen from './src/screens/home/RecordsScreen';
 import RecordDetailScreen from './src/screens/records/RecordDetailScreen';
+import QRScreen from './src/screens/QRScreen';
 // New feature placeholder screens
 import AbhaLinkScreen from './src/screens/auth/AbhaLinkScreen';
 import QRLoginScreen from './src/screens/auth/QRLoginScreen';
@@ -182,17 +183,12 @@ function AppContent() {
         />
         <Tab.Screen
           name="QR"
-          component={DashboardScreen}
+          component={QRScreen}
           options={{
             tabBarLabel: '',
-            tabBarIcon: ({ color }) => (
-              <FloatingQRButton />
+            tabBarIcon: ({ focused }) => (
+              <FloatingQRIcon focused={focused} />
             ),
-          }}
-          listeners={{
-            tabPress: (e) => {
-              // TODO: navigate to scanner or QR share screen
-            },
           }}
         />
         <Tab.Screen
@@ -272,25 +268,31 @@ function AppContent() {
 import { useI18n } from './src/i18n/i18n';
 
 import { Icon as PaperIcon } from 'react-native-paper';
+import { View as RNView } from 'react-native';
+
 function HomeScreenIcon({ name, color }) {
   return <PaperIcon source={name} color={color} size={24} />;
 }
 
-import { View as RNView } from 'react-native';
-function FloatingQRButton() {
+function FloatingQRIcon({ focused }) {
   return (
     <RNView style={{
-      width: 64,
-      height: 64,
-      borderRadius: 32,
-      backgroundColor: brandTheme.colors.primary,
+      width: 56,
+      height: 56,
+      borderRadius: 28,
+      backgroundColor: focused ? '#43A047' : '#43A047',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: -12,
-      borderWidth: 1,
-      borderColor: '#E2E8F0'
+      marginTop: -8,
+      borderWidth: 3,
+      borderColor: '#FFFFFF',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
     }}>
-      <PaperIcon source="qrcode-scan" color="#FFFFFF" size={30} />
+      <PaperIcon source="qrcode-scan" color="#FFFFFF" size={28} />
     </RNView>
   );
 }

@@ -182,12 +182,16 @@ export default function RecordsScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={styles.container} edges={[]}>
+      <ScrollView 
+        style={styles.content} 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Search Bar - Part of scrollable content */}
         <View style={styles.searchContainer}>
           <Searchbar
-            placeholder={t('searchRecords') || 'Search records...'}
+            placeholder={t('Search Records') || 'Search records...'}
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchBar}
@@ -402,6 +406,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+  scrollContent: {
+    paddingBottom: Platform.OS === 'ios' ? 100 : 80, // Extra padding for tab bar
+  },
   searchContainer: {
     paddingHorizontal: 16,
     paddingTop: 16,
@@ -609,7 +616,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 20,
+    marginBottom: 28,
   },
   primaryButton: {
     backgroundColor: '#43A047',
@@ -628,7 +635,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     margin: 16,
     right: 0,
-    bottom: 0,
+    bottom: Platform.OS === 'ios' ? 85 : 65, // Above tab bar
     backgroundColor: '#43A047',
   },
   // ABDM Styles
