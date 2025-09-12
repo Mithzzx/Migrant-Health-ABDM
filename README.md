@@ -19,63 +19,6 @@
 
 ---
 
-## 📸 Screenshots & Demo
-
-### 🏥 **Mobile App (React Native)**
-
-<div align="center">
-
-#### **Authentication & Onboarding**
-| Login Screen | Language Selection | OTP Verification |
-|:---:|:---:|:---:|
-| ![Login](./docs/screenshots/mobile/login-screen.png) | ![Language](./docs/screenshots/mobile/language-selection.png) | ![OTP](./docs/screenshots/mobile/otp-verification.png) |
-| *ABHA ID login with Kerala branding* | *12 language support with voice* | *Secure OTP verification* |
-
-#### **Core Features**
-| Dashboard | AI Assistant | Health Records |
-|:---:|:---:|:---:|
-| ![Dashboard](./docs/screenshots/mobile/dashboard-screen.png) | ![AI Chat](./docs/screenshots/mobile/ai-chat-screen.png) | ![Records](./docs/screenshots/mobile/health-records.png) |
-| *Main health dashboard* | *Voice commands in English/Hindi* | *ABDM-compliant record storage* |
-
-#### **Healthcare Services**
-| Appointment Booking | Emergency Details | Medicine Tracking |
-|:---:|:---:|:---:|
-| ![Appointments](./docs/screenshots/mobile/appointment-booking.png) | ![Emergency](./docs/screenshots/mobile/emergency-details.png) | ![Medicines](./docs/screenshots/mobile/medicine-tracking.png) |
-| *Doctor selection & scheduling* | *Emergency contacts & medical info* | *Medication reminders* |
-
-</div>
-
-### 👨‍⚕️ **Doctor Portal (Web)**
-
-<div align="center">
-
-| Portal Dashboard | Patient Management |
-|:---:|:---:|
-| ![Doctor Dashboard](./docs/screenshots/web/doctor-dashboard.png) | ![Patient List](./docs/screenshots/web/patient-management.png) |
-| *Healthcare provider dashboard* | *Consent-based patient access* |
-
-</div>
-
-### 📊 **Analytics Dashboard (Government)**
-
-<div align="center">
-
-#### **Population Health Insights**
-![Analytics Dashboard](./docs/screenshots/analytics/main-dashboard.png)
-*Real-time population health metrics for 247K+ migrant workers in Kerala*
-
-#### **Interactive Data Visualization**
-| Health Metrics | Disease Surveillance | Facility Performance |
-|:---:|:---:|:---:|
-| ![Metrics](./docs/screenshots/analytics/health-metrics.png) | ![Disease Map](./docs/screenshots/analytics/disease-heatmap.png) | ![Facilities](./docs/screenshots/analytics/facility-performance.png) |
-| *KPIs with trend analysis* | *Geographic disease distribution* | *Healthcare facility monitoring* |
-
-</div>
-
-> **📝 Note**: Screenshots are currently placeholders. Actual screenshots will be added as development progresses. See [Screenshot Guide](./docs/screenshots/README.md) for contribution guidelines.
-
----
-
 ## ✨ Features
 
 ### 🏥 **Mobile App (Worker-Facing)**
@@ -132,6 +75,63 @@
 - **Container:** Docker-ready with multi-stage builds
 - **Cloud:** AWS / Azure / Google Cloud deployment ready
 - **Monitoring:** Health check endpoints and error tracking
+
+---
+
+## 📸 Screenshots & Demo
+
+### 🏥 **Mobile App (React Native)**
+
+<div align="center">
+
+#### **Authentication & Onboarding**
+| Login Screen | Language Selection | OTP Verification |
+|:---:|:---:|:---:|
+| ![Login](./docs/screenshots/mobile/login-screen.png) | ![Language](./docs/screenshots/mobile/language-selection.png) | ![OTP](./docs/screenshots/mobile/otp-verification.png) |
+| *ABHA ID login with Kerala branding* | *12 language support with voice* | *Secure OTP verification* |
+
+#### **Core Features**
+| Dashboard | AI Assistant | Health Records |
+|:---:|:---:|:---:|
+| ![Dashboard](./docs/screenshots/mobile/dashboard-screen.png) | ![AI Chat](./docs/screenshots/mobile/ai-chat-screen.png) | ![Records](./docs/screenshots/mobile/health-records.png) |
+| *Main health dashboard* | *Voice commands in English/Hindi* | *ABDM-compliant record storage* |
+
+#### **Healthcare Services**
+| Appointment Booking | Emergency Details | Medicine Tracking |
+|:---:|:---:|:---:|
+| ![Appointments](./docs/screenshots/mobile/appointment-booking.png) | ![Emergency](./docs/screenshots/mobile/emergency-details.png) | ![Medicines](./docs/screenshots/mobile/medicine-tracking.png) |
+| *Doctor selection & scheduling* | *Emergency contacts & medical info* | *Medication reminders* |
+
+</div>
+
+### 👨‍⚕️ **Doctor Portal (Web)**
+
+<div align="center">
+
+| Portal Dashboard | Patient Management |
+|:---:|:---:|
+| ![Doctor Dashboard](./docs/screenshots/web/doctor-dashboard.png) | ![Patient List](./docs/screenshots/web/patient-management.png) |
+| *Healthcare provider dashboard* | *Consent-based patient access* |
+
+</div>
+
+### 📊 **Analytics Dashboard (Government)**
+
+<div align="center">
+
+#### **Population Health Insights**
+![Analytics Dashboard](./docs/screenshots/analytics/main-dashboard.png)
+*Real-time population health metrics for 247K+ migrant workers in Kerala*
+
+#### **Interactive Data Visualization**
+| Health Metrics | Disease Surveillance | Facility Performance |
+|:---:|:---:|:---:|
+| ![Metrics](./docs/screenshots/analytics/health-metrics.png) | ![Disease Map](./docs/screenshots/analytics/disease-heatmap.png) | ![Facilities](./docs/screenshots/analytics/facility-performance.png) |
+| *KPIs with trend analysis* | *Geographic disease distribution* | *Healthcare facility monitoring* |
+
+</div>
+
+> **📝 Note**: Screenshots are currently placeholders. Actual screenshots will be added as development progresses. See [Screenshot Guide](./docs/screenshots/README.md) for contribution guidelines.
 
 ---
 
