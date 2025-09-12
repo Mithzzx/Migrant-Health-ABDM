@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Platform, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Searchbar, Text, Icon, Button, FAB, Card, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
+import { Searchbar, Text, Icon, Button, FAB, Card, Dialog, Portal, ActivityIndicator, IconButton, Menu } from 'react-native-paper';
 import { useI18n } from '../../i18n/i18n';
 import sampleRecords from '../records/recordData';
 
-export default function RecordsScreen({ navigation }) {
+export default function RecordsScreen({ navigation, route }) {
   const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState(['all']); // Default to 'all' selected
+  
+  // Get selected language from navigation params or default to English
+  const selectedLanguage = route?.params?.selectedLanguage || 'en';
   
   // ABDM Integration State
   const [abdmRecords, setAbdmRecords] = useState([]); // Start with 0 records
@@ -18,6 +21,142 @@ export default function RecordsScreen({ navigation }) {
   const [abdmId, setAbdmId] = useState('14-1234-5678-9012'); // Demo ABDM ID
 
   const onChangeSearch = (query) => setSearchQuery(query);
+
+  // Supported Languages
+  const supportedLanguages = [
+    { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
+    { code: 'hi', name: 'Hindi', nativeName: 'हिंदी', flag: '🇮🇳' },
+    { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം', flag: '🇮🇳' },
+    { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', flag: '🇮🇳' },
+    { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', flag: '🇮🇳' },
+    { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ', flag: '🇮🇳' },
+    { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇮🇳' },
+    { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી', flag: '🇮🇳' },
+    { code: 'mr', name: 'Marathi', nativeName: 'मराठी', flag: '🇮🇳' },
+    { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+  ];
+
+  // Demo Translation Service
+  const translateText = (text, targetLang) => {
+    const translations = {
+      // Medical Record Titles
+      'Blood Test Report': {
+        hi: 'रक्त जांच रिपोर्ट',
+        ml: 'രക്ത പരിശോധന റിപ്പോർട്ട്',
+        ta: 'இரத்த பரிசோதனை அறிக்கை',
+        te: 'రక్త పరీక్ష నివేదిక',
+        kn: 'ರಕ್ತ ಪರೀಕ್ಷೆ ವರದಿ',
+        bn: 'রক্ত পরীক্ষার রিপোর্ট',
+        gu: 'લોહી પરીક્ષણ રિપોર્ટ',
+        mr: 'रक्त तपासणी अहवाल',
+        pa: 'ਖੂਨ ਦੀ ਜਾਂਚ ਰਿਪੋਰਟ'
+      },
+      'Prescription - Antibiotics': {
+        hi: 'नुस्खा - एंटीबायोटिक्स',
+        ml: 'കുറിപ്പടി - ആൻറിബയോട്ടിക്സ്',
+        ta: 'மருந்து பரிந்துரை - நுண்ணுயிர் எதிர்ப்பிகள்',
+        te: 'ప్రిస్క్రిప్షన్ - యాంటీబయాటిక్స్',
+        kn: 'ಔಷಧಿ ಸೂಚನೆ - ಆಂಟಿಬಯಾಟಿಕ್ಸ್',
+        bn: 'প্রেসক্রিপশন - অ্যান্টিবায়োটিক',
+        gu: 'પ્રિસ્ક્રિપ્શન - એન્ટિબાયોટિક્સ',
+        mr: 'प्रिस्क्रिप्शन - प्रतिजैविक',
+        pa: 'ਨੁਸਖਾ - ਐਂਟੀਬਾਇਓਟਿਕਸ'
+      },
+      'Chest X-Ray Report': {
+        hi: 'छाती एक्स-रे रिपोर्ट',
+        ml: 'നെഞ്ച് എക്സ്-റേ റിപ്പോർട്ട്',
+        ta: 'மார்பு எக்ஸ்-ரே அறிக்கை',
+        te: 'ఛాతీ ఎక్స్-రే నివేదిక',
+        kn: 'ಎದೆಯ ಎಕ್ಸ್-ರೇ ವರದಿ',
+        bn: 'বুকের এক্স-রে রিপোর্ট',
+        gu: 'છાતીના એક્સ-રે રિપોર્ટ',
+        mr: 'छाती एक्स-रे अहवाल',
+        pa: 'ਛਾਤੀ ਦਾ ਐਕਸ-ਰੇ ਰਿਪੋਰਟ'
+      },
+      'Ayushman Bharat Coverage Card': {
+        hi: 'आयुष्मान भारत कवरेज कार्ड',
+        ml: 'ആയുഷ്മാൻ ഭാരത് കവറേജ് കാർഡ്',
+        ta: 'ஆயுஷ்மான் பாரத் கவரேஜ் கார்டு',
+        te: 'ఆయుష్మాన్ భారత్ కవరేజ్ కార్డ్',
+        kn: 'ಆಯುಷ್ಮಾನ್ ಭಾರತ್ ಕವರೇಜ್ ಕಾರ್ಡ್',
+        bn: 'আয়ুষ্মান ভারত কভারেজ কার্ড',
+        gu: 'આયુષ્માન ભારત કવરેજ કાર્ડ',
+        mr: 'आयुष्मान भारत कव्हरेज कार्ड',
+        pa: 'ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ ਕਵਰੇਜ ਕਾਰਡ'
+      },
+      'ESI Medical Coverage': {
+        hi: 'ईएसआई चिकित्सा कवरेज',
+        ml: 'ഇഎസ്ഐ മെഡിക്കൽ കവറേജ്',
+        ta: 'ஈஎஸ்ஐ மருத்துவ கவரேஜ்',
+        te: 'ఈఎస్ఐ వైద్య కవరేజ్',
+        kn: 'ಇಎಸ್ಐ ವೈದ್ಯಕೀಯ ಕವರೇಜ್',
+        bn: 'ইএসআই চিকিৎসা কভারেজ',
+        gu: 'ઇએસઆઇ મેડિકલ કવરેજ',
+        mr: 'ईएसआय वैद्यकीय कव्हरेज',
+        pa: 'ਈਐਸਆਈ ਮੈਡੀਕਲ ਕਵਰੇਜ'
+      },
+      'State Health Insurance Claim': {
+        hi: 'राज्य स्वास्थ्य बीमा दावा',
+        ml: 'സംസ്ഥാന ആരോഗ്യ ഇൻഷുറൻസ് ക്ലെയിം',
+        ta: 'மாநில சுகாதார காப்பீடு கோரிக்கை',
+        te: 'రాష్ట్ర ఆరోగ్య బీమా దావా',
+        kn: 'ರಾಜ್ಯ ಆರೋಗ್ಯ ವಿಮೆ ಹಕ್ಕು',
+        bn: 'রাজ্য স্বাস্থ্য বীমা দাবি',
+        gu: 'રાજ્ય આરોગ્ય વીમા દાવો',
+        mr: 'राज्य आरोग्य विमा दावा',
+        pa: 'ਰਾਜ ਸਿਹਤ ਬੀਮਾ ਦਾਅਵਾ'
+      },
+      'RSBY Portability Certificate': {
+        hi: 'आरएसबीवाई पोर्टेबिलिटी प्रमाणपत्र',
+        ml: 'ആർഎസ്ബിവൈ പോർട്ടബിലിറ്റി സർട്ടിഫിക്കറ്റ്',
+        ta: 'ஆர்எஸ்பிவை போர்டபிலிட்டி சான்றிதழ்',
+        te: 'ఆర్ఎస్బివై పోర్టబిలిటీ సర్టిఫికేట్',
+        kn: 'ಆರ್ಎಸ್ಬಿವೈ ಪೋರ್ಟಬಿಲಿಟಿ ಪ್ರಮಾಣಪತ್ರ',
+        bn: 'আরএসবিওয়াই পোর্টেবিলিটি সার্টিফিকেট',
+        gu: 'આરએસબીવાય પોર્ટેબિલિટી સર્ટિફિકેટ',
+        mr: 'आरएसबीवाय पोर्टेबिलिटी प्रमाणपत्र',
+        pa: 'ਆਰਐਸਬੀਵਾਈ ਪੋਰਟੇਬਿਲਟੀ ਸਰਟੀਫਿਕੇਟ'
+      },
+      'Private Health Insurance Policy': {
+        hi: 'निजी स्वास्थ्य बीमा पॉलिसी',
+        ml: 'സ്വകാര്യ ആരോഗ്യ ഇൻഷുറൻസ് പോളിസി',
+        ta: 'தனியார் சுகாதார காப்பீடு கொள்கை',
+        te: 'ప్రైవేట్ హెల్త్ ఇన్‌షురెన్స్ పాలసీ',
+        kn: 'ಖಾಸಗಿ ಆರೋಗ್ಯ ವಿಮಾ ನೀತಿ',
+        bn: 'ব্যক্তিগত স্বাস্থ্য বীমা নীতি',
+        gu: 'ખાનગી આરોગ્ય વીમા પોલિસી',
+        mr: 'खाजगी आरोग्य विमा पॉलिसी',
+        pa: 'ਪ੍ਰਾਈਵੇਟ ਹੈਲਥ ਇੰਸ਼ੋਰੈਂਸ ਪਾਲਿਸੀ'
+      }
+      // Add more translations as needed
+    };
+
+    if (targetLang === 'en' || !translations[text] || !translations[text][targetLang]) {
+      return text;
+    }
+    return translations[text][targetLang];
+  };
+
+  // Handle Language Selection
+  const handleLanguageSelect = async (langCode) => {
+    if (langCode === selectedLanguage) return;
+    
+    setIsTranslating(true);
+    setShowLanguageMenu(false);
+    
+    // Simulate translation delay
+    setTimeout(() => {
+      setSelectedLanguage(langCode);
+      setIsTranslating(false);
+      
+      const selectedLang = supportedLanguages.find(lang => lang.code === langCode);
+      Alert.alert(
+        'Language Changed',
+        `Records are now displayed in ${selectedLang.nativeName}. This is a demo translation.`,
+        [{ text: 'OK' }]
+      );
+    }, 1500);
+  };
 
   // Handle record viewing with ABDM integration
   const onRecordPress = (record) => {
@@ -42,7 +181,8 @@ export default function RecordsScreen({ navigation }) {
     // Navigate to ABDM-compliant record detail screen
     navigation.navigate('RecordDetail', { 
       record: abdmRecord,
-      abdmCompliant: true 
+      abdmCompliant: true,
+      selectedLanguage: selectedLanguage 
     });
   };
 
@@ -258,7 +398,9 @@ export default function RecordsScreen({ navigation }) {
                       </View>
                       <View style={styles.recordInfo}>
                         <View style={styles.recordHeader}>
-                          <Text style={styles.recordTitle} numberOfLines={1}>{record.title}</Text>
+                          <Text style={styles.recordTitle} numberOfLines={1}>
+                            {translateText(record.title, selectedLanguage)}
+                          </Text>
                           {isActive && (
                             <View style={styles.activeBadge}>
                               <Text style={styles.activeBadgeText}>Active</Text>

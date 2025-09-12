@@ -233,14 +233,17 @@ function AppContent() {
             <Stack.Screen 
               name="Records" 
               component={RecordsScreen} 
-              options={{
+              options={({ navigation, route }) => ({
                 headerShown: true,
                 title: 'Health Records',
                 headerStyle: { backgroundColor: '#FFFFFF' },
                 headerTitleStyle: { color: '#0A2540', fontWeight: '600' },
                 headerTintColor: '#43A047',
-                headerTitleAlign: 'center'
-              }}
+                headerTitleAlign: 'center',
+                headerRight: () => (
+                  <TranslationHeaderButton navigation={navigation} />
+                ),
+              })}
             />
             <Stack.Screen 
               name="RecordDetail" 
@@ -267,8 +270,9 @@ function AppContent() {
 
 import { useI18n } from './src/i18n/i18n';
 
-import { Icon as PaperIcon } from 'react-native-paper';
-import { View as RNView } from 'react-native';
+import { Icon as PaperIcon, IconButton, Menu, ActivityIndicator } from 'react-native-paper';
+import { View as RNView, Text, Alert } from 'react-native';
+import { useState } from 'react';
 
 function HomeScreenIcon({ name, color }) {
   return <PaperIcon source={name} color={color} size={24} />;
@@ -294,5 +298,113 @@ function FloatingQRIcon({ focused }) {
     }}>
       <PaperIcon source="qrcode-scan" color="#FFFFFF" size={28} />
     </RNView>
+  );
+}
+
+function TranslationHeaderButton({ navigation }) {
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  // Supported Languages
+  const supportedLanguages = [
+    { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
+    { code: 'hi', name: 'Hindi', nativeName: 'हिंदी', flag: '🇮🇳' },
+    { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം', flag: '🇮🇳' },
+    { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', flag: '🇮🇳' },
+    { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', flag: '🇮🇳' },
+    { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ', flag: '🇮🇳' },
+    { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇮🇳' },
+    { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી', flag: '🇮🇳' },
+    { code: 'mr', name: 'Marathi', nativeName: 'मराठी', flag: '🇮🇳' },
+    { code: 'pa', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+  ];
+
+  // Handle Language Selection
+  const handleLanguageSelect = async (langCode) => {
+    if (langCode === selectedLanguage) return;
+    
+    setIsTranslating(true);
+    setShowLanguageMenu(false);
+    
+    // Simulate translation delay
+    setTimeout(() => {
+      setSelectedLanguage(langCode);
+      setIsTranslating(false);
+      
+      const selectedLang = supportedLanguages.find(lang => lang.code === langCode);
+      
+      // Update the RecordsScreen with new language
+      navigation.setParams({ selectedLanguage: langCode });
+      
+      Alert.alert(
+        'Language Changed',
+        `Records are now displayed in ${selectedLang.nativeName}. This is a demo translation.`,
+        [{ text: 'OK' }]
+      );
+    }, 1500);
+  };
+
+  if (isTranslating) {
+    return (
+      <RNView style={{ flexDirection: 'row', alignItems: 'center', marginRight: 8 }}>
+        <ActivityIndicator size="small" color="#43A047" />
+        <Text style={{ fontSize: 12, color: '#43A047', marginLeft: 4, fontWeight: '500' }}>
+          Translating...
+        </Text>
+      </RNView>
+    );
+  }
+
+  return (
+    <Menu
+      visible={showLanguageMenu}
+      onDismiss={() => setShowLanguageMenu(false)}
+      anchor={
+        <IconButton
+          icon="translate"
+          size={24}
+          iconColor="#43A047"
+          style={{ margin: 0 }}
+          onPress={() => setShowLanguageMenu(true)}
+        />
+      }
+      contentStyle={{
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
+        maxHeight: 400,
+      }}
+    >
+      {supportedLanguages.map((language) => (
+        <Menu.Item
+          key={language.code}
+          onPress={() => handleLanguageSelect(language.code)}
+          title={
+            <RNView style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}>
+              <Text style={{ fontSize: 20, marginRight: 12 }}>{language.flag}</Text>
+              <RNView style={{ flex: 1 }}>
+                <Text style={{
+                  fontSize: 14,
+                  fontWeight: '500',
+                  color: selectedLanguage === language.code ? '#43A047' : '#0A2540'
+                }}>
+                  {language.name}
+                </Text>
+                <Text style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
+                  {language.nativeName}
+                </Text>
+              </RNView>
+              {selectedLanguage === language.code && (
+                <PaperIcon source="check" size={16} color="#43A047" />
+              )}
+            </RNView>
+          }
+          style={{
+            paddingVertical: 8,
+            backgroundColor: selectedLanguage === language.code ? '#F0FDF4' : 'transparent'
+          }}
+        />
+      ))}
+    </Menu>
   );
 }

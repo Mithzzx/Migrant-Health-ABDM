@@ -317,6 +317,159 @@ const sampleRecords = [
       'Diclofenac 50mg as needed for pain'
     ],
     documentUrl: 'https://example.com/documents/emergency-visit-015.pdf'
+  },
+  {
+    id: '16',
+    title: 'Ayushman Bharat Coverage Card',
+    type_key: 'others',
+    date: '2024-01-15',
+    hospital: 'PMJAY Empaneled Hospital',
+    doctor: 'Insurance Verification Team',
+    size: '1.8 MB',
+    status: 'Active',
+    description: 'Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (PM-JAY) insurance coverage card for comprehensive health benefits up to ₹5 lakhs per family per year.',
+    policyDetails: {
+      policyNumber: 'PMJAY-KL-2024-789456',
+      familyId: 'FAM-AB-123456789',
+      coverageAmount: '₹5,00,000 per family per year',
+      validFrom: '2024-01-15',
+      validUntil: '2025-01-14',
+      beneficiaries: 4,
+      status: 'Active'
+    },
+    benefits: [
+      'Hospitalization expenses coverage',
+      'Pre and post hospitalization expenses',
+      'Daycare procedures coverage',
+      'Emergency treatments across India',
+      'Portable across all states',
+      'Cashless treatment at empaneled hospitals'
+    ],
+    notes: 'Valid across all Indian states. Show this card for cashless treatment at any PM-JAY empaneled hospital.',
+    documentUrl: 'https://example.com/documents/pmjay-card-016.pdf'
+  },
+  {
+    id: '17',
+    title: 'ESI Medical Coverage',
+    type_key: 'others',
+    date: '2024-03-10',
+    hospital: 'ESI Dispensary, Ernakulam',
+    doctor: 'ESI Medical Officer',
+    size: '1.2 MB',
+    status: 'Active',
+    description: 'Employee State Insurance (ESI) medical benefits coverage for organized sector workers and their dependents.',
+    policyDetails: {
+      policyNumber: 'ESI-2024-KL-567890',
+      ipNumber: '1234567890',
+      coverageType: 'Self + Family',
+      validFrom: '2024-03-10',
+      validUntil: '2025-03-09',
+      contributionRate: '3.25% of wages',
+      status: 'Active'
+    },
+    benefits: [
+      'Medical care for self and dependents',
+      'Cash benefits during sickness',
+      'Maternity benefits',
+      'Disability benefits',
+      'Dependent benefits',
+      'Treatment at ESI hospitals and dispensaries'
+    ],
+    notes: 'Present ESI card at any ESI facility for medical treatment. Coverage includes family members.',
+    documentUrl: 'https://example.com/documents/esi-coverage-017.pdf'
+  },
+  {
+    id: '18',
+    title: 'State Health Insurance Claim',
+    type_key: 'others',
+    date: '2024-08-22',
+    hospital: 'Kerala Institute of Medical Sciences',
+    doctor: 'Dr. Radhika Nair, Claims Department',
+    size: '2.5 MB',
+    status: 'Approved',
+    description: 'Insurance claim processed for emergency appendectomy surgery under Kerala State Health Insurance Scheme.',
+    claimDetails: {
+      claimNumber: 'KSHIS-2024-CLM-445566',
+      claimAmount: '₹85,000',
+      approvedAmount: '₹82,500',
+      deductible: '₹2,500',
+      dateOfService: '2024-08-20',
+      dateProcessed: '2024-08-22',
+      status: 'Approved and Paid'
+    },
+    services: [
+      'Emergency room consultation',
+      'Appendectomy surgery',
+      'General anesthesia',
+      '2-day hospital stay',
+      'Post-operative medications',
+      'Follow-up consultation'
+    ],
+    notes: 'Claim successfully processed and amount credited to hospital. Patient discharge summary attached.',
+    documentUrl: 'https://example.com/documents/insurance-claim-018.pdf'
+  },
+  {
+    id: '19',
+    title: 'RSBY Portability Certificate',
+    type_key: 'others',
+    date: '2024-05-15',
+    hospital: 'District Hospital, Thrissur',
+    doctor: 'RSBY Nodal Officer',
+    size: '1.1 MB',
+    status: 'Valid',
+    description: 'Rashtriya Swasthya Bima Yojana (RSBY) portability certificate enabling healthcare access across different states for migrant workers.',
+    portabilityDetails: {
+      certificateNumber: 'RSBY-PORT-2024-112233',
+      originalState: 'Kerala',
+      migrationState: 'Tamil Nadu',
+      validFrom: '2024-05-15',
+      validUntil: '2024-11-14',
+      familyMembers: 5,
+      coverageAmount: '₹30,000 per family per year'
+    },
+    coverage: [
+      'Hospitalization in migrated state',
+      'Emergency medical care',
+      'Surgery and procedures',
+      'Diagnostic tests',
+      'Transportation allowance',
+      'Follow-up care'
+    ],
+    notes: 'This certificate allows the family to access RSBY benefits while working in Tamil Nadu. Valid for 6 months.',
+    documentUrl: 'https://example.com/documents/rsby-portability-019.pdf'
+  },
+  {
+    id: '20',
+    title: 'Private Health Insurance Policy',
+    type_key: 'others',
+    date: '2024-04-01',
+    hospital: 'Star Health Insurance',
+    doctor: 'Policy Services Team',
+    size: '3.2 MB',
+    status: 'Active',
+    description: 'Comprehensive private health insurance policy providing enhanced coverage for family healthcare needs.',
+    policyDetails: {
+      policyNumber: 'STAR-FAM-2024-998877',
+      planName: 'Star Family Health Optima',
+      sumInsured: '₹10,00,000',
+      premium: '₹24,500 per year',
+      validFrom: '2024-04-01',
+      validUntil: '2025-03-31',
+      familySize: 4,
+      roomRent: 'Private room upto ₹7,500/day'
+    },
+    coverage: [
+      'Hospitalization expenses',
+      'Pre and post hospitalization',
+      'Ambulance charges',
+      'Daycare procedures',
+      'Health check-ups',
+      'Alternative treatments (AYUSH)',
+      'Critical illness cover',
+      'Maternity benefits'
+    ],
+    notes: 'Premium paid annually. Covers entire family with no co-payment. Network of 10,000+ hospitals across India.',
+    documentUrl: 'https://example.com/documents/private-insurance-020.pdf'
   }
 ];
 

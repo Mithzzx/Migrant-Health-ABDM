@@ -4,8 +4,88 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Card, Button, Icon, Chip, Divider } from 'react-native-paper';
 
 export default function RecordDetailScreen({ route, navigation }) {
-  const { record, abdmCompliant } = route.params;
+  const { record, abdmCompliant, selectedLanguage = 'en' } = route.params;
   const [sharing, setSharing] = useState(false);
+
+  // Demo Translation Service (same as RecordsScreen)
+  const translateText = (text, targetLang) => {
+    const translations = {
+      // Medical Record Titles
+      'Blood Test Report': {
+        hi: 'रक्त जांच रिपोर्ट',
+        ml: 'രക്ത പരിശോധന റിപ്പോർട്ട്',
+        ta: 'இரத்த பரிசோதனை அறிக்கை',
+        te: 'రక్త పరీక్ష నివేదిక',
+        kn: 'ರಕ್ತ ಪರೀಕ್ಷೆ ವರದಿ',
+        bn: 'রক্ত পরীক্ষার রিপোর্ট',
+        gu: 'લોહી પરીક્ષણ રિપોર્ટ',
+        mr: 'रक्त तपासणी अहवाल',
+        pa: 'ਖੂਨ ਦੀ ਜਾਂਚ ਰਿਪੋਰਟ'
+      },
+      'Prescription - Antibiotics': {
+        hi: 'नुस्खा - एंटीबायोटिक्स',
+        ml: 'കുറിപ്പടി - ആൻറിബയോട്ടിക്സ്',
+        ta: 'மருந்து பரிந்துரை - நுண்ணுயிர் எதிர்ப்பிகள்',
+        te: 'ప్రిస్క్రిప్షన్ - యాంటీబయాటిక్స్',
+        kn: 'ಔಷಧಿ ಸೂಚನೆ - ಆಂಟಿಬಯಾಟಿಕ್ಸ್',
+        bn: 'প্রেসক্রিপশন - অ্যান্টিবায়োটিক',
+        gu: 'પ્રિસ્ક્રિપ્શન - એન્ટિબાયોટિક્સ',
+        mr: 'प्रिस्क्रिप्शन - प्रतिजैविक',
+        pa: 'ਨੁਸਖਾ - ਐਂਟੀਬਾਇਓਟਿਕਸ'
+      },
+      // Medical Terms
+      'Record Details': {
+        hi: 'रिकॉर्ड विवरण',
+        ml: 'റെക്കോർഡ് വിശദാംശങ്ങൾ',
+        ta: 'பதிவு விவரங்கள்',
+        te: 'రికార్డ్ వివరాలు',
+        kn: 'ದಾಖಲೆ ವಿವರಗಳು',
+        bn: 'রেকর্ডের বিবরণ',
+        gu: 'રેકોર્ડ વિગતો',
+        mr: 'रेकॉर्ड तपशील',
+        pa: 'ਰਿਕਾਰਡ ਵੇਰਵੇ'
+      },
+      'Test Results': {
+        hi: 'परीक्षण परिणाम',
+        ml: 'പരിശോധന ഫലങ്ങൾ',
+        ta: 'சோதனை முடிவுகள்',
+        te: 'పరీక్ష ఫలితాలు',
+        kn: 'ಪರೀಕ್ಷೆಯ ಫಲಿತಾಂಶಗಳು',
+        bn: 'পরীক্ষার ফলাফল',
+        gu: 'પરીક્ષણ પરિણામો',
+        mr: 'चाचणी परिणाम',
+        pa: 'ਟੈਸਟ ਦੇ ਨਤੀਜੇ'
+      },
+      'Medications': {
+        hi: 'दवाएं',
+        ml: 'മരുന്നുകൾ',
+        ta: 'மருந்துகள்',
+        te: 'మందులు',
+        kn: 'ಔಷಧಿಗಳು',
+        bn: 'ওষুধ',
+        gu: 'દવાઓ',
+        mr: 'औषधे',
+        pa: 'ਦਵਾਈਆਂ'
+      },
+      'Normal': {
+        hi: 'सामान्य',
+        ml: 'സാധാരണ',
+        ta: 'சாதாரண',
+        te: 'సాధారణ',
+        kn: 'ಸಾಮಾನ್ಯ',
+        bn: 'স্বাভাবিক',
+        gu: 'સામાન્ય',
+        mr: 'सामान्य',
+        pa: 'ਆਮ'
+      }
+      // Add more translations as needed
+    };
+
+    if (targetLang === 'en' || !translations[text] || !translations[text][targetLang]) {
+      return text;
+    }
+    return translations[text][targetLang];
+  };
 
   const getCategoryColor = (type) => {
     const colors = {
@@ -67,7 +147,7 @@ export default function RecordDetailScreen({ route, navigation }) {
                 <Icon source="file-document" size={32} color="#FFFFFF" />
               </View>
               <View style={styles.headerInfo}>
-                <Text style={styles.recordTitle}>{record.title}</Text>
+                <Text style={styles.recordTitle}>{translateText(record.title, selectedLanguage)}</Text>
                 <Text style={styles.recordMeta}>{record.date} • {record.hospital}</Text>
                 <Text style={styles.recordDoctor}>{record.doctor}</Text>
               </View>
@@ -90,7 +170,7 @@ export default function RecordDetailScreen({ route, navigation }) {
         {/* Record Details */}
         <Card style={styles.detailCard} mode="outlined">
           <Card.Content>
-            <Text style={styles.sectionTitle}>Record Details</Text>
+            <Text style={styles.sectionTitle}>{translateText('Record Details', selectedLanguage)}</Text>
             <Divider style={styles.divider} />
             
             {record.description && (
@@ -103,7 +183,7 @@ export default function RecordDetailScreen({ route, navigation }) {
             {/* Lab Results */}
             {record.results && (
               <View>
-                <Text style={styles.subSectionTitle}>Test Results</Text>
+                <Text style={styles.subSectionTitle}>{translateText('Test Results', selectedLanguage)}</Text>
                 {record.results.map((result, index) => (
                   <View key={index} style={styles.resultRow}>
                     <Text style={styles.testName}>{result.test}</Text>
@@ -115,7 +195,7 @@ export default function RecordDetailScreen({ route, navigation }) {
                       style={[styles.statusIndicator, { backgroundColor: result.status === 'Normal' ? '#E8F5E8' : '#FEF2F2' }]}
                       textStyle={{ color: result.status === 'Normal' ? '#059669' : '#DC2626', fontSize: 10 }}
                     >
-                      {result.status}
+                      {translateText(result.status, selectedLanguage)}
                     </Chip>
                   </View>
                 ))}
@@ -125,7 +205,7 @@ export default function RecordDetailScreen({ route, navigation }) {
             {/* Medications */}
             {record.medications && (
               <View>
-                <Text style={styles.subSectionTitle}>Medications</Text>
+                <Text style={styles.subSectionTitle}>{translateText('Medications', selectedLanguage)}</Text>
                 {record.medications.map((med, index) => (
                   <View key={index} style={styles.medicationRow}>
                     <Text style={styles.medicationName}>{med.name}</Text>
