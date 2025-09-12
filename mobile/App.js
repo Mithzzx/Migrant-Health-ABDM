@@ -271,7 +271,7 @@ function AppContent() {
 import { useI18n } from './src/i18n/i18n';
 
 import { Icon as PaperIcon, IconButton, Menu, ActivityIndicator } from 'react-native-paper';
-import { View as RNView, Text, Alert } from 'react-native';
+import { View as RNView, Text, Alert, ScrollView } from 'react-native';
 import { useState } from 'react';
 
 function HomeScreenIcon({ name, color }) {
@@ -372,39 +372,53 @@ function TranslationHeaderButton({ navigation }) {
       contentStyle={{
         backgroundColor: '#FFFFFF',
         borderRadius: 12,
-        maxHeight: 400,
+        maxHeight: 350,
+        minWidth: 250,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+        elevation: 8,
       }}
     >
-      {supportedLanguages.map((language) => (
-        <Menu.Item
-          key={language.code}
-          onPress={() => handleLanguageSelect(language.code)}
-          title={
-            <RNView style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 4 }}>
-              <Text style={{ fontSize: 20, marginRight: 12 }}>{language.flag}</Text>
-              <RNView style={{ flex: 1 }}>
-                <Text style={{
-                  fontSize: 14,
-                  fontWeight: '500',
-                  color: selectedLanguage === language.code ? '#43A047' : '#0A2540'
-                }}>
-                  {language.name}
-                </Text>
-                <Text style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
-                  {language.nativeName}
-                </Text>
+      <ScrollView 
+        style={{ maxHeight: 330 }}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+      >
+        {supportedLanguages.map((language) => (
+          <Menu.Item
+            key={language.code}
+            onPress={() => handleLanguageSelect(language.code)}
+            title={
+              <RNView style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 2 }}>
+                <Text style={{ fontSize: 18, marginRight: 10 }}>{language.flag}</Text>
+                <RNView style={{ flex: 1 }}>
+                  <Text style={{
+                    fontSize: 14,
+                    fontWeight: '500',
+                    color: selectedLanguage === language.code ? '#43A047' : '#0A2540'
+                  }}>
+                    {language.name}
+                  </Text>
+                  <Text style={{ fontSize: 11, color: '#64748B', marginTop: 1 }}>
+                    {language.nativeName}
+                  </Text>
+                </RNView>
+                {selectedLanguage === language.code && (
+                  <PaperIcon source="check" size={14} color="#43A047" />
+                )}
               </RNView>
-              {selectedLanguage === language.code && (
-                <PaperIcon source="check" size={16} color="#43A047" />
-              )}
-            </RNView>
-          }
-          style={{
-            paddingVertical: 8,
-            backgroundColor: selectedLanguage === language.code ? '#F0FDF4' : 'transparent'
-          }}
-        />
-      ))}
+            }
+            style={{
+              paddingVertical: 6,
+              paddingHorizontal: 12,
+              minHeight: 48,
+              backgroundColor: selectedLanguage === language.code ? '#F0FDF4' : 'transparent'
+            }}
+          />
+        ))}
+      </ScrollView>
     </Menu>
   );
 }
