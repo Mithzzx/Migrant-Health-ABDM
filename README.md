@@ -331,6 +331,38 @@ yarn workspace analytics-dashboard add @types/node -D
 yarn workspaces list --verbose
 ```
 
+### Repository Maintenance
+
+#### **Cleanup Script**
+```bash
+# Remove unnecessary files (.DS_Store, temp files, logs)
+./scripts/cleanup.sh
+
+# Manual cleanup commands
+find . -name ".DS_Store" -delete          # Remove macOS system files
+find . -name "*.tmp" -delete              # Remove temporary files
+find . -name "*.log" -not -path "*/node_modules/*" -delete  # Remove logs
+```
+
+#### **Prevent .DS_Store on macOS**
+```bash
+# Disable .DS_Store creation on network drives
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+
+# Disable .DS_Store creation globally (optional)
+defaults write com.apple.desktopservices DSDontWriteStores true
+```
+
+#### **Git Maintenance**
+```bash
+# Remove files from git history (if already committed)
+git rm --cached filename
+git commit -m "Remove unnecessary file"
+
+# Check for large files in repository
+find . -size +5M -not -path "*/node_modules/*" -not -path "*/.git/*"
+```
+
 ### Environment Configuration
 
 #### Backend (.env)
