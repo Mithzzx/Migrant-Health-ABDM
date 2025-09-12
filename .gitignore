@@ -24,11 +24,23 @@ logs/
 
 # --- OS / Editor ---
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+*~
+.swp
+.swo
+*.swp
+*.swo
+*.tmp
+*.temp
 
 # --- Environment Files ---
 .env
@@ -81,13 +93,26 @@ temp/
 *.swo
 *.orig
 *.patch
-
-# --- Images / Generated Assets ---
-*.log
+.sass-cache/
 *.pid
 *.seed
 *.cover
-*.sass-cache/
+
+# --- IDE / Editor specific ---
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*~
+
+# --- Backup files ---
+*.bak
+*.backup
+*.old
 
 # --- Backend specific ---
 backend/.env.local
@@ -96,8 +121,10 @@ backend/*.sqlite
 backend/coverage/
 
 # --- Misc ---
-*.DS_Store
-*.orig
 .env.local
 package-lock.json
+
+# --- Analytics Dashboard specific ---
+analytics-dashboard/dist/
+analytics-dashboard/.vite/
 
