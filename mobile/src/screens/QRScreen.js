@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Platform, Alert, Dimensions, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Card, Button, Icon, SegmentedButtons, FAB } from 'react-native-paper';
+import QRCode from 'react-native-qrcode-svg';
 import { useI18n } from '../i18n/i18n';
 
 const { width } = Dimensions.get('window');
@@ -20,22 +21,30 @@ export default function QRScreen({ navigation }) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     try {
+      const timestamp = Date.now();
       const qrPayload = {
         type: 'ABDM_HEALTH_SHARE',
+        version: '1.0',
         abdmId: '14-1234-5678-9012',
         patientId: 'PHR_USER_123456',
-        shareToken: `HST_${Date.now()}`,
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes
+        shareToken: `HST_${timestamp}`,
+        expiresAt: new Date(timestamp + 15 * 60 * 1000).toISOString(), // 15 minutes
         permissions: ['READ_RECORDS', 'VIEW_PROFILE'],
         hipIds: ['KIMS_TRIVANDRUM', 'MEDICAL_COLLEGE_CALICUT'],
         metadata: {
-          version: '1.0',
-          generatedAt: new Date().toISOString(),
-          source: 'PHR_APP_MOBILE'
+          generatedAt: new Date(timestamp).toISOString(),
+          source: 'PHR_APP_MOBILE',
+          platform: Platform.OS
         }
       };
       
-      setQrData(qrPayload);
+      // Create a more compact QR string for better scanning
+      const qrString = JSON.stringify(qrPayload, null, 0); // No pretty formatting for compactness
+      
+      setQrData({
+        ...qrPayload,
+        qrString: qrString
+      });
     } catch (error) {
       Alert.alert(
         'QR Generation Failed',
@@ -44,6 +53,31 @@ export default function QRScreen({ navigation }) {
       );
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleShareQR = () => {
+    if (qrData) {
+      Alert.alert(
+        'Share QR Code',
+        'Choose how to share your health record QR code:',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Copy Data', 
+            onPress: () => {
+              // In a real app, you would use Clipboard.setString()
+              Alert.alert('Copied!', 'QR code data copied to clipboard');
+            }
+          },
+          { 
+            text: 'Save Image', 
+            onPress: () => {
+              Alert.alert('Save QR', 'QR code image would be saved to gallery');
+            }
+          }
+        ]
+      );
     }
   };
 
@@ -64,7 +98,7 @@ export default function QRScreen({ navigation }) {
     }
   }, [qrMode]);
 
-  const QRPlaceholder = ({ data }) => (
+  const QRCodeDisplay = ({ data }) => (
     <View style={styles.qrContainer}>
       <View style={styles.qrCodePlaceholder}>
         {isGenerating ? (
@@ -72,54 +106,25 @@ export default function QRScreen({ navigation }) {
             <Icon source="qrcode" size={60} color="#94A3B8" />
             <Text style={styles.loadingText}>Generating Secure QR...</Text>
           </View>
-        ) : (
+        ) : data && data.qrString ? (
           <View style={styles.qrGenerated}>
-            <View style={styles.qrPattern}>
-              {/* Realistic QR pattern simulation */}
-              {Array.from({ length: 25 }, (_, i) => (
-                <View key={i} style={styles.qrRow}>
-                  {Array.from({ length: 25 }, (_, j) => {
-                    // Create corner squares (finder patterns)
-                    const isTopLeftCorner = (i < 7 && j < 7);
-                    const isTopRightCorner = (i < 7 && j > 17);
-                    const isBottomLeftCorner = (i > 17 && j < 7);
-                    
-                    // Corner square patterns
-                    if (isTopLeftCorner || isTopRightCorner || isBottomLeftCorner) {
-                      const isOuterRing = (i === 0 || i === 6 || j === 0 || j === 6 || (i > 17 && i === 18) || (i > 17 && i === 24) || (j > 17 && j === 18) || (j > 17 && j === 24));
-                      const isInnerSquare = ((i >= 2 && i <= 4) && (j >= 2 && j <= 4)) || 
-                                          ((i >= 2 && i <= 4) && (j >= 20 && j <= 22)) || 
-                                          ((i >= 20 && i <= 22) && (j >= 2 && j <= 4));
-                      
-                      return (
-                        <View 
-                          key={j} 
-                          style={[
-                            styles.qrDot, 
-                            { backgroundColor: (isOuterRing || isInnerSquare) ? '#0A2540' : '#FFFFFF' }
-                          ]} 
-                        />
-                      );
-                    }
-                    
-                    // Data pattern with more realistic distribution
-                    const isData = Math.random() > 0.45; // 55% filled for realistic QR density
-                    const patternFactor = (i * 7 + j * 11) % 13; // More random pattern
-                    const shouldFill = isData && (patternFactor > 6);
-                    
-                    return (
-                      <View 
-                        key={j} 
-                        style={[
-                          styles.qrDot, 
-                          { backgroundColor: shouldFill ? '#0A2540' : '#FFFFFF' }
-                        ]} 
-                      />
-                    );
-                  })}
-                </View>
-              ))}
-            </View>
+            <QRCode
+              value={data.qrString}
+              size={220}
+              backgroundColor="white"
+              color="black"
+              ecl="M" // Error correction level: L, M, Q, H (M = ~15% error correction)
+              enableLinearGradient={false}
+              quietZone={10}
+            />
+            <Text style={styles.qrHint}>
+              Scan with any QR scanner to share health records
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.loadingContainer}>
+            <Icon source="qrcode-scan" size={60} color="#94A3B8" />
+            <Text style={styles.loadingText}>No QR data</Text>
           </View>
         )}
       </View>
@@ -174,7 +179,7 @@ export default function QRScreen({ navigation }) {
             {/* QR Code Display */}
             <Card style={styles.qrCard} mode="outlined">
               <Card.Content>
-                <QRPlaceholder data={qrData} />
+                <QRCodeDisplay data={qrData} />
                 
                 {qrData && (
                   <View style={styles.qrInfo}>
@@ -212,7 +217,7 @@ export default function QRScreen({ navigation }) {
                 mode="outlined"
                 style={styles.secondaryButton}
                 contentStyle={styles.buttonContent}
-                onPress={() => Alert.alert('Share', 'QR code sharing options would appear here')}
+                onPress={handleShareQR}
                 icon="share"
               >
                 Share QR Image
@@ -383,26 +388,19 @@ const styles = StyleSheet.create({
   },
   qrGenerated: {
     alignItems: 'center',
-    position: 'relative',
-  },
-  qrPattern: {
-    width: 200,
-    height: 200,
+    justifyContent: 'center',
+    padding: 16,
     backgroundColor: '#FFFFFF',
-    padding: 8,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },
-  qrRow: {
-    flexDirection: 'row',
-    height: 7.2,
-  },
-  qrDot: {
-    width: 7.2,
-    height: 7.2,
-    marginRight: 0.4,
-    marginBottom: 0.4,
+  qrHint: {
+    marginTop: 12,
+    fontSize: 12,
+    color: '#6B7280',
+    textAlign: 'center',
+    fontWeight: '500',
   },
   qrInfo: {
     marginTop: 20,

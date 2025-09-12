@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Platform } from 'react-native';
+import { Platform, View as RNView, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer, DefaultTheme as NavDefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider as PaperProvider, MD3LightTheme as PaperLightTheme } from 'react-native-paper';
+import { Provider as PaperProvider, MD3LightTheme as PaperLightTheme, Text, IconButton, Menu, Icon as PaperIcon } from 'react-native-paper';
 import LoginScreen from './src/screens/LoginScreen';
 import OTPScreen from './src/screens/OTPScreen';
 import LanguageSelectScreen from './src/screens/LanguageSelectScreen';
@@ -28,7 +28,7 @@ import RemindersScreen from './src/screens/reminders/RemindersScreen';
 import AddReminderScreen from './src/screens/reminders/AddReminderScreen';
 import HealthTipsScreen from './src/screens/health/HealthTipsScreen';
 import DevStartScreen from './src/screens/dev/DevStartScreen';
-import { AppI18nProvider } from './src/i18n/i18n';
+import { AppI18nProvider, useI18n } from './src/i18n/i18n';
 
 const Stack = createNativeStackNavigator();
 const DashboardStack = createNativeStackNavigator();
@@ -233,17 +233,19 @@ function AppContent() {
             <Stack.Screen 
               name="Records" 
               component={RecordsScreen} 
-              options={({ navigation, route }) => ({
-                headerShown: true,
-                title: 'Health Records',
-                headerStyle: { backgroundColor: '#FFFFFF' },
-                headerTitleStyle: { color: '#0A2540', fontWeight: '600' },
-                headerTintColor: '#43A047',
-                headerTitleAlign: 'center',
-                headerRight: () => (
-                  <TranslationHeaderButton navigation={navigation} />
-                ),
-              })}
+              options={({ navigation, route }) => {
+                return {
+                  headerShown: true,
+                  title: 'Records', // This will be overridden by the screen's own title
+                  headerStyle: { backgroundColor: '#FFFFFF' },
+                  headerTitleStyle: { color: '#0A2540', fontWeight: '600' },
+                  headerTintColor: '#43A047',
+                  headerTitleAlign: 'center',
+                  headerRight: () => (
+                    <TranslationHeaderButton navigation={navigation} />
+                  ),
+                };
+              }}
             />
             <Stack.Screen 
               name="RecordDetail" 
@@ -267,12 +269,6 @@ function AppContent() {
     </PaperProvider>
   );
 }
-
-import { useI18n } from './src/i18n/i18n';
-
-import { Icon as PaperIcon, IconButton, Menu, ActivityIndicator } from 'react-native-paper';
-import { View as RNView, Text, Alert, ScrollView } from 'react-native';
-import { useState } from 'react';
 
 function HomeScreenIcon({ name, color }) {
   return <PaperIcon source={name} color={color} size={24} />;
@@ -302,7 +298,7 @@ function FloatingQRIcon({ focused }) {
 }
 
 function TranslationHeaderButton({ navigation }) {
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const { lang, setLang, t } = useI18n();
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
 
@@ -310,8 +306,8 @@ function TranslationHeaderButton({ navigation }) {
   const supportedLanguages = [
     { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
     { code: 'hi', name: 'Hindi', nativeName: 'हिंदी', flag: '🇮🇳' },
-    { code: 'ml', name: 'Malayalam', nativeName: 'മലയാളം', flag: '🇮🇳' },
-    { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', flag: '🇮🇳' },
+    { code: 'ml', name: 'Malayalam', nativeName: 'മলയാളം', flag: '🇮🇳' },
+    { code: 'ta', name: 'Tamil', nativeName: 'தমিழ்', flag: '🇮🇳' },
     { code: 'te', name: 'Telugu', nativeName: 'తెలుగు', flag: '🇮🇳' },
     { code: 'kn', name: 'Kannada', nativeName: 'ಕನ್ನಡ', flag: '🇮🇳' },
     { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇮🇳' },
@@ -322,25 +318,23 @@ function TranslationHeaderButton({ navigation }) {
 
   // Handle Language Selection
   const handleLanguageSelect = async (langCode) => {
-    if (langCode === selectedLanguage) return;
+    if (langCode === lang) return;
     
     setIsTranslating(true);
     setShowLanguageMenu(false);
     
     // Simulate translation delay
     setTimeout(() => {
-      setSelectedLanguage(langCode);
+      // Update the global language state
+      setLang(langCode);
       setIsTranslating(false);
       
       const selectedLang = supportedLanguages.find(lang => lang.code === langCode);
       
-      // Update the RecordsScreen with new language
-      navigation.setParams({ selectedLanguage: langCode });
-      
       Alert.alert(
-        'Language Changed',
-        `Records are now displayed in ${selectedLang.nativeName}. This is a demo translation.`,
-        [{ text: 'OK' }]
+        t('languageChanged'),
+        t('recordsInLanguage', { language: selectedLang.nativeName }),
+        [{ text: t('ok') }]
       );
     }, 1500);
   };
@@ -350,7 +344,7 @@ function TranslationHeaderButton({ navigation }) {
       <RNView style={{ flexDirection: 'row', alignItems: 'center', marginRight: 8 }}>
         <ActivityIndicator size="small" color="#43A047" />
         <Text style={{ fontSize: 12, color: '#43A047', marginLeft: 4, fontWeight: '500' }}>
-          Translating...
+          {t('linking')}
         </Text>
       </RNView>
     );
@@ -397,7 +391,7 @@ function TranslationHeaderButton({ navigation }) {
                   <Text style={{
                     fontSize: 14,
                     fontWeight: '500',
-                    color: selectedLanguage === language.code ? '#43A047' : '#0A2540'
+                    color: lang === language.code ? '#43A047' : '#0A2540'
                   }}>
                     {language.name}
                   </Text>
@@ -405,7 +399,7 @@ function TranslationHeaderButton({ navigation }) {
                     {language.nativeName}
                   </Text>
                 </RNView>
-                {selectedLanguage === language.code && (
+                {lang === language.code && (
                   <PaperIcon source="check" size={14} color="#43A047" />
                 )}
               </RNView>
@@ -414,7 +408,7 @@ function TranslationHeaderButton({ navigation }) {
               paddingVertical: 6,
               paddingHorizontal: 12,
               minHeight: 48,
-              backgroundColor: selectedLanguage === language.code ? '#F0FDF4' : 'transparent'
+              backgroundColor: lang === language.code ? '#F0FDF4' : 'transparent'
             }}
           />
         ))}

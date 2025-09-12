@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Platform, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Searchbar, Text, Icon, Button, FAB, Card, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
@@ -16,6 +16,13 @@ export default function RecordsScreen({ navigation }) {
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [abdmId] = useState('14-1234-5678-9012'); // Demo ABDM ID
+
+  // Update navigation title when language changes
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('records')
+    });
+  }, [navigation, t]);
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
