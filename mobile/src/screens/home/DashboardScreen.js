@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
-import { Text, Icon, Button } from 'react-native-paper';
+import { StyleSheet, View, ScrollView, Pressable, FlatList, Linking, ImageBackground } from 'react-native';
+import { Text, Icon, Button, TouchableRipple } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useI18n } from '../../i18n/i18n';
 
@@ -9,16 +9,71 @@ export default function DashboardScreen() {
   const navigation = useNavigation();
 
   const navigateToRecords = () => {
-    // Navigate to the Records screen directly
     navigation.navigate('Records');
   };
 
-  // Mock user data - replace with actual user data from context/API
   const userData = {
     name: 'User Name',
     abhaId: 'user.name@abdm',
     isVerified: true
   };
+
+  const videoBlogs = [
+    {
+      id: 'video-1',
+      title: 'What is Ayushman Bharat Health Account (ABHA) number?',
+      duration: '2:32',
+      category: 'ABHA Guide',
+      isNew: true,
+      videoId: 'p7YoyREvanQ',
+      thumbnailUrl: 'https://img.youtube.com/vi/p7YoyREvanQ/hqdefault.jpg'
+    },
+    {
+      id: 'video-2',
+      title: 'How to create ABHA ID | Ayushman Bharat Health Account',
+      duration: '4:13',
+      category: 'ABHA Setup',
+      isNew: false,
+      videoId: 'CWW5Qn3aUJM',
+      thumbnailUrl: 'https://img.youtube.com/vi/CWW5Qn3aUJM/hqdefault.jpg'
+    },
+    {
+      id: 'video-3',
+      title: 'How to link existing health records with ABHA number?',
+      duration: '1:31',
+      category: 'Health Records',
+      isNew: false,
+      videoId: 't-X3NQPuTX8',
+      thumbnailUrl: 'https://img.youtube.com/vi/t-X3NQPuTX8/hqdefault.jpg'
+    },
+    {
+      id: 'video-4',
+      title: 'Telemedicine Guidelines 2023',
+      duration: '11:25',
+      category: 'Telemedicine',
+      isNew: true,
+      videoId: 'H7uH1n10sS0',
+      thumbnailUrl: 'https://img.youtube.com/vi/H7uH1n10sS0/hqdefault.jpg'
+    },
+    {
+      id: 'video-5',
+      title: 'How to download vaccination certificate',
+      duration: '1:44',
+      category: 'Vaccination',
+      isNew: false,
+      videoId: 'Z3K3XRi_58s',
+      thumbnailUrl: 'https://img.youtube.com/vi/Z3K3XRi_58s/hqdefault.jpg'
+    },
+    {
+      id: 'video-6',
+      title: 'Digital Personal Data Protection Act 2023',
+      duration: '25:48',
+      category: 'Privacy & Security',
+      isNew: false,
+      videoId: 'f5a_n2k7YkE',
+      thumbnailUrl: 'https://img.youtube.com/vi/f5a_n2k7YkE/hqdefault.jpg'
+    }
+  ];
 
   const UserProfileCard = () => (
     <View style={styles.profileCard}>
@@ -41,62 +96,57 @@ export default function DashboardScreen() {
     </View>
   );
 
-  const FeatureCard = ({ icon, title, description, buttonText, onPress, disabled = false }) => (
-    <View style={[styles.featureCard, disabled && styles.disabledCard]}>
-      <View style={styles.cardContent}>
-        <Icon source={icon} size={28} color={disabled ? '#9CA3AF' : '#43A047'} style={styles.cardIcon} />
-        <Text style={[styles.cardTitle, disabled && styles.disabledText]}>{title}</Text>
-        <Text style={[styles.cardDescription, disabled && styles.disabledText]}>{description}</Text>
-      </View>
-      <Button
-        mode="contained"
-        style={[styles.cardButton, disabled && styles.disabledButton]}
-        labelStyle={styles.cardButtonText}
-        onPress={onPress}
-        disabled={disabled}
+  const renderVideoBlogCard = ({ item }) => (
+    <TouchableRipple
+      onPress={() => {
+        if (item.videoId) {
+          Linking.openURL(`https://www.youtube.com/watch?v=${item.videoId}`);
+        }
+      }}
+      style={styles.videoBlogCardRipple}
+    >
+      <ImageBackground 
+        source={{ uri: item.thumbnailUrl }} 
+        style={styles.videoBlogCard}
+        imageStyle={styles.thumbnailImageStyle}
+        resizeMode="cover"
       >
-        {buttonText}
-      </Button>
-    </View>
-  );
-
-  const AppointmentCard = () => (
-    <View style={styles.appointmentCard}>
-      <View style={styles.appointmentHeader}>
-        <Text style={styles.appointmentTitle}>{t('bookAppointment')}</Text>
-        <Pressable onPress={() => {}}>
-          <Text style={styles.historyLink}>{t('history')}</Text>
-        </Pressable>
-      </View>
-      <Text style={styles.appointmentDescription}>{t('findDoctorsNearby')}</Text>
-      <Button
-        mode="contained"
-        style={styles.appointmentButton}
-        labelStyle={styles.appointmentButtonText}
-        onPress={() => {}}
-      >
-        {t('bookNow')}
-      </Button>
-    </View>
+        <View style={styles.thumbnailOverlay}>
+          <View style={styles.playButtonOverlay}>
+            <Icon source="play" size={24} color="#FFFFFF" />
+          </View>
+          {item.isNew && (
+            <View style={styles.newBadge}>
+              <Text style={styles.newBadgeText}>NEW</Text>
+            </View>
+          )}
+          <View style={styles.videoInfo}>
+            <View style={styles.videoCategoryContainer}>
+              <Text style={styles.videoCategory}>{item.category}</Text>
+              <Text style={styles.videoDuration}>{item.duration}</Text>
+            </View>
+            <Text style={styles.videoTitle} numberOfLines={2} ellipsizeMode="tail">
+              {item.title}
+            </Text>
+          </View>
+        </View>
+      </ImageBackground>
+    </TouchableRipple>
   );
 
   return (
     <ScrollView 
       style={styles.container}
       contentContainerStyle={styles.scrollContent} 
-      contentInsetAdjustmentBehavior="automatic" 
-      automaticallyAdjustContentInsets
       showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior="automatic"
     >
-      {/* User Profile Card */}
       <View style={styles.profileSection}>
         <UserProfileCard />
       </View>
 
-      {/* Main 2-Column Grid Section */}
       <View style={styles.mainGridSection}>
         <View style={styles.gridContainer}>
-          {/* Left Column - Large Health Records Card */}
           <View style={styles.leftColumn}>
             <View style={styles.largeCard}>
               <View style={styles.largeCardHeader}>
@@ -133,9 +183,7 @@ export default function DashboardScreen() {
             </View>
           </View>
 
-          {/* Right Column - Two Stacked Cards */}
           <View style={styles.rightColumn}>
-            {/* Top Card - ABHA */}
             <View style={styles.smallCard}>
               <Icon source="card-account-details" size={24} color="#43A047" style={styles.smallCardIcon} />
               <Text style={styles.smallCardTitle}>{t('abhaCard')}</Text>
@@ -152,7 +200,6 @@ export default function DashboardScreen() {
               </Button>
             </View>
 
-            {/* Bottom Card - Emergency Info */}
             <View style={[styles.smallCard, styles.emergencyCard]}>
               <Icon source="alert-circle" size={24} color="#DC2626" style={styles.smallCardIcon} />
               <Text style={[styles.smallCardTitle, styles.emergencyTitle]}>{t('emergencyDetails')}</Text>
@@ -173,7 +220,6 @@ export default function DashboardScreen() {
         </View>
       </View>
 
-      {/* Redesigned Appointment Booking Card */}
       <View style={styles.appointmentSection}>
         <View style={styles.appointmentCard}>
           <View style={styles.appointmentHeader}>
@@ -216,7 +262,7 @@ export default function DashboardScreen() {
               mode="contained"
               style={styles.bookButton}
               labelStyle={styles.bookButtonText}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('DoctorSelection')}
               icon="calendar-plus"
               contentStyle={styles.bookButtonContent}
             >
@@ -235,9 +281,27 @@ export default function DashboardScreen() {
         </View>
       </View>
 
-      {/* Bottom spacing for tab bar */}
+      <View style={styles.videoBlogsSection}>
+        <View style={styles.videoBlogsHeader}>
+          <Text style={styles.videoBlogsSectionTitle}>Health & ABDM Video Guides</Text>
+          <Pressable onPress={() => {}} style={styles.viewAllButton}>
+            <Text style={styles.viewAllText}>View All</Text>
+            <Icon source="chevron-right" size={16} color="#43A047" />
+          </Pressable>
+        </View>
+        <FlatList
+          data={videoBlogs}
+          renderItem={renderVideoBlogCard}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.videoBlogsScrollContainer}
+          ItemSeparatorComponent={() => <View style={styles.videoBlogCardSeparator} />}
+        />
+      </View>
+
       <View style={styles.bottomSpacing} />
-    </ScrollView>
+      </ScrollView>
   );
 }
 
@@ -247,10 +311,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F5F7',
   },
   scrollContent: {
-    padding: 16,  // Increased from 16 to 20 for more breathing room
+    padding: 16,
+    paddingTop: 8, // Reduced top padding since nav bar handles it
+    paddingBottom: 100, // Extra space for tab bar
   },
   profileSection: {
-    marginBottom: 20,  // Increased space below profile card
+    marginBottom: 20,
   },
   profileCard: {
     backgroundColor: '#FFFFFF',
@@ -261,17 +327,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.02,
     shadowRadius: 4,
     elevation: 1,
   },
-  profileLeft: {
-    marginRight: 12,
-  },
+  profileLeft: { marginRight: 12 },
   avatarContainer: {
     width: 48,
     height: 48,
@@ -282,22 +343,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#43A047',
   },
-  profileCenter: {
-    flex: 1,
-  },
+  profileCenter: { flex: 1 },
   profileName: {
     fontSize: 16,
     fontWeight: '700',
     color: '#0A2540',
     marginBottom: 2,
   },
-  profileId: {
-    fontSize: 13,
-    color: '#6B7280',
-  },
-  profileRight: {
-    marginLeft: 12,
-  },
+  profileId: { fontSize: 13, color: '#6B7280' },
+  profileRight: { marginLeft: 12 },
   verifiedBadge: {
     width: 28,
     height: 28,
@@ -306,34 +360,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  section: {
-    marginBottom: 12,  // Increased from 24 to 32 for more separation
-  },
-  // New 2-Column Grid Layout Styles
-  mainGridSection: {
-    marginBottom: 20,
-  },
+  mainGridSection: { marginBottom: 20 },
   gridContainer: {
     flexDirection: 'row',
     gap: 12,
-    height: 280, // Fixed height for the grid
+    height: 280,
   },
-  leftColumn: {
-    flex: 1, // Equal width with right column
-  },
-  rightColumn: {
-    flex: 1, // Equal width with left column
-    gap: 12,
-  },
+  leftColumn: { flex: 1 },
+  rightColumn: { flex: 1, gap: 12 },
   largeCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 18,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
@@ -364,20 +404,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: 12,
   },
-  statItem: {
-    alignItems: 'center',
-  },
+  statItem: { alignItems: 'center' },
   statNumber: {
     fontSize: 16,
     fontWeight: '700',
     color: '#43A047',
     marginBottom: 2,
   },
-  statLabel: {
-    fontSize: 10,
-    color: '#6B7280',
-    textAlign: 'center',
-  },
+  statLabel: { fontSize: 10, color: '#6B7280', textAlign: 'center' },
   abdmBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -401,23 +435,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 'auto',
   },
-  largeCardButtonText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  buttonContent: {
-    flexDirection: 'row-reverse',
-  },
+  largeCardButtonText: { fontSize: 13, fontWeight: '600', color: '#FFFFFF' },
+  buttonContent: { flexDirection: 'row-reverse' },
   smallCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
@@ -426,9 +451,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
-  smallCardIcon: {
-    marginBottom: 8,
-  },
+  smallCardIcon: { marginBottom: 8 },
   smallCardTitle: {
     fontSize: 14,
     fontWeight: '600',
@@ -443,46 +466,19 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     flex: 1,
   },
-  smallCardButton: {
-    borderColor: '#43A047',
-    borderRadius: 8,
-  },
-  smallCardButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#43A047',
-  },
-  // Emergency Card Styles
-  emergencyCard: {
-    borderColor: '#DC2626',
-    borderWidth: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  emergencyTitle: {
-    color: '#DC2626',
-  },
-  emergencyButton: {
-    backgroundColor: '#DC2626',
-    borderRadius: 8,
-  },
-  emergencyButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  // Redesigned Appointment Card Styles
-  appointmentSection: {
-    marginBottom: 20,
-  },
+  smallCardButton: { borderColor: '#43A047', borderRadius: 8 },
+  smallCardButtonText: { fontSize: 12, fontWeight: '600', color: '#43A047' },
+  emergencyCard: { borderColor: '#DC2626', borderWidth: 1, backgroundColor: '#FFFFFF' },
+  emergencyTitle: { color: '#DC2626' },
+  emergencyButton: { backgroundColor: '#DC2626', borderRadius: 8 },
+  emergencyButtonText: { fontSize: 12, fontWeight: '600', color: '#FFFFFF' },
+  appointmentSection: { marginBottom: 20 },
   appointmentCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 20,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
@@ -505,28 +501,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#43A047',
   },
-  appointmentHeaderText: {
-    flex: 1,
-  },
+  appointmentHeaderText: { flex: 1 },
   appointmentTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: '#0A2540',
     marginBottom: 2,
   },
-  appointmentSubtitle: {
-    fontSize: 13,
-    color: '#6B7280',
-  },
-  historyButton: {
-    alignItems: 'center',
-    padding: 8,
-  },
-  historyText: {
-    fontSize: 10,
-    color: '#6B7280',
-    marginTop: 2,
-  },
+  appointmentSubtitle: { fontSize: 13, color: '#6B7280' },
+  historyButton: { alignItems: 'center', padding: 8 },
+  historyText: { fontSize: 10, color: '#6B7280', marginTop: 2 },
   appointmentServices: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -535,9 +519,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
     borderRadius: 12,
   },
-  serviceItem: {
-    alignItems: 'center',
-  },
+  serviceItem: { alignItems: 'center' },
   serviceIcon: {
     width: 40,
     height: 40,
@@ -549,39 +531,93 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },
-  serviceText: {
+  serviceText: { fontSize: 11, color: '#374151', fontWeight: '500' },
+  appointmentActions: { flexDirection: 'row', gap: 12 },
+  bookButton: { flex: 2, backgroundColor: '#43A047', borderRadius: 12 },
+  bookButtonText: { fontSize: 14, fontWeight: '600', color: '#FFFFFF' },
+  bookButtonContent: { flexDirection: 'row-reverse' },
+  emergencyCallButton: { flex: 1, borderColor: '#DC2626', borderRadius: 12 },
+  emergencyCallButtonText: { fontSize: 12, fontWeight: '600', color: '#DC2626' },
+  bottomSpacing: { height: 120 },
+  videoBlogsSection: { marginTop: 24, marginBottom: 20 },
+  videoBlogsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 0,
+  },
+  videoBlogsSectionTitle: { fontSize: 18, fontWeight: '700', color: '#0A2540' },
+  viewAllButton: { flexDirection: 'row', alignItems: 'center' },
+  viewAllText: { fontSize: 14, fontWeight: '600', color: '#43A047', marginRight: 4 },
+  videoBlogsScrollContainer: { paddingRight: 16 },
+  videoBlogCardSeparator: { width: 12 },
+  videoBlogCardRipple: { borderRadius: 16 },
+  videoBlogCard: {
+    width: 280,
+    height: 180,
+    borderRadius: 16,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  thumbnailImageStyle: {
+    borderRadius: 16,
+  },
+  thumbnailOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  playButtonOverlay: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  newBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: '#EF4444',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  newBadgeText: { color: '#FFFFFF', fontSize: 10, fontWeight: '700' },
+  videoInfo: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 12,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  videoCategoryContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  videoCategory: {
+    color: 'rgba(255,255,255,0.9)',
     fontSize: 11,
-    color: '#374151',
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  videoDuration: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 11,
     fontWeight: '500',
   },
-  appointmentActions: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  bookButton: {
-    flex: 2,
-    backgroundColor: '#43A047',
-    borderRadius: 12,
-  },
-  bookButtonText: {
+  videoTitle: {
+    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  bookButtonContent: {
-    flexDirection: 'row-reverse',
-  },
-  emergencyCallButton: {
-    flex: 1,
-    borderColor: '#DC2626',
-    borderRadius: 12,
-  },
-  emergencyCallButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#DC2626',
-  },
-  bottomSpacing: {
-    height: 120,
+    lineHeight: 18,
+    marginTop: 8,
   },
 });

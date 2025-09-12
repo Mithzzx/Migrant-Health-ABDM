@@ -28,6 +28,9 @@ import RemindersScreen from './src/screens/reminders/RemindersScreen';
 import AddReminderScreen from './src/screens/reminders/AddReminderScreen';
 import HealthTipsScreen from './src/screens/health/HealthTipsScreen';
 import DevStartScreen from './src/screens/dev/DevStartScreen';
+import AppointmentBookingScreen from './src/screens/appointments/AppointmentBookingScreen';
+import AppointmentsListScreen from './src/screens/appointments/AppointmentsListScreen';
+import DoctorSelectionScreen from './src/screens/appointments/DoctorSelectionScreen';
 import { AppI18nProvider, useI18n } from './src/i18n/i18n';
 
 const Stack = createNativeStackNavigator();
@@ -263,6 +266,30 @@ function AppContent() {
             <Stack.Screen name="Reminders" component={RemindersScreen} />
             <Stack.Screen name="AddReminder" component={AddReminderScreen} />
             <Stack.Screen name="HealthTips" component={HealthTipsScreen} />
+            <Stack.Screen 
+              name="DoctorSelection" 
+              component={DoctorSelectionScreen} 
+              options={{
+                headerShown: false,
+                contentStyle: { backgroundColor: brandTheme.colors.background }
+              }}
+            />
+            <Stack.Screen 
+              name="AppointmentBooking" 
+              component={AppointmentBookingScreen} 
+              options={{
+                headerShown: false,
+                contentStyle: { backgroundColor: brandTheme.colors.background }
+              }}
+            />
+            <Stack.Screen 
+              name="AppointmentsList" 
+              component={AppointmentsListScreen} 
+              options={{
+                headerShown: false,
+                contentStyle: { backgroundColor: brandTheme.colors.background }
+              }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>

@@ -48,6 +48,8 @@ export default function MoreScreen() {
 
       {/* Health Features */}
       <SectionCard title="Health & Records">
+        <RowItem icon="calendar-plus" label="Book Appointment" onPress={() => navigation.navigate('DoctorSelection')} />
+        <RowItem icon="calendar-clock" label="My Appointments" onPress={() => navigation.navigate('AppointmentsList')} />
         <RowItem icon="folder" label="My Records" onPress={() => navigation.navigate('Records')} />
         <RowItem icon="heart-pulse" label="Health Tips" onPress={() => navigation.navigate('HealthTips')} />
         <RowItem icon="microphone-outline" label="Voice Assistant" onPress={() => navigation.navigate('VoiceAssistant')} />

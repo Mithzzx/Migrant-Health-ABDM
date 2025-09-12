@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Platform, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Platform, ScrollView, TouchableOpacity, Alert, ActionSheetIOS } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Searchbar, Text, Icon, Button, FAB, Card, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
 import { useI18n } from '../../i18n/i18n';
@@ -16,6 +16,10 @@ export default function RecordsScreen({ navigation }) {
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [abdmId] = useState('14-1234-5678-9012'); // Demo ABDM ID
+  
+  // Upload functionality state
+  const [showUploadMenu, setShowUploadMenu] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Update navigation title when language changes
   useEffect(() => {
@@ -122,6 +126,139 @@ export default function RecordsScreen({ navigation }) {
       t('abdmUnlinkedMessage'),
       [{ text: t('ok') }]
     );
+  };
+
+  // Manual Upload Functions
+  const handleCameraUpload = async () => {
+    try {
+      setIsUploading(true);
+      
+      // Simulate camera capture
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const newRecord = {
+        id: `manual_${Date.now()}`,
+        title: `Photo Record ${new Date().toLocaleDateString()}`,
+        type_key: 'diagnostic',
+        date: new Date().toLocaleDateString(),
+        hospital: 'Manual Upload',
+        doctor: 'Self Uploaded',
+        status: 'Uploaded',
+        size: '2.3 MB',
+        format: 'JPG',
+        abdmId: `${abdmId}-MANUAL-${Date.now()}`,
+        hipId: 'MANUAL_UPLOAD',
+        patientId: abdmId,
+        metadata: {
+          version: '1.0',
+          timestamp: new Date().toISOString(),
+          source: 'MANUAL_CAMERA',
+          uploadMethod: 'Camera Capture'
+        },
+        verified: false,
+        manual: true
+      };
+
+      setAbdmRecords(prev => [newRecord, ...prev]);
+      
+      Alert.alert(
+        'Photo Captured',
+        'Your photo has been added to your health records.',
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      Alert.alert('Upload Failed', 'Failed to capture photo. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleImageUpload = async () => {
+    try {
+      setIsUploading(true);
+      
+      // Simulate image selection
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newRecord = {
+        id: `manual_${Date.now()}`,
+        title: `Image Record ${new Date().toLocaleDateString()}`,
+        type_key: 'lab',
+        date: new Date().toLocaleDateString(),
+        hospital: 'Manual Upload',
+        doctor: 'Self Uploaded',
+        status: 'Uploaded',
+        size: '1.8 MB',
+        format: 'PNG',
+        abdmId: `${abdmId}-MANUAL-${Date.now()}`,
+        hipId: 'MANUAL_UPLOAD',
+        patientId: abdmId,
+        metadata: {
+          version: '1.0',
+          timestamp: new Date().toISOString(),
+          source: 'MANUAL_GALLERY',
+          uploadMethod: 'Gallery Selection'
+        },
+        verified: false,
+        manual: true
+      };
+
+      setAbdmRecords(prev => [newRecord, ...prev]);
+      
+      Alert.alert(
+        'Image Uploaded',
+        'Your image has been added to your health records.',
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      Alert.alert('Upload Failed', 'Failed to upload image. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handlePDFUpload = async () => {
+    try {
+      setIsUploading(true);
+      
+      // Simulate PDF selection
+      await new Promise(resolve => setTimeout(resolve, 1200));
+      
+      const newRecord = {
+        id: `manual_${Date.now()}`,
+        title: `PDF Document ${new Date().toLocaleDateString()}`,
+        type_key: 'discharge',
+        date: new Date().toLocaleDateString(),
+        hospital: 'Manual Upload',
+        doctor: 'Self Uploaded',
+        status: 'Uploaded',
+        size: '894 KB',
+        format: 'PDF',
+        abdmId: `${abdmId}-MANUAL-${Date.now()}`,
+        hipId: 'MANUAL_UPLOAD',
+        patientId: abdmId,
+        metadata: {
+          version: '1.0',
+          timestamp: new Date().toISOString(),
+          source: 'MANUAL_PDF',
+          uploadMethod: 'Document Selection'
+        },
+        verified: false,
+        manual: true
+      };
+
+      setAbdmRecords(prev => [newRecord, ...prev]);
+      
+      Alert.alert(
+        'PDF Uploaded',
+        'Your PDF document has been added to your health records.',
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      Alert.alert('Upload Failed', 'Failed to upload PDF. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const recordCategories = [
@@ -237,6 +374,7 @@ export default function RecordsScreen({ navigation }) {
               const isActive = record.status === 'Active';
               const isFinal = record.status === 'Final';
               const isCompleted = record.status === 'Completed';
+              const isManuallyUploaded = record.manual;
               
               return (
                 <TouchableOpacity 
@@ -244,16 +382,29 @@ export default function RecordsScreen({ navigation }) {
                   onPress={() => onRecordPress(record)}
                   activeOpacity={0.7}
                 >
-                  <Card style={styles.recordCard} mode="outlined">
+                  <Card style={[
+                    styles.recordCard,
+                    isManuallyUploaded && styles.manualUploadCard
+                  ]} mode="outlined">
                     <Card.Content style={styles.recordContent}>
                       <View style={[styles.recordIcon, { backgroundColor: `${categoryData.color}10` }]}>
                         <Icon source={categoryData.icon} size={24} color={categoryData.color} />
+                        {isManuallyUploaded && (
+                          <View style={styles.manualUploadBadge}>
+                            <Icon source="upload" size={10} color="#3B82F6" />
+                          </View>
+                        )}
                       </View>
                       <View style={styles.recordInfo}>
                         <View style={styles.recordHeader}>
                           <Text style={styles.recordTitle} numberOfLines={1}>
                             {t(record.title_key)}
                           </Text>
+                          {isManuallyUploaded && (
+                            <View style={styles.uploadedBadge}>
+                              <Text style={styles.uploadedBadgeText}>{t('uploaded')}</Text>
+                            </View>
+                          )}
                           {isActive && (
                             <View style={styles.activeBadge}>
                               <Text style={styles.activeBadgeText}>{t('active')}</Text>
@@ -343,14 +494,40 @@ export default function RecordsScreen({ navigation }) {
         )}
       </ScrollView>
 
+      {/* Upload FAB */}
       <FAB
-        icon="plus"
+        icon={isUploading ? "loading" : "plus"}
         style={styles.fab}
         color="#FFFFFF"
         onPress={() => {
-          console.log('Add record manually');
+          if (Platform.OS === 'ios') {
+            ActionSheetIOS.showActionSheetWithOptions(
+              {
+                options: ['Cancel', 'Take Photo', 'Choose from Gallery', 'Select PDF'],
+                cancelButtonIndex: 0,
+                title: 'Upload Health Record'
+              },
+              (buttonIndex) => {
+                switch (buttonIndex) {
+                  case 1:
+                    handleCameraUpload();
+                    break;
+                  case 2:
+                    handleImageUpload();
+                    break;
+                  case 3:
+                    handlePDFUpload();
+                    break;
+                }
+              }
+            );
+          } else {
+            setShowUploadMenu(true);
+          }
         }}
         mode="elevated"
+        loading={isUploading}
+        disabled={isUploading}
       />
 
       <Portal>
@@ -380,6 +557,53 @@ export default function RecordsScreen({ navigation }) {
               loading={isLoading}
             >
               {isLoading ? t('linking') : t('confirmLink')}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+
+        {/* Android Upload Options Dialog */}
+        <Dialog visible={showUploadMenu} onDismiss={() => setShowUploadMenu(false)} style={styles.uploadDialog}>
+          <Dialog.Title style={styles.uploadDialogTitle}>Upload Health Record</Dialog.Title>
+          <Dialog.Content>
+            <TouchableOpacity
+              style={styles.uploadOption}
+              onPress={() => {
+                setShowUploadMenu(false);
+                handleCameraUpload();
+              }}
+            >
+              <Icon source="camera" size={24} color="#43A047" />
+              <Text style={styles.uploadOptionText}>Take Photo</Text>
+              <Icon source="chevron-right" size={20} color="#94A3B8" />
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.uploadOption}
+              onPress={() => {
+                setShowUploadMenu(false);
+                handleImageUpload();
+              }}
+            >
+              <Icon source="image" size={24} color="#43A047" />
+              <Text style={styles.uploadOptionText}>Choose from Gallery</Text>
+              <Icon source="chevron-right" size={20} color="#94A3B8" />
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.uploadOption}
+              onPress={() => {
+                setShowUploadMenu(false);
+                handlePDFUpload();
+              }}
+            >
+              <Icon source="file-pdf-box" size={24} color="#43A047" />
+              <Text style={styles.uploadOptionText}>Select PDF Document</Text>
+              <Icon source="chevron-right" size={20} color="#94A3B8" />
+            </TouchableOpacity>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowUploadMenu(false)} textColor="#6B7280">
+              Cancel
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -538,6 +762,35 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  uploadedBadge: {
+    backgroundColor: '#3B82F6',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  uploadedBadgeText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  manualUploadCard: {
+    borderColor: '#3B82F610',
+    borderWidth: 1.5,
+    backgroundColor: '#3B82F605',
+  },
+  manualUploadBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    backgroundColor: '#3B82F6',
+    borderRadius: 8,
+    width: 16,
+    height: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
   },
   recordMeta: {
     fontSize: 13,
@@ -719,5 +972,31 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     backgroundColor: '#43A047',
+  },
+  // Upload Dialog Styles
+  uploadDialog: {
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+  },
+  uploadDialogTitle: {
+    textAlign: 'center',
+    color: '#43A047',
+    fontWeight: '700',
+    fontSize: 18,
+  },
+  uploadOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 4,
+    borderRadius: 12,
+    marginVertical: 4,
+  },
+  uploadOptionText: {
+    flex: 1,
+    fontSize: 16,
+    color: '#0A2540',
+    fontWeight: '500',
+    marginLeft: 16,
   },
 });
