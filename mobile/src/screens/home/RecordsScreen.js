@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Platform, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Platform, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Searchbar, Text, Icon, Button, FAB, Card } from 'react-native-paper';
+import { Searchbar, Text, Icon, Button, FAB, Card, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
 import { useI18n } from '../../i18n/i18n';
 import sampleRecords from '../records/recordData';
 
 export default function RecordsScreen({ navigation }) {
   const { t } = useI18n();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategorießs, setSelectedCategories] = useState(['all']); // Default to 'all' selected
+  const [selectedCategories, setSelectedCategories] = useState(['all']); // Default to 'all' selected
+  
+  // ABDM Integration State
+  const [abdmRecords, setAbdmRecords] = useState([]); // Start with 0 records
+  const [isAbdmLinked, setIsAbdmLinked] = useState(false);
+  const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [abdmId, setAbdmId] = useState('14-1234-5678-9012'); // Demo ABDM ID
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
@@ -37,6 +44,78 @@ export default function RecordsScreen({ navigation }) {
       record: abdmRecord,
       abdmCompliant: true 
     });
+  };
+
+  // ABDM Sandbox Integration Functions
+  const simulateAbdmFetch = async () => {
+    setIsLoading(true);
+    
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    try {
+      // Simulate ABDM sandbox response
+      const mockAbdmRecords = sampleRecords.map(record => ({
+        ...record,
+        id: `ABDM_${record.id}`,
+        abdmId: `${abdmId}-${record.id}`,
+        hipId: record.hospital.replace(/\s+/g, '_').toUpperCase(),
+        patientId: abdmId,
+        careContext: {
+          referenceNumber: `CC-${abdmId}-${record.id}`,
+          display: record.title
+        },
+        metadata: {
+          version: '1.0',
+          timestamp: new Date().toISOString(),
+          source: 'ABDM_SANDBOX',
+          encryption: 'AES-256',
+          consent: 'GRANTED',
+          dataRange: {
+            from: '2023-01-01',
+            to: new Date().toISOString().split('T')[0]
+          }
+        },
+        verified: true,
+        sandbox: true
+      }));
+      
+      setAbdmRecords(mockAbdmRecords);
+      setIsAbdmLinked(true);
+      
+      Alert.alert(
+        'ABDM Link Success',
+        `Successfully linked ABDM ID: ${abdmId}\nFetched ${mockAbdmRecords.length} health records from ABDM sandbox.`,
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      Alert.alert(
+        'ABDM Link Failed',
+        'Failed to fetch records from ABDM sandbox. Please try again.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setIsLoading(false);
+      setShowLinkDialog(false);
+    }
+  };
+
+  const handleAbdmLink = () => {
+    setShowLinkDialog(true);
+  };
+
+  const confirmAbdmLink = () => {
+    simulateAbdmFetch();
+  };
+
+  const resetAbdmLink = () => {
+    setAbdmRecords([]);
+    setIsAbdmLinked(false);
+    Alert.alert(
+      'ABDM Unlinked',
+      'ABDM account has been unlinked. Records cleared.',
+      [{ text: 'OK' }]
+    );
   };
 
   const recordCategories = [
@@ -79,10 +158,11 @@ export default function RecordsScreen({ navigation }) {
     // TODO: Filter records by selected categories
   };
 
-  // Filter records based on selected categories
+  // Filter records based on selected categories - use ABDM records when linked
+  const currentRecords = isAbdmLinked ? abdmRecords : [];
   const filteredRecords = selectedCategories.includes('all') 
-    ? sampleRecords 
-    : sampleRecords.filter(record => selectedCategories.includes(record.type_key));
+    ? currentRecords 
+    : currentRecords.filter(record => selectedCategories.includes(record.type_key));
 
   const getCategoryIcon = (category) => {
     const categoryData = recordCategories.find(cat => cat.id === category);
@@ -150,7 +230,7 @@ export default function RecordsScreen({ navigation }) {
         </View>
 
         {/* Filtered Records List */}
-        {filteredRecords.length > 0 ? (
+        {filteredRecords.length > 0 && (
           <View style={styles.recordsSection}>
             <Text style={styles.recordsTitle}>
               {getRecordsTitle()}
@@ -209,32 +289,22 @@ export default function RecordsScreen({ navigation }) {
               );
             })}
           </View>
-        ) : (
-          /* Empty State - when no records match filters */
-          <View style={styles.emptyContainer}>
-            <View style={styles.emptyIconContainer}>
-              <Icon source="filter-outline" size={64} color="#D1D5DB" />
-            </View>
-            <Text style={styles.emptyTitle}>
-              No Records Found
-            </Text>
-            <Text style={styles.emptyDescription}>
-              No records match your selected filters. Try selecting different categories or add new records.
-            </Text>
-          </View>
         )}
 
-        {/* Original Empty State - only show when no records exist at all */}
-        {sampleRecords.length === 0 && (
+        {/* ABDM Empty State - show when not linked */}
+        {!isAbdmLinked && currentRecords.length === 0 && (
           <View style={styles.emptyContainer}>
             <View style={styles.emptyIconContainer}>
-              <Icon source="folder-outline" size={64} color="#D1D5DB" />
+              <Icon source="shield-plus" size={64} color="#43A047" />
             </View>
             <Text style={styles.emptyTitle}>
-              {t('noRecordsYet') || 'No Health Records Yet'}
+              Link Your ABDM Account
             </Text>
             <Text style={styles.emptyDescription}>
-              {t('recordsDescription') || 'Your medical reports, prescriptions, and health documents will appear here once you link your ABHA ID or upload them.'}
+              Connect your Ayushman Bharat Digital Mission (ABDM) account to securely access your health records from across India.
+            </Text>
+            <Text style={styles.abdmIdText}>
+              Demo ABDM ID: {abdmId}
             </Text>
             
             <Button
@@ -242,13 +312,36 @@ export default function RecordsScreen({ navigation }) {
               style={styles.primaryButton}
               contentStyle={styles.buttonContent}
               labelStyle={styles.buttonLabel}
-              onPress={() => {
-                // TODO: Navigate to ABHA linking
-                console.log('Link ABHA ID');
-              }}
+              onPress={handleAbdmLink}
+              icon="shield-check"
+              loading={isLoading}
             >
-              {t('linkAbhaId') || 'Link ABHA ID'}
+              {isLoading ? 'Linking ABDM...' : 'Link ABDM Account'}
             </Button>
+
+            <Text style={styles.sandboxNote}>
+              * This is a sandbox demo using sample ABDM data
+            </Text>
+          </View>
+        )}
+
+        {/* Show records count when ABDM is linked */}
+        {isAbdmLinked && (
+          <View style={styles.abdmLinkedContainer}>
+            <View style={styles.abdmLinkedHeader}>
+              <Icon source="shield-check" size={20} color="#10B981" />
+              <Text style={styles.abdmLinkedText}>
+                ABDM Linked: {abdmId}
+              </Text>
+              <Button 
+                mode="text" 
+                onPress={resetAbdmLink}
+                textColor="#DC2626"
+                compact
+              >
+                Unlink
+              </Button>
+            </View>
           </View>
         )}
       </ScrollView>
@@ -264,6 +357,39 @@ export default function RecordsScreen({ navigation }) {
         }}
         mode="elevated"
       />
+
+      {/* ABDM Link Confirmation Dialog */}
+      <Portal>
+        <Dialog visible={showLinkDialog} onDismiss={() => setShowLinkDialog(false)} style={styles.dialogContainer}>
+          <Dialog.Icon icon="shield-check" />
+          <Dialog.Title style={styles.dialogTitle}>Link ABDM Account</Dialog.Title>
+          <Dialog.Content>
+            <Text style={styles.dialogText}>
+              Do you want to link your ABDM account to access your health records?
+            </Text>
+            <View style={styles.abdmIdContainer}>
+              <Text style={styles.abdmIdLabel}>ABDM ID:</Text>
+              <Text style={styles.abdmIdValue}>{abdmId}</Text>
+            </View>
+            <Text style={styles.dialogSubtext}>
+              This will securely fetch your health records from the ABDM network using sandbox demo data.
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowLinkDialog(false)} textColor="#6B7280">
+              Cancel
+            </Button>
+            <Button 
+              onPress={confirmAbdmLink} 
+              mode="contained" 
+              style={styles.confirmButton}
+              loading={isLoading}
+            >
+              {isLoading ? 'Linking...' : 'Confirm Link'}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 }
@@ -277,7 +403,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingTop: 16,
   },
   searchBar: {
@@ -294,7 +420,7 @@ const styles = StyleSheet.create({
     minHeight: 0,
   },
   categorySection: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingVertical: 20,
     marginBottom: 8,
   },
@@ -331,7 +457,7 @@ const styles = StyleSheet.create({
     lineHeight: 12,
   },
   recordsSection: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   recordsTitle: {
     fontSize: 16,
@@ -457,8 +583,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 32,
-    paddingVertical: 40,
-    minHeight: 300,
+    paddingBottom: 40,
+    minHeight: 250,
   },
   emptyIconContainer: {
     width: 120,
@@ -467,7 +593,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 24,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },
@@ -483,7 +609,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 32,
+    marginBottom: 20,
   },
   primaryButton: {
     backgroundColor: '#43A047',
@@ -503,6 +629,98 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+    backgroundColor: '#43A047',
+  },
+  // ABDM Styles
+  abdmIdText: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginBottom: 16,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontWeight: '600',
+  },
+  sandboxNote: {
+    fontSize: 12,
+    color: '#94A3B8',
+    textAlign: 'center',
+    marginTop: 12,
+    fontStyle: 'italic',
+  },
+  abdmLinkedContainer: {
+    backgroundColor: '#F0FDF4',
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#10B981',
+  },
+  abdmLinkedHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  abdmLinkedText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#065F46',
+    fontWeight: '600',
+    marginLeft: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
+  // Dialog Styles
+  dialogContainer: {
+    borderRadius: 28,
+    backgroundColor: '#FFFFFF',
+  },
+  dialogTitle: {
+    textAlign: 'center',
+    color: '#43A047',
+    fontWeight: '700',
+    fontSize: 20,
+  },
+  dialogText: {
+    fontSize: 16,
+    color: '#374151',
+    textAlign: 'center',
+    marginBottom: 16,
+     lineHeight: 22,
+  },
+  dialogSubtext: {
+    fontSize: 13,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 8,
+    fontStyle: 'italic',
+    lineHeight: 18,
+  },
+  abdmIdContainer: {
+    backgroundColor: '#F0FDF4',
+    padding: 16,
+    borderRadius: 12,
+    marginVertical: 16,
+    borderWidth: 2,
+    borderColor: '#43A047',
+    shadowColor: '#43A047',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  abdmIdLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  abdmIdValue: {
+    fontSize: 16,
+    color: '#0A2540',
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
+  confirmButton: {
     backgroundColor: '#43A047',
   },
 });
