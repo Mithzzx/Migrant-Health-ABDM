@@ -14,6 +14,7 @@ import MedicinesScreen from './src/screens/home/MedicinesScreen';
 import AIChatBotScreen from './src/screens/home/AIChatBotScreen';
 import MoreScreen from './src/screens/home/MoreScreen';
 import RecordsScreen from './src/screens/home/RecordsScreen';
+import RecordDetailScreen from './src/screens/records/RecordDetailScreen';
 // New feature placeholder screens
 import AbhaLinkScreen from './src/screens/auth/AbhaLinkScreen';
 import QRLoginScreen from './src/screens/auth/QRLoginScreen';
@@ -233,7 +234,30 @@ function AppContent() {
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen name="VaccinationRecords" component={VaccinationRecordsScreen} />
             <Stack.Screen name="MedicalHistory" component={MedicalHistoryScreen} />
-            <Stack.Screen name="Records" component={RecordsScreen} />
+            <Stack.Screen 
+              name="Records" 
+              component={RecordsScreen} 
+              options={{
+                headerShown: true,
+                title: 'Health Records',
+                headerStyle: { backgroundColor: '#FFFFFF' },
+                headerTitleStyle: { color: '#0A2540', fontWeight: '600' },
+                headerTintColor: '#43A047',
+                headerTitleAlign: 'center'
+              }}
+            />
+            <Stack.Screen 
+              name="RecordDetail" 
+              component={RecordDetailScreen} 
+              options={{
+                headerShown: true,
+                title: 'Record Details',
+                headerStyle: { backgroundColor: '#FFFFFF' },
+                headerTitleStyle: { color: '#0A2540', fontWeight: '600' },
+                headerTintColor: '#43A047',
+                headerTitleAlign: 'center'
+              }}
+            />
             <Stack.Screen name="VoiceAssistant" component={VoiceAssistantScreen} />
             <Stack.Screen name="Reminders" component={RemindersScreen} />
             <Stack.Screen name="AddReminder" component={AddReminderScreen} />
