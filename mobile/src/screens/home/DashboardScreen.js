@@ -210,7 +210,7 @@ export default function DashboardScreen() {
                 mode="contained"
                 style={styles.emergencyButton}
                 labelStyle={styles.emergencyButtonText}
-                onPress={() => {}}
+                onPress={() => navigation.navigate('EmergencyDetails')}
                 icon="share"
               >
                 Share Info
@@ -272,7 +272,7 @@ export default function DashboardScreen() {
               mode="outlined"
               style={styles.emergencyCallButton}
               labelStyle={styles.emergencyCallButtonText}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('EmergencyDetails')}
               icon="phone"
             >
               Emergency

@@ -31,6 +31,7 @@ import DevStartScreen from './src/screens/dev/DevStartScreen';
 import AppointmentBookingScreen from './src/screens/appointments/AppointmentBookingScreen';
 import AppointmentsListScreen from './src/screens/appointments/AppointmentsListScreen';
 import DoctorSelectionScreen from './src/screens/appointments/DoctorSelectionScreen';
+import EmergencyDetailsScreen from './src/screens/emergency/EmergencyDetailsScreen';
 import { AppI18nProvider, useI18n } from './src/i18n/i18n';
 
 const Stack = createNativeStackNavigator();
@@ -272,6 +273,14 @@ function AppContent() {
               options={{
                 headerShown: false,
                 contentStyle: { backgroundColor: brandTheme.colors.background }
+              }}
+            />
+            <Stack.Screen 
+              name="EmergencyDetails" 
+              component={EmergencyDetailsScreen}
+              options={{
+                headerShown: false,
+                contentStyle: { backgroundColor: '#ffffff' }
               }}
             />
             <Stack.Screen 
