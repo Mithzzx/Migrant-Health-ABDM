@@ -561,6 +561,5 @@ For support and questions:
 - Check the [documentation wiki](https://github.com/Mithzzx/Migrant-Health-ABDM/wiki)
 
 **Made with ❤️ for the health and wellbeing of migrant workers in Kerala**
-**Made with ❤️ for the health and wellbeing of migrant workers in Kerala**
 
 
